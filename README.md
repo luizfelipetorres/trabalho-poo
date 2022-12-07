@@ -1,4 +1,4 @@
-# Trabalho POO :work:
+# Trabalho POO
 
 Quem nunca brincou com um quebra-cabeça de mão? Esse jogo é aquele em que há
 15 peças quadradas em um tabuleiro quadrado com 16 quadrados pequenos, estando
