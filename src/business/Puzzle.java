@@ -19,8 +19,8 @@ public class Puzzle {
 		this.pieces = new Piece[getLine()][getColumn()];
 		int value = 1;
 
-		for (int i = 0; i < pieces.length; i++) {
-			for (int j = 0; j < pieces[i].length; j++) {
+		for (int i = 0; i < getLine(); i++) {
+			for (int j = 0; j < getColumn(); j++) {
 				this.pieces[i][j] = new Piece(value++);
 			}
 		}
@@ -82,7 +82,6 @@ public class Puzzle {
 			line2 < 0 || column2 < 0 ||
 			line1 >= getLine() || column1 >= getColumn() ||
 			line2 >= getLine() || column2 >= getColumn()) {
-			System.out.println("e1");
 			return false;
 		}
 
