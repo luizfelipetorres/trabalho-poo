@@ -4,21 +4,23 @@ import java.util.Random;
 
 public class Puzzle {
 
-	private int size;
+	private int line;
+	private int column;
 	private Piece[][] pieces;
 
-	public Puzzle(int size, TypeShuffle typeShuffle) {
-		this.size = size;
+	public Puzzle(int line , int column, TypeShuffle typeShuffle) {
+		setLine(line);
+		setColumn(column);
 		this.generateTable();
 		this.shuffleTable(typeShuffle);
 	}
 
 	private void generateTable() {
-		this.pieces = new Piece[getSize()][getSize()];
+		this.pieces = new Piece[getLine()][getColumn()];
 		int value = 1;
 
 		for (int i = 0; i < pieces.length; i++) {
-			for (int j = 0; j < pieces.length; j++) {
+			for (int j = 0; j < pieces[i].length; j++) {
 				this.pieces[i][j] = new Piece(value++);
 			}
 		}
@@ -41,11 +43,11 @@ public class Puzzle {
 		}
 
 		for (int i = 0; i < numberShuffle; i++) {
-			int line1 = random.nextInt(0, getSize());
-			int column1 = random.nextInt(0, getSize());
+			int line1 = random.nextInt(0, getLine());
+			int column1 = random.nextInt(0, getColumn());
 
-			int line2 = random.nextInt(0, getSize());
-			int column2 = random.nextInt(0, getSize());
+			int line2 = random.nextInt(0, getLine());
+			int column2 = random.nextInt(0, getColumn());
 
 			Piece parts = this.pieces[line2][column2];
 			pieces[line2][column2] = pieces[line1][column1];
@@ -59,13 +61,15 @@ public class Puzzle {
 	public void movePieces(int line1, int column1, int line2, int column2) {
 
 		if (validOperation(line1, column1, line2, column2)) {
-			Piece parts = this.pieces[line2][column2];
+			
+			Piece parts = pieces[line2][column2];
 			pieces[line2][column2] = pieces[line1][column1];
 			pieces[line1][column1] = parts;
 
 			if (completedPuzzle()) {
 				System.out.println("Completou o quebra cabeca");
 			}
+			
 		} else {
 			System.out.println("invalido");
 		}
@@ -74,8 +78,10 @@ public class Puzzle {
 
 	private boolean validOperation(int line1, int column1, int line2, int column2) {
 
-		if (line1 < 0 || column1 < 0 || line2 < 0 || column2 < 0 || line1 >= getSize() || column1 >= getSize()
-				|| line2 >= getSize() || column2 >= getSize()) {
+		if (line1 < 0 || column1 < 0 || 
+			line2 < 0 || column2 < 0 ||
+			line1 >= getLine() || column1 >= getColumn() ||
+			line2 >= getLine() || column2 >= getColumn()) {
 			System.out.println("e1");
 			return false;
 		}
@@ -87,7 +93,7 @@ public class Puzzle {
 			return false;
 		}
 
-		if (parts1.getIndex() != getSize() * getSize() && parts2.getIndex() != getSize() * getSize()) {
+		if (parts1.getIndex() != size()  && parts2.getIndex() != size()) {
 			return false;
 		}
 
@@ -105,8 +111,8 @@ public class Puzzle {
 
 		int value = 1;
 
-		for (int i = 0; i < pieces.length; i++) {
-			for (int j = 0; j < pieces.length; j++) {
+		for (int i = 0; i < getLine(); i++) {
+			for (int j = 0; j < getColumn(); j++) {
 				if (pieces[i][j].getIndex() != value++) {
 					return false;
 				}
@@ -117,16 +123,40 @@ public class Puzzle {
 	}
 
 	public void show() {
-		for (int i = 0; i < pieces.length; i++) {
-			for (int j = 0; j < pieces.length; j++) {
+		for (int i = 0; i < getLine(); i++) {
+			for (int j = 0; j < getColumn(); j++) {
 				System.out.printf("%02d ", pieces[i][j].getIndex());
 			}
 			System.out.println();
 		}
 	}
+	
+	public int size() {
+		return getLine() * getColumn();
+	}
 
-	public int getSize() {
-		return size;
+	public int getLine() {
+		return line;
+	}
+
+	public void setLine(int line) {
+		this.line = line;
+	}
+
+	public int getColumn() {
+		return column;
+	}
+
+	public void setColumn(int column) {
+		this.column = column;
+	}
+
+	public Piece[][] getPieces() {
+		return pieces;
+	}
+
+	public void setPieces(Piece[][] pieces) {
+		this.pieces = pieces;
 	}
 
 }
