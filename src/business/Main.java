@@ -7,7 +7,7 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
-		Puzzle puzzle = new Puzzle(2, 2,TypeShuffle.pairs);
+		Puzzle puzzle = new Puzzle(4, 4,TypeShuffle.pairs);
 		
 		puzzle.show();
 		

@@ -32,13 +32,13 @@ public class Puzzle {
 
 		if (typeShuffle.equals(TypeShuffle.pairs)) {
 			while (numberShuffle == 0 || numberShuffle % 2 != 0) {
-				numberShuffle = random.nextInt(0, 100);
+				numberShuffle = random.nextInt(0, size()+1);
 			}
 		}
 
 		if (typeShuffle.equals(TypeShuffle.odd)) {
 			while (numberShuffle == 0 || numberShuffle % 2 == 0) {
-				numberShuffle = random.nextInt(0, 100);
+				numberShuffle = random.nextInt(0, size()+1);
 			}
 		}
 
