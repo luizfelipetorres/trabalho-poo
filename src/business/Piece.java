@@ -3,23 +3,18 @@ package business;
 import java.util.Objects;
 
 public class Piece {
-	private int index;
-	
-	public Piece(int index) {
-		setIndex(index);
-	}
+	private Position expected;
+	private Position current;
 
-	public int getIndex() {
-		return index;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
+	public Piece(Position esperada, Position atual) {
+		super();
+		this.expected = esperada;
+		this.current = atual;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(index);
+		return Objects.hash(current, expected);
 	}
 
 	@Override
@@ -31,7 +26,6 @@ public class Piece {
 		if (getClass() != obj.getClass())
 			return false;
 		Piece other = (Piece) obj;
-		return index == other.index;
+		return Objects.equals(current, other.current) && Objects.equals(expected, other.expected);
 	}
-	
 }

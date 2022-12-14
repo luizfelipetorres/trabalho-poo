@@ -1,27 +1,31 @@
 package business;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class Puzzle {
 
-	private int line;
-	private int column;
-	private Piece[][] pieces;
+	private int lines;
+	private int columns;
+	private List<Piece> pieces;
 
 	public Puzzle(int line , int column, TypeShuffle typeShuffle) {
 		setLine(line);
 		setColumn(column);
+		this.pieces = new ArrayList<>();
 		this.generateTable();
 		this.shuffleTable(typeShuffle);
 	}
 
 	private void generateTable() {
-		this.pieces = new Piece[getLine()][getColumn()];
 		int value = 1;
-
 		for (int i = 0; i < getLine(); i++) {
 			for (int j = 0; j < getColumn(); j++) {
-				this.pieces[i][j] = new Piece(value++);
+				Position p = new Position(j, i);
+				//this.pieces = new Piece(p, p);
 			}
 		}
 	}
@@ -32,20 +36,27 @@ public class Puzzle {
 
 		if (typeShuffle.equals(TypeShuffle.pairs)) {
 			while (numberShuffle == 0 || numberShuffle % 2 != 0) {
-				numberShuffle = random.nextInt(0, size()+1);
+				numberShuffle = random.nextInt(0, size()/2);
 			}
 		}
 
 		if (typeShuffle.equals(TypeShuffle.odd)) {
 			while (numberShuffle == 0 || numberShuffle % 2 == 0) {
-				numberShuffle = random.nextInt(0, size()+1);
+				numberShuffle = random.nextInt(0, size()/2);
 			}
 		}
+		
+		Map<Piece, Piece> map = new HashMap<>();
+		
 
 		for (int i = 0; i < numberShuffle; i++) {
+			while (en.hasMoreElements()) {
+				
+				
+			}
 			int line1 = random.nextInt(0, getLine());
 			int column1 = random.nextInt(0, getColumn());
-
+			
 			int line2 = random.nextInt(0, getLine());
 			int column2 = random.nextInt(0, getColumn());
 
@@ -135,19 +146,19 @@ public class Puzzle {
 	}
 
 	public int getLine() {
-		return line;
+		return lines;
 	}
 
 	public void setLine(int line) {
-		this.line = line;
+		this.lines = line;
 	}
 
 	public int getColumn() {
-		return column;
+		return columns;
 	}
 
 	public void setColumn(int column) {
-		this.column = column;
+		this.columns = column;
 	}
 
 	public Piece[][] getPieces() {
