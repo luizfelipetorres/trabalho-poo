@@ -11,6 +11,32 @@ public class Piece {
 		this.expected = esperada;
 		this.current = atual;
 	}
+	
+	
+
+	public Position getExpected() {
+		return expected;
+	}
+
+
+
+	public void setExpected(Position expected) {
+		this.expected = expected;
+	}
+
+
+
+	public Position getCurrent() {
+		return current;
+	}
+
+
+
+	public void setCurrent(Position current) {
+		this.current = current;
+	}
+
+
 
 	@Override
 	public int hashCode() {

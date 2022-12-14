@@ -4,28 +4,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 public class Puzzle {
-
 	private int lines;
 	private int columns;
-	private List<Piece> pieces;
+	private Piece[][] pieces;
 
 	public Puzzle(int line , int column, TypeShuffle typeShuffle) {
 		setLine(line);
 		setColumn(column);
-		this.pieces = new ArrayList<>();
 		this.generateTable();
 		this.shuffleTable(typeShuffle);
 	}
 
 	private void generateTable() {
-		int value = 1;
+		pieces = new Piece[getLine()][getColumn()];
 		for (int i = 0; i < getLine(); i++) {
 			for (int j = 0; j < getColumn(); j++) {
-				Position p = new Position(j, i);
-				//this.pieces = new Piece(p, p);
+				Position p = new Position(i, j);
+				this.pieces[i][j] = new Piece(p, p);
 			}
 		}
 	}
@@ -36,13 +35,13 @@ public class Puzzle {
 
 		if (typeShuffle.equals(TypeShuffle.pairs)) {
 			while (numberShuffle == 0 || numberShuffle % 2 != 0) {
-				numberShuffle = random.nextInt(0, size()/2);
+				numberShuffle = random.nextInt(0, size()/2 + 1);
 			}
 		}
 
 		if (typeShuffle.equals(TypeShuffle.odd)) {
 			while (numberShuffle == 0 || numberShuffle % 2 == 0) {
-				numberShuffle = random.nextInt(0, size()/2);
+				numberShuffle = random.nextInt(0, size()/2 + 1);
 			}
 		}
 		
@@ -50,19 +49,14 @@ public class Puzzle {
 		
 
 		for (int i = 0; i < numberShuffle; i++) {
-			while (en.hasMoreElements()) {
+			Position p1 = new Position(random.nextInt(0, getLine()), random.nextInt(0, getColumn()));
+			Position p2 = new Position(random.nextInt(0, getLine()), random.nextInt(0, getColumn()));
+			if (!p1.equals(p2) && !(map.containsKey(p1) && map.containsValue(p2) ) && !(map.containsKey(p2) && map.containsValue(p1) ) ) {
 				
 				
 			}
-			int line1 = random.nextInt(0, getLine());
-			int column1 = random.nextInt(0, getColumn());
-			
-			int line2 = random.nextInt(0, getLine());
-			int column2 = random.nextInt(0, getColumn());
 
-			Piece parts = this.pieces[line2][column2];
-			pieces[line2][column2] = pieces[line1][column1];
-			pieces[line1][column1] = parts;
+		
 		}
 
 		System.out.println("quantidade de embaralhamento:" + numberShuffle);
