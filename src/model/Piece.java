@@ -1,4 +1,4 @@
-package business;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,10 @@ public class Piece {
 	
 	public void movement() {
 		Optional<Piece> piece = neighbors.stream().filter(e -> e.isEmpty()).findFirst();
-		
+		/* to-do:
+		 * 	implementar peristencia na tabela PEÇA passando index da peça e o id do tabuleiro
+		 * 
+		 * */
 		if(piece.isPresent()) {
 			exchange(this, piece.get());
 			System.out.println("troca realizada");

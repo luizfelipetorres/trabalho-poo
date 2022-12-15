@@ -12,8 +12,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import business.Puzzle;
-import business.TypeShuffle;
+import model.Puzzle;
+import util.TypeShuffle;
 
 public class Game {
 
@@ -50,7 +50,7 @@ public class Game {
 		frame = new JFrame();
 		
 		frame.getContentPane().setBackground(new Color(207, 207, 207));
-		frame.setBounds(100, 100, 600, 600);
+		frame.setBounds(100, 100, 1000, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		

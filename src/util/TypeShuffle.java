@@ -1,4 +1,4 @@
-package business;
+package util;
 
 public enum TypeShuffle {
 	pairs, odd;

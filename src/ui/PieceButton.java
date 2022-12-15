@@ -3,7 +3,7 @@ package ui;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import business.Piece;
+import model.Piece;
 
 @SuppressWarnings("serial")
 public class PieceButton extends JButton {
