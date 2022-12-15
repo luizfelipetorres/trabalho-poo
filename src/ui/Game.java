@@ -46,7 +46,7 @@ public class Game {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		Puzzle puzzle = new Puzzle(2, 2,TypeShuffle.pairs);
+		Puzzle puzzle = new Puzzle(3, 3,TypeShuffle.pairs);
 		frame = new JFrame();
 		
 		frame.getContentPane().setBackground(new Color(207, 207, 207));

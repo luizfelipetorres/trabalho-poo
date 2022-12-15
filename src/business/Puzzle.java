@@ -63,8 +63,8 @@ public class Puzzle {
 		Map< Integer, Integer> map = new HashMap<>();
 
 		while (value<=numberExchange) {
-			Piece pieceOrigin = pieces.get(random.nextInt(0, size()));
-			Piece pieceDestiny = pieces.get(random.nextInt(0, size()));
+			Piece pieceOrigin = pieces.get(random.nextInt(0, size()-1));
+			Piece pieceDestiny = pieces.get(random.nextInt(0, size()-1));
 			
 			if(!pieceOrigin.equals(pieceDestiny)){
 				
