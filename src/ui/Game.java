@@ -1,26 +1,24 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import business.Puzzle;
 import business.TypeShuffle;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.JLabel;
-
 public class Game {
 
 	private JFrame frame;
-	private Puzzle puzzle;
-	private int numberField = 0;
-
+	private List<PieceButton> buttons = new ArrayList<>();
 	/**
 	 * Launch the application.
 	 */
@@ -42,14 +40,15 @@ public class Game {
 	 */
 	public Game() {
 		initialize();
-		puzzle = new Puzzle(4, 4,TypeShuffle.pairs);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		Puzzle puzzle = new Puzzle(2, 2,TypeShuffle.pairs);
 		frame = new JFrame();
+		
 		frame.getContentPane().setBackground(new Color(207, 207, 207));
 		frame.setBounds(100, 100, 600, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,23 +57,34 @@ public class Game {
 		JPanel panelGame = new JPanel();
 		panelGame.setBounds(10, 11, 500, 500);
 		frame.getContentPane().add(panelGame);
-		panelGame.setLayout(null);
 		
-		for(int i = 5; i < panelGame.getWidth(); i=i+45) {
-			for(int j = 5; j < panelGame.getHeight(); j=j+45) {
+		GridLayout gridLayout = new GridLayout(puzzle.getLINES(), puzzle.getCOLUMNS());
+		panelGame.setLayout(gridLayout);
+		
+		int whith = panelGame.getWidth() / puzzle.getLINES();
+		int height = panelGame.getHeight() / puzzle.getCOLUMNS();
+		
+		puzzle.getPieces().forEach(e -> buttons.add(new PieceButton(e, whith, height)));
 				
-				JPanel fieldGame = new JPanel(new BorderLayout(0, 0));
-				fieldGame.setBackground(new Color(128, 128, 128));
-				fieldGame.setBounds(j, i, 40, 40);
-				panelGame.add(fieldGame);
-			
-				JLabel lbNumber = new JLabel(String.valueOf(numberField));
-				lbNumber.setHorizontalAlignment(SwingConstants.CENTER);
-				lbNumber.setBounds(0, 0, 10, 10);
-				fieldGame.add(lbNumber);
-				
-				numberField++;
-			}	
-		}
+		buttons.forEach(el ->{
+			el.addMouseListener(new MouseAdapter() {
+	            @Override
+	             public void mouseClicked(MouseEvent e) {
+	            	PieceButton piece =  buttons.stream().filter(h -> h.getPiece().isEmpty()).findFirst().get();
+	            	el.getPiece().movement();  
+	            	el.configImg();
+	            	piece.configImg();
+	            	System.out.println(puzzle.completedPuzzle());
+	            	if(puzzle.completedPuzzle()) {
+	                    JOptionPane.showMessageDialog (null, "ganhou;)");
+	            	}
+	             }            
+	        });
+		});
+		
+		buttons.forEach(e -> panelGame.add(e));
+		
+
+
 	}
 }
