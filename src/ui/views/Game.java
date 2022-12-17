@@ -1,4 +1,4 @@
-package ui;
+package ui.views;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import model.Puzzle;
+import ui.components.PieceButton;
 import util.TypeShuffle;
 
 public class Game {
