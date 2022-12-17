@@ -123,7 +123,7 @@ public class Login {
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 25));
 		
 		JLabel lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setIcon(new ImageIcon("C:\\Users\\luissant\\OneDrive - BRQ\\Documentos\\Project\\eclipse\\trabalho-poo\\img\\bg.png"));
+		lblNewLabel_3.setIcon(new ImageIcon("img\\bg.png"));
 		lblNewLabel_3.setBounds(0, 0, 445, 606);
 		frame.getContentPane().add(lblNewLabel_3);
 	}
