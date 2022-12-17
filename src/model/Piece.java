@@ -22,7 +22,6 @@ public class Piece {
 		this.LINE = line;
 		this.COLUMN = column;
 		this.isEmpty = isEmpty;
-		img = new ImageIcon ("img\\numero-"+index+".png");
 	}
 	
 	void addNeighbor(Piece neighbor) {
@@ -45,7 +44,6 @@ public class Piece {
 		 * */
 		if(piece.isPresent()) {
 			exchange(this, piece.get());
-			System.out.println("troca realizada");
 		}
 	}
 	

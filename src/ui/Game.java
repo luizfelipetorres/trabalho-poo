@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,16 +39,22 @@ public class Game {
 
 	/**
 	 * Create the application.
+	 * @throws IOException 
 	 */
-	public Game() {
+	public Game() throws IOException {
 		initialize();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws IOException 
 	 */
-	private void initialize() {
-		Puzzle puzzle = new Puzzle(3, 3,TypeShuffle.pairs);
+	private void initialize() throws IOException {
+		File img = new File("img//naruto.jpg");
+		Puzzle puzzle;
+		
+		puzzle = new Puzzle(2, 2,img,TypeShuffle.pairs);
+		
 		frame = new JFrame();
 		
 		frame.getContentPane().setBackground(new Color(207, 207, 207));
@@ -63,7 +71,6 @@ public class Game {
 		
 		int whith = panelGame.getWidth() / puzzle.getLINES();
 		int height = panelGame.getHeight() / puzzle.getCOLUMNS();
-		
 		puzzle.getPieces().forEach(e -> buttons.add(new PieceButton(e, whith, height)));
 				
 		buttons.forEach(el ->{
@@ -74,7 +81,6 @@ public class Game {
 	            	el.getPiece().movement();  
 	            	el.configImg();
 	            	piece.configImg();
-	            	System.out.println(puzzle.completedPuzzle());
 	            	if(puzzle.completedPuzzle()) {
 	                    JOptionPane.showMessageDialog (null, "ganhou;)");
 	            	}
