@@ -53,7 +53,7 @@ public class Game {
 		File img = new File("img//naruto.jpg");
 		Puzzle puzzle;
 		
-		puzzle = new Puzzle(2, 2,img,TypeShuffle.pairs);
+		puzzle = new Puzzle(3, 3,img,TypeShuffle.pairs);
 		
 		frame = new JFrame();
 		
