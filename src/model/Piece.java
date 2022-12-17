@@ -91,6 +91,7 @@ public class Piece {
 
 	public ImageIcon getImg() {
 		return img;
+		
 	}
 
 	public void setImg(ImageIcon img) {
