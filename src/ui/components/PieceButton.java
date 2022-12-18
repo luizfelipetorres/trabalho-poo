@@ -7,19 +7,23 @@ import model.Piece;
 
 public class PieceButton extends JButton {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Piece piece;
-	private int whith;
+	private int width;
 	private int height;
-	public PieceButton(Piece piece, int whith, int height) {	
+	public PieceButton(Piece piece, int width, int height) {	
 		this.piece = piece;
-		this.whith = whith;
+		this.width = width;
 		this.height = height;
 		configImg();
 	}
 	
 	public void configImg() {
 		ImageIcon img = piece.getImg();
-		img.setImage(img.getImage().getScaledInstance(whith,height, 100));
+		img.setImage(img.getImage().getScaledInstance(width, height, 100));
 		setIcon(img);
 	}
 	
