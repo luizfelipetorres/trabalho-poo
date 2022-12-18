@@ -77,44 +77,5 @@ public class Game{
 		int height = panelGame.getHeight() / puzzle.getCOLUMNS();
 		puzzle.getPieces().forEach(e -> buttons.add(new PieceButton(e, whith, height)));
 
-		ShuffleListener listener = new ShuffleListener() {
-			@Override
-			public void updateButtons() {
-				buttons.forEach(button -> button.configImg());
-			}
-		};
-
-		buttons.forEach(e -> panelGame.add(e));
-
-		Thread shuffle = new Thread(() -> {
-			puzzle.shuffleTable(listener);
-			buttons.forEach(button -> {
-				button.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseReleased(MouseEvent e) {
-						makeMovement(button);
-					}
-				});
-			});
-		});
-		shuffle.start();
-	}
-
-	private File chooseImage() {
-		JFileChooser fileChooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "png");
-		fileChooser.setFileFilter(filter);
-		boolean choosed = fileChooser.showOpenDialog(fileChooser) == JFileChooser.APPROVE_OPTION;
-		return choosed ? fileChooser.getSelectedFile() : new File("img//naruto.jpg");
-	}
-
-	private void makeMovement(PieceButton button) {
-		PieceButton piece = buttons.stream().filter(h -> h.getPiece().isEmpty()).findFirst().get();
-		button.getPiece().movement();
-		button.configImg();
-		piece.configImg();
-		if (puzzle.completedPuzzle()) {
-			JOptionPane.showMessageDialog(null, "ganhou;)");
-		}
 	}
 }
