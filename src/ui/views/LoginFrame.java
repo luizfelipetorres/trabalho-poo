@@ -27,7 +27,7 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Login {
+public class LoginFrame {
 
 	private JFrame frame;
 	private JTextField fieldRegisterUsername;
@@ -52,13 +52,13 @@ public class Login {
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 				| javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Login window = new Login();
+					LoginFrame window = new LoginFrame();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,7 +70,7 @@ public class Login {
 	/**
 	 * Create the application.
 	 */
-	public Login() {
+	private LoginFrame() {
 		initialize();
 	}
 
@@ -148,9 +148,10 @@ public class Login {
 						Arrays.toString(fieldLoginPassword.getPassword()));
 
 				PlayerDAO playerDAO = PlayerDAO.getInstance();
-				if (playerDAO.authenticate(player)) {
+				Player playerSelected = playerDAO.authenticate(player);
+				if (playerSelected != null) {
 
-					Game.main(null);
+					KernelFrame.main(null, playerSelected);
 
 				} else {
 					JOptionPane.showMessageDialog(btnLogin,
@@ -272,7 +273,7 @@ public class Login {
 		});
 		
 		JLabel lbBG = new JLabel("");
-		lbBG.setIcon(new ImageIcon("img\\bg.jpg"));
+		lbBG.setIcon(new ImageIcon("img\\bg-login.jpg"));
 		lbBG.setBounds(0, 0, 494, 567);
 		frame.getContentPane().add(lbBG);
 

@@ -1,4 +1,4 @@
-package ui;
+package ui.views;
 
 import java.awt.EventQueue;
 import java.io.IOException;

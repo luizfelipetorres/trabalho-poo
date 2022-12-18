@@ -26,24 +26,30 @@ public class PlayerDAO implements PlayerDAOListener {
 	}
 	
 	@Override
-	public boolean authenticate(Player player) {
+	public Player authenticate(Player player) {
 		
+		Player playerIntern = new Player();
+
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "SELECT * FROM PLAYER AS P WHERE P.PLAYER_USERNAME = '" + player.getPlayerUsername() + "' AND P.PLAYER_PASSWORD = '" + player.getPlayerPassword() + "'";
 			Statement stmt = (Statement) connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
-			
+
 			if (rs.next()) {
-				rs.close();
-				connection.close();
-				return true;
+				playerIntern.setPlayerId((rs.getInt("PLAYER_ID")));
+				playerIntern.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
+				playerIntern.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
+				playerIntern.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
 			}
-			
+			rs.close();
+			connection.close();
+			return playerIntern;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return null;
 		
 	}
 
