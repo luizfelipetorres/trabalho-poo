@@ -17,7 +17,7 @@ public class ConnectionFactory {
 	private static final String USER = "postgres";
 	private static final String PASS = "root";
 
-	public static Connection getConnectionJDBC() {
+	public static Connection getConnection() {
 
 		try {
 			Class.forName(DRIVER);
@@ -28,7 +28,7 @@ public class ConnectionFactory {
 		}
 	}
 
-	public static void closeConnectionJDBC(Connection conn) {
+	public static void closeConnection(Connection conn) {
 
 		if (conn != null) {
 			try {
@@ -39,7 +39,7 @@ public class ConnectionFactory {
 		}
 	}
 
-	public static void closeConnectionJDBC(Connection conn, PreparedStatement stmt) {
+	public static void closeConnection(Connection conn, PreparedStatement stmt) {
 
 		if (stmt != null) {
 			try {
@@ -48,10 +48,10 @@ public class ConnectionFactory {
 				System.err.println("Erro na conexão!!!" + ex);
 			}
 		}
-		closeConnectionJDBC(conn);
+		closeConnection(conn);
 	}
 
-	public static void closeConnectionJDBC(Connection conn, PreparedStatement stmt, ResultSet rs) {
+	public static void closeConnection(Connection conn, PreparedStatement stmt, ResultSet rs) {
 
 		if (rs != null) {
 			try {
@@ -60,16 +60,7 @@ public class ConnectionFactory {
 				System.err.println("Erro na conexão!!!" + ex);
 			}
 		}
-		closeConnectionJDBC(conn, stmt);
-	}
-
-	private static EntityManagerFactory emf;
-
-	public static EntityManager getConnection() {
-		if (emf == null) {
-			emf = Persistence.createEntityManagerFactory("PuzzlePersistence");
-		}
-		return emf.createEntityManager();
+		closeConnection(conn, stmt);
 	}
 
 }

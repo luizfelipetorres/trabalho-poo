@@ -13,12 +13,13 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import model.Puzzle;
 import ui.components.PieceButton;
 import util.TypeShuffle;
 
-public class Game {
+public class Game{
 
 	private JFrame frame;
 	private List<PieceButton> buttons = new ArrayList<>();
@@ -26,7 +27,18 @@ public class Game {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+		try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Game.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+        EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Game window = new Game();
@@ -37,7 +49,7 @@ public class Game {
 			}
 		});
 	}
-
+	
 	/**
 	 * Create the application.
 	 * @throws IOException 

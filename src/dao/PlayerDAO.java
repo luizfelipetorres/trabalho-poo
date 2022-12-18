@@ -1,132 +1,189 @@
 package dao;
 
-import java.awt.HeadlessException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
-import javax.swing.JOptionPane;
 
 import connection.ConnectionFactory;
 import model.Player;
 
-public class PlayerDAO implements PlayerDAOListener{
-	
+public class PlayerDAO implements PlayerDAOListener {
+
 	private static PlayerDAO instance;
-	
+
 	private PlayerDAO() {
-    }
-    
-    public static PlayerDAO getInstance(){
-        if(instance == null){
-            instance = new PlayerDAO();
-        }
-        return instance;
-    }
+	}
+
+	public static PlayerDAO getInstance() {
+		if (instance == null) {
+			instance = new PlayerDAO();
+		}
+		return instance;
+	}
+	
+	@Override
+	public boolean authenticate(Player player) {
+		
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM PLAYER AS P WHERE P.PLAYER_USERNAME = '" + player.getPlayerUsername() + "' AND P.PLAYER_PASSWORD = '" + player.getPlayerPassword() + "'";
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			if (rs.next()) {
+				rs.close();
+				connection.close();
+				return true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+		
+	}
 
 	@Override
 	public void save(Player player) {
-		EntityManager entityManager = ConnectionFactory.getConnection();
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "INSERT INTO PLAYER(PLAYER_USERNAME, PLAYER_EMAIL, PLAYER_PASSWORD) VALUES (?,?,?)";
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, player.getPlayerUsername());
+			ps.setString(2, player.getPlayerEmail());
+			ps.setString(3, player.getPlayerPassword());
 
-        try {
-            entityManager.getTransaction().begin();
-            entityManager.persist(player);
-            entityManager.getTransaction().commit();
-            
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "Save" + ex);
-            entityManager.getTransaction().rollback();
-        } catch (PersistenceException ex) {
-            JOptionPane.showMessageDialog(null, "Erro: Registro duplicado!" + ex);
-        } finally {
-            entityManager.close();
-        }
+			ps.execute();
+			ps.close();
+			connection.close();
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
 	}
 
 	@Override
 	public void update(Player player) {
-		EntityManager entityManager = ConnectionFactory.getConnection();
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "UPDATE PLAYER SET "
+					+ "PLAYER_USERNAME = " + player.getPlayerUsername() 
+					+ ", PLAYER_EMAIL = " + player.getPlayerEmail() 
+					+ ", PLAYER_PASSWORD = " + player.getPlayerPassword() 
+					+ " WHERE PLAYER_ID = " + player.getPlayerId();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, player.getPlayerUsername());
+			ps.setString(2, player.getPlayerEmail());
+			ps.setString(3, player.getPlayerPassword());
 
-        try {
-            entityManager.getTransaction().begin();
-            entityManager.merge(player);
-            entityManager.getTransaction().commit();
-            
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "Update" + ex);
-            entityManager.getTransaction().rollback();
-        } catch (PersistenceException ex) {
-            JOptionPane.showMessageDialog(null, "Registro duplicado ou nulo || log do erro: " + ex);
-        } finally {
-            entityManager.close();
-        }
+			ps.execute();
+			ps.close();
+			connection.close();
+
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Player> findAll() {
-		EntityManager entityManager = ConnectionFactory.getConnection();
-        List<Player> players = null;
-        
-        try {
-        	players = entityManager.createNamedQuery("Player.findAll").getResultList();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "FindAll" + ex);
-        } finally {
-            entityManager.close();
-        }
-        return players;
+
+		ArrayList<Player> listPlayers = new ArrayList<Player>();
+
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM PLAYER";
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				Player player = new Player();
+				player.setPlayerId((rs.getInt("PLAYER_ID")));
+				player.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
+				player.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
+				player.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
+				listPlayers.add(player);
+			}
+			rs.close();
+			connection.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listPlayers;
 	}
 
 	@Override
 	public Player findById(Integer integer) {
-		EntityManager entityManager = ConnectionFactory.getConnection();
-		Player player = null;
-        
-        try {
-        	player = entityManager.find(Player.class, integer);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "FindById" + ex);
-        } finally {
-            entityManager.close();
-        }
-        return player;
+
+		Player player = new Player();
+
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM PLAYER WHERE PLAYER_ID = " + integer;
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			if (rs.next()) {
+				player.setPlayerId((rs.getInt("PLAYER_ID")));
+				player.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
+				player.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
+				player.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
+			}
+			rs.close();
+			connection.close();
+			return player;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Player> findByName(String playerName) {
-		EntityManager entityManager = ConnectionFactory.getConnection();
-        List<Player> clientes = null;
-    
-        try {
-            Query query = entityManager.createNamedQuery("Cliente.findByPlayerName", Player.class);
-            query.setParameter("playerName", playerName);
-            
-            clientes = query.getResultList();
-            
-        } catch (HeadlessException ex) {
-            JOptionPane.showMessageDialog(null, "findByPlayerName" + ex);
-        } finally {
-            entityManager.close();
-        }
-        return clientes;
+		
+		ArrayList<Player> listPlayers = new ArrayList<Player>();
+		
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM PLAYER WHERE PLAYER_ID LIKE " + "'%" + playerName + "%'";
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				Player player = new Player();
+				player.setPlayerId((rs.getInt("PLAYER_ID")));
+				player.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
+				player.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
+				player.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
+				listPlayers.add(player);
+			}
+			rs.close();
+			connection.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listPlayers;
 	}
 
 	@Override
 	public void remove(Integer integer) {
-EntityManager entityManager = ConnectionFactory.getConnection();
-        
-        try {
-        	Player player = entityManager.find(Player.class, integer);
-            entityManager.getTransaction().begin();
-            entityManager.remove(player);
-            entityManager.getTransaction().commit();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Remove" + ex);
-            entityManager.getTransaction().rollback();
-        } finally {
-            entityManager.close();
-        }
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			Statement stmt = connection.createStatement();
+
+			String query = "DELETE FROM PLAYER WHERE PLAYER_ID = " + integer;
+
+			stmt.executeUpdate(query);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
