@@ -23,6 +23,8 @@ public class PieceButton extends JButton {
 		img.setImage(img.getImage().getScaledInstance(whith,height, 100));
 		setIcon(img);
 	}
+	
+	
 
 	public Piece getPiece() {
 		return piece;

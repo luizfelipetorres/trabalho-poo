@@ -43,11 +43,11 @@ public class Piece {
 		 * 
 		 * */
 		if(piece.isPresent()) {
-			exchange(this, piece.get());
+			exchange(piece.get());
 		}
 	}
 	
-	void exchange(Piece origin, Piece destiny) {
+	void exchange(Piece destiny) {
 		int index = destiny.getIndex();
 		ImageIcon img = destiny.getImg();
 		boolean isEmpty = destiny.isEmpty();
@@ -115,5 +115,6 @@ public class Piece {
 		return COLUMN == other.COLUMN && LINE == other.LINE && Objects.equals(img, other.img) && index == other.index
 				&& isEmpty == other.isEmpty && Objects.equals(neighbors, other.neighbors);
 	}
-	
+
+
 }
