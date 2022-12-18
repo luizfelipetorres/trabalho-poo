@@ -2,7 +2,6 @@ package ui.views;
 
 import java.awt.EventQueue;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;

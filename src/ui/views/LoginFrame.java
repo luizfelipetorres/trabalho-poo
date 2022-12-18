@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.JPasswordField;
-import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.JSeparator;

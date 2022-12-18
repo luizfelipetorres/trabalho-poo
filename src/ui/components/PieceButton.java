@@ -5,7 +5,6 @@ import javax.swing.JButton;
 
 import model.Piece;
 
-@SuppressWarnings("serial")
 public class PieceButton extends JButton {
 	
 	private Piece piece;

@@ -1,7 +1,6 @@
 package ui.views;
 
 import java.awt.EventQueue;
-import java.awt.GridLayout;
 import java.io.IOException;
 
 import javax.swing.JFrame;
