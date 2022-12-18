@@ -58,7 +58,7 @@ public class Game{
 
 	private void initialize() throws IOException {
 		File img = new File("img//naruto.jpg"); //chooseImage();
-		puzzle = new Puzzle(8, 8, img, TypeShuffle.pairs);
+		puzzle = new Puzzle(4, 4, img, TypeShuffle.pairs);
 		frame = new JFrame();
 
 		frame.getContentPane().setBackground(new Color(207, 207, 207));

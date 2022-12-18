@@ -112,8 +112,6 @@ public class KernelFrame {
 		panelPuzzle.setBounds(10, 91, 631, 571);
 		frame.getContentPane().add(panelPuzzle);
 		
-		
-		
 		try {
 			new PuzzleBoard(panelPuzzle, 3);
 		} catch (IOException e) {
