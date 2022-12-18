@@ -5,7 +5,6 @@ import java.util.List;
 
 import dao.PlayerDAO;
 import model.Player;
-import model.validation.HibernateValidator;
 
 public class PlayerController {
 	
@@ -20,31 +19,37 @@ public class PlayerController {
         }
         return instance;
     }
+    
+    public void authenticate(String name, String password) throws SQLException {
+
+        Player player = new Player();
+
+        player.setPlayerUsername(name);
+        player.setPlayerPassword(password);
+
+        PlayerDAO.getInstance().authenticate(player);      
+    }
 
     public void save(String name, String email, String password) throws SQLException {
 
         Player player = new Player();
 
-        player.setPlayerName(name);
+        player.setPlayerUsername(name);
         player.setPlayerEmail(email);
         player.setPlayerPassword(password);
 
-        if (HibernateValidator.isPlayer(player) == true) {
-        	PlayerDAO.getInstance().save(player);
-        }
+        PlayerDAO.getInstance().save(player);      
     }
 
     public void update(int id, String name, String email, String password) throws SQLException {
 
     	Player player = new Player();
 
-    	player.setPlayerName(name);
+    	player.setPlayerUsername(name);
         player.setPlayerEmail(email);
         player.setPlayerPassword(password);
         
-        if (HibernateValidator.isPlayer(player) == true) {
-        	PlayerDAO.getInstance().update(player);
-        }
+        PlayerDAO.getInstance().update(player);
     }
 
     public List<Player> findAll() {
