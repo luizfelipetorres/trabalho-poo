@@ -25,10 +25,10 @@ public class Piece {
 	}
 	
 	void addNeighbor(Piece neighbor) {
-		boolean different =  LINE != neighbor.getLINE() && COLUMN!= neighbor.getCOLUMN() ;
+		boolean different =  this.getLINE() != neighbor.getLINE() && this.getCOLUMN() != neighbor.getCOLUMN() ;
 		
-		int deltaLine = Math.abs(LINE - neighbor.getLINE());
-		int deltaColumn = Math.abs(COLUMN - neighbor.getCOLUMN());
+		int deltaLine = Math.abs(this.getLINE() - neighbor.getLINE());
+		int deltaColumn = Math.abs(this.getCOLUMN() - neighbor.getCOLUMN());
 		int generalDelta = deltaLine + deltaColumn;
 		
 		if(generalDelta == 1 && !different) {
@@ -38,10 +38,7 @@ public class Piece {
 	
 	public void movement() {
 		Optional<Piece> piece = neighbors.stream().filter(e -> e.isEmpty()).findFirst();
-		/* to-do:
-		 * 	implementar peristencia na tabela PEÇA passando index da peça e o id do tabuleiro
-		 * 
-		 * */
+
 		if(piece.isPresent()) {
 			exchange(piece.get());
 		}
@@ -51,21 +48,21 @@ public class Piece {
 		int index = destiny.getIndex();
 		ImageIcon img = destiny.getImg();
 		boolean isEmpty = destiny.isEmpty();
-		destiny.setAttributes(getIndex(), getImg(), isEmpty());
-		setAttributes(index, img, isEmpty);
+		destiny.setAttributes(this.getIndex(), this.getImg(), this.isEmpty());
+		this.setAttributes(index, img, isEmpty);
 	}
 	
-	private void setAttributes(int index,ImageIcon img,boolean isEmpty) {
-		setIndex(index);
-		setImg(img);
-		setEmpty(isEmpty);
+	private void setAttributes(int index, ImageIcon img, boolean isEmpty) {
+		this.setIndex(index);
+		this.setImg(img);
+		this.setEmpty(isEmpty);
 	}
 
 	public int getIndex() {
 		return index;
 	}
 
-	public void setIndex(int index) {
+	private void setIndex(int index) {
 		this.index = index;
 	}
 
@@ -83,7 +80,7 @@ public class Piece {
 
 	public void setEmpty(boolean isEmpty) {
 		if(isEmpty) {
-			setImg(new ImageIcon("img\\vazio.png"));
+			this.setImg(new ImageIcon("img\\empty.png"));
 		}
 		
 		this.isEmpty = isEmpty;

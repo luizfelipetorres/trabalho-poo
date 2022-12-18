@@ -15,6 +15,8 @@ import javax.swing.border.LineBorder;
 
 import model.Player;
 import ui.components.PuzzleBoard;
+import ui.components.Stopwatch;
+
 import java.awt.Font;
 
 public class KernelFrame {
@@ -85,7 +87,7 @@ public class KernelFrame {
 		
 		JLabel lbBgmain = new JLabel("");
 		lbBgmain.setIcon(new ImageIcon("img\\bg-main.jpg"));
-		lbBgmain.setBounds(651, 0, 433, 673);
+		lbBgmain.setBounds(651, 91, 433, 582);
 		frame.getContentPane().add(lbBgmain);
 		
 		JPanel panelInformation = new JPanel();
@@ -94,13 +96,13 @@ public class KernelFrame {
 		frame.getContentPane().add(panelInformation);
 		panelInformation.setLayout(null);
 		
-		JLabel lbUsername = new JLabel("Nome do usuário:");
+		JLabel lbUsername = new JLabel("Nome do usuário: ");
 		lbUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbUsername.setBounds(10, 11, 300, 47);
 		lbUsername.setText(lbUsername.getText() + player.getPlayerUsername());
 		panelInformation.add(lbUsername);
 		
-		JLabel lblEmailDoUsurio = new JLabel("E-mail do usuário:");
+		JLabel lblEmailDoUsurio = new JLabel("E-mail do usuário: ");
 		lblEmailDoUsurio.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblEmailDoUsurio.setBounds(321, 11, 300, 47);
 		lblEmailDoUsurio.setText(lblEmailDoUsurio.getText() + player.getPlayerEmail());
@@ -111,11 +113,17 @@ public class KernelFrame {
 		panelPuzzle.setBounds(10, 91, 631, 571);
 		frame.getContentPane().add(panelPuzzle);
 		
+		JPanel panelStopWatch = new JPanel();
+		panelStopWatch.setBorder(new LineBorder(new Color(0, 0, 128)));
+		panelStopWatch.setBounds(651, 11, 423, 69);
+		frame.getContentPane().add(panelStopWatch);
+		
 		try {
-			new PuzzleBoard(panelPuzzle, 3);
+			PuzzleBoard.getInstance(panelPuzzle, 3);
+			Stopwatch.getInstance(panelStopWatch);
 		} catch (IOException e) {
 			e.printStackTrace();
-			}
+		}
 		
 	}
 }

@@ -15,17 +15,29 @@ public class Match {
 		this.players = new ArrayList<Player>();
 		this.puzzle = puzzle;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
-	
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public List<Player> getPlayers() {
 		return players;
 	}
-	
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
+
 	public Puzzle getPuzzle() {
 		return puzzle;
+	}
+
+	public void setPuzzle(Puzzle puzzle) {
+		this.puzzle = puzzle;
 	}
 	
 }

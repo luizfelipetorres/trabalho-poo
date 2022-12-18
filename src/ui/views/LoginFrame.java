@@ -149,7 +149,7 @@ public class LoginFrame {
 
 				PlayerDAO playerDAO = PlayerDAO.getInstance();
 				Player playerSelected = playerDAO.authenticate(player);
-				System.out.println(playerSelected);
+
 				if (playerSelected != null) {
 					
 					KernelFrame.main(null, playerSelected);

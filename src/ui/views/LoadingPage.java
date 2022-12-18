@@ -14,6 +14,10 @@ import java.awt.Color;
 
 public class LoadingPage extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	JProgressBar progressBar;
 	JLabel porcentagem;

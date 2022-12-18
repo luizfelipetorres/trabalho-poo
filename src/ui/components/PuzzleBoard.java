@@ -24,7 +24,7 @@ public class PuzzleBoard extends Component{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private List<PieceButton> buttons = new ArrayList<>();
+	private List<PieceButton> buttons;
 	private Puzzle puzzle;
 	private File defaultImage;
 
@@ -32,8 +32,13 @@ public class PuzzleBoard extends Component{
 	 * Create the application.
 	 * @throws IOException 
 	 */
-	public PuzzleBoard(JPanel panelGame, int size) throws IOException {
-		defaultImage = new File("img//naruto.jpg");
+	public static PuzzleBoard getInstance(JPanel panelGame, int size) throws IOException {
+		return new PuzzleBoard(panelGame, size);
+	}
+	
+	private PuzzleBoard(JPanel panelGame, int size) throws IOException {
+		this.buttons = new ArrayList<PieceButton>();
+		this.defaultImage = new File("img//naruto.jpg");
 		initialize(panelGame, size);
 	}
 
@@ -82,7 +87,7 @@ public class PuzzleBoard extends Component{
 		button.configImg();
 		piece.configImg();
 		if (puzzle.completedPuzzle()) {
-			JOptionPane.showMessageDialog(null, "ganhou;)");
+			JOptionPane.showMessageDialog(null, "Parabéns, você ganhou!!!");
 		}
 	}
 	
@@ -91,10 +96,11 @@ public class PuzzleBoard extends Component{
 		int option = JOptionPane.showConfirmDialog(this, msg);
 		return option == JOptionPane.YES_OPTION;
 	}
+	
 	private File chooseImage() {
 		if (!userChooseImage()) 
 			return defaultImage;
-		
+
 		JFileChooser fileChooser = new JFileChooser(defaultImage);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "png");
 		fileChooser.setFileFilter(filter);
