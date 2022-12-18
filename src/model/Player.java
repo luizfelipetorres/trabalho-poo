@@ -53,5 +53,11 @@ public class Player {
 	public void setPlayerPassword(String playerPassword) {
 		this.playerPassword = playerPassword;
 	}
-  
+
+	@Override
+	public String toString() {
+		return "Player [playerUsername=" + playerUsername + ", playerEmail=" + playerEmail + "]";
+	}
+	
+	
 }

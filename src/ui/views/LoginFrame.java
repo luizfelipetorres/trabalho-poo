@@ -60,6 +60,7 @@ public class LoginFrame {
 				try {
 					LoginFrame window = new LoginFrame();
 					window.frame.setVisible(true);
+					window.frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -149,8 +150,9 @@ public class LoginFrame {
 
 				PlayerDAO playerDAO = PlayerDAO.getInstance();
 				Player playerSelected = playerDAO.authenticate(player);
+				System.out.println(playerSelected);
 				if (playerSelected != null) {
-
+					
 					KernelFrame.main(null, playerSelected);
 
 				} else {
