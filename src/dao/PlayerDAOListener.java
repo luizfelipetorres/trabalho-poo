@@ -6,7 +6,7 @@ import model.Player;
 
 public interface PlayerDAOListener {
 	
-	public boolean authenticate(Player player);
+	public Player authenticate(Player player);
 	public void save(Player player);
     public void update(Player player);
     public List<Player> findAll();
