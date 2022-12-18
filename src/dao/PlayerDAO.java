@@ -41,10 +41,10 @@ public class PlayerDAO implements PlayerDAOListener {
 				playerIntern.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
 				playerIntern.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
 				playerIntern.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
+				rs.close();
+				connection.close();
+				return playerIntern;
 			}
-			rs.close();
-			connection.close();
-			return playerIntern;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,7 +62,6 @@ public class PlayerDAO implements PlayerDAOListener {
 			ps.setString(1, player.getPlayerUsername());
 			ps.setString(2, player.getPlayerEmail());
 			ps.setString(3, player.getPlayerPassword());
-
 			ps.execute();
 			ps.close();
 			connection.close();
@@ -139,11 +138,11 @@ public class PlayerDAO implements PlayerDAOListener {
 				player.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
 				player.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
 				player.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
+				rs.close();
+				connection.close();
+				return player;
 			}
-			rs.close();
-			connection.close();
-			return player;
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

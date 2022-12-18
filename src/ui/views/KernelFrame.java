@@ -44,6 +44,7 @@ public class KernelFrame {
 				try {
 					KernelFrame window = new KernelFrame(player);
 					window.frame.setVisible(true);
+					window.frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
