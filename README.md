@@ -16,14 +16,14 @@ para qual se obtém posições de partida em que é impossível resolver o jogo.
 
 O tempo que um jogador leva para arrumar uma solução deve ser a base para sua
 pontuação:
-**●** se tempo<1 minuto pontos=1000,
-**●** se tempo<10 minutos pontos=100,
-**●** se tempo<100 minutos pontos=
+- se tempo<1 minuto pontos=1000,
+- se tempo<10 minutos pontos=100,
+- se tempo<100 minutos pontos=10
 Considerar as frações de tempo:
-**●** Até 1 minuto cada segundo vale 50/3 pontos,
-**●** Até 10 minutos cada segundo vale 6 pontos.
+- Até 1 minuto cada segundo vale 50/3 pontos,
+- Até 10 minutos cada segundo vale 6 pontos.
+- Até 100 minutos cada segundo vale 1/600 pontos
 
-**●** Até 100 minutos cada segundo vale 1/600 pontos
 Cada Jogador deve ser cadastrado(apelido e código que tem que ser único) antes
 de começar uma Partida que é disputada por no máximo três Jogadores. Ganha
 quem conseguir resolver o jogo com maior pontuação. Ao final o jogo deve
