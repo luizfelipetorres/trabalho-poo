@@ -6,17 +6,29 @@ public class PlayerMatch {
 	
 	private int playerId;
 	private int matchId;
-	private LocalDateTime startTime;
-	private LocalDateTime endTime;
+	private int duration;
 	private double playerPoints;
 	
-	public PlayerMatch(int playerId, int matchId, LocalDateTime startTime, LocalDateTime endTime, double playerPoints) {
+	public PlayerMatch(int playerId, int matchId, LocalDateTime startTime, LocalDateTime endTime, int duration) {
 		super();
 		this.playerId = playerId;
 		this.matchId = matchId;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.playerPoints = playerPoints;
+		this.duration = duration;
+		this.playerPoints = 0;
+	}
+	
+	public static float calculetePoints(int duration) {
+		int minute = 60;
+		float points = 0;
+		
+		if (duration < minute) {
+			points = 1_000;
+		} else if (duration < 10 * minute) {
+			points = 100;
+		} else if (duration < 100 * minute) {
+			points = 10;
+		}
+		return points;
 	}
 
 	public int getPlayerId() {
@@ -26,13 +38,13 @@ public class PlayerMatch {
 	public int getMatchId() {
 		return matchId;
 	}
-	
-	public LocalDateTime getStartTime() {
-		return startTime;
+
+	public int getDuration() {
+		return duration;
 	}
 
-	public LocalDateTime getEndTime() {
-		return endTime;
+	public void setDuration(int duration) {
+		this.duration = duration;
 	}
 
 	public double getPlayerPoints() {
