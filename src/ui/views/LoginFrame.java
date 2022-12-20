@@ -259,7 +259,8 @@ public class LoginFrame {
 						Arrays.toString(fieldRegisterPassword.getPassword()));
 
 				PlayerDAO playerDAO = PlayerDAO.getInstance();
-				playerDAO.save(player);
+				if (playerDAO.save(player));
+					tabbedPane.setSelectedIndex(0);
 			}
 		});
 		btnRegister.addMouseListener(new MouseAdapter() {

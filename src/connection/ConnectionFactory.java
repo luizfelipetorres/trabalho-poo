@@ -17,7 +17,8 @@ public class ConnectionFactory {
 	private static final String DRIVER = "org.postgresql.Driver";
 	private static final String URL = "jdbc:postgresql://localhost:5432/puzzle";
 	private static final String USER = "postgres";
-	private static final String PASS = "1234";
+	private static final String PASS = "root";
+	private static boolean tableCreated = false;
 
 	public static Connection getConnection() {
 
@@ -68,6 +69,9 @@ public class ConnectionFactory {
 	}
 
 	public static void createTables(Connection con) {
+		if (tableCreated)
+			return;
+		
 		StringBuilder str = new StringBuilder();
 		char i;
 		try {
@@ -76,9 +80,10 @@ public class ConnectionFactory {
 				str.append(f.nextLine());
 			}
 			con.createStatement().execute(str.toString());
+			tableCreated = true;
 		} catch (SQLException e) {
 			System.out.println("Erro na criação das tabelas!");
-			e.printStackTrace();
+			tableCreated = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
