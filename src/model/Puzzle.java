@@ -30,7 +30,6 @@ public class Puzzle {
 		this.generatepieces(file);
 		this.associateNeighbors();
 		this.addEmpty();
-		// shuffleTable(typeShuffle);
 	}
 
 	private void generatepieces(File file) throws IOException {
