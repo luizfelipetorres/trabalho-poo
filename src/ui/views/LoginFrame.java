@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class LoginFrame extends AbstractWindow{
+public class LoginFrame extends AbstractWindow {
 
 	private JFrame frame;
 	private CustomButton btnLogin;
@@ -43,13 +43,25 @@ public class LoginFrame extends AbstractWindow{
 			}
 		});
 	}
-	
+
 	public LoginFrame() {
 		super();
 		initialize();
 	}
 
 	protected void initialize() {
+		MouseAdapter hoverEffect = new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				e.getComponent().setBackground(new Color(249, 13, 72));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				e.getComponent().setBackground(new Color(0, 0, 128));
+			}
+		};
+
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -69,42 +81,33 @@ public class LoginFrame extends AbstractWindow{
 
 		CustomField fieldLoginUsername = new CustomField("Nome do usuário:", 270, 30, 50, false);
 		CustomField fieldLoginPassword = new CustomField("Senha:", 270, 30, 150, true);
-		
+
 		containerLogin.add(fieldLoginUsername.initialize());
 		containerLogin.add(fieldLoginPassword.initialize());
 
-		btnLogin = new CustomButton("Entrar", "img\\icons\\icon-login.png", new Color(255, 255, 255), new Color(0, 0, 128), 20, 279, 270, 50);
+		btnLogin = new CustomButton("Entrar", "img\\icons\\icon-login.png", new Color(255, 255, 255),
+				new Color(0, 0, 128), 20, 279, 270, 50);
 		containerLogin.add(btnLogin);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				Player player = new Player(fieldLoginUsername.getText(),
 						Arrays.toString(fieldLoginPassword.getPassword()));
-				
+
 				Player playerSelected = PlayerDAO.getInstance().authenticate(player);
 
 				if (playerSelected != null) {
-					
+
 					KernelFrame.main(null, playerSelected);
 
 				} else {
 					JOptionPane.showMessageDialog(btnLogin,
 							"Dados inválidos, por favor insira as credenciais novamente!");
 				}
+			}
+		});
+		btnLogin.addMouseListener(hoverEffect);
 
-			}
-		});
-		btnLogin.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnLogin.setBackground(new Color(249, 13, 72));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnLogin.setBackground(new Color(0, 0, 128));
-			}
-		});
-		
 		JLabel lbRecover = new JLabel("Esqueceu sua senha?");
 		lbRecover.setBounds(20, 418, 270, 23);
 		containerLogin.add(lbRecover);
@@ -120,13 +123,14 @@ public class LoginFrame extends AbstractWindow{
 		CustomField fieldRegisterUsername = new CustomField("Nome do usuário:", 270, 30, 50, false);
 		CustomField fieldRegisterEmail = new CustomField("E-mail:", 270, 30, 150, false);
 		CustomField fieldRegisterPassword = new CustomField("Senha:", 270, 30, 250, true);
-		
+
 		containerRegister.add(fieldRegisterUsername.initialize());
 		containerRegister.add(fieldRegisterEmail.initialize());
 		containerRegister.add(fieldRegisterPassword.initialize());
-		
-		btnRegister = new CustomButton("Cadastrar", "img\\icons\\icon-adduser.png", new Color(255, 255, 255), new Color(0, 0, 128), 21, 374, 270, 50);
-		containerRegister.add(btnRegister);	
+
+		btnRegister = new CustomButton("Cadastrar", "img\\icons\\icon-adduser.png", new Color(255, 255, 255),
+				new Color(0, 0, 128), 21, 374, 270, 50);
+		containerRegister.add(btnRegister);
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -134,21 +138,13 @@ public class LoginFrame extends AbstractWindow{
 						Arrays.toString(fieldRegisterPassword.getPassword()));
 
 				PlayerDAO playerDAO = PlayerDAO.getInstance();
-				if (playerDAO.save(player));
-					tabbedPane.setSelectedIndex(0);
+				if (playerDAO.save(player))
+					;
+				tabbedPane.setSelectedIndex(0);
 			}
 		});
-		btnRegister.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnRegister.setBackground(new Color(249, 13, 72));
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnRegister.setBackground(new Color(0, 0, 128));
-			}
-		});
-		
+		btnRegister.addMouseListener(hoverEffect);
+
 		JLabel lbBG = new JLabel("");
 		lbBG.setIcon(new ImageIcon("img\\bg-login.jpg"));
 		lbBG.setBounds(0, 0, 494, 567);

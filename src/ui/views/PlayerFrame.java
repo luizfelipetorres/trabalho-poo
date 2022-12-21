@@ -61,3 +61,4 @@ public class PlayerFrame extends JPanel {
 		panelInformationPersona.add(lbTitleInformationPersona);
 	}
 }
+

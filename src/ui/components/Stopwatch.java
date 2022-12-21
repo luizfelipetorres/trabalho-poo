@@ -35,11 +35,14 @@ public class Stopwatch {
 		public void actionPerformed(ActionEvent e) {
 			long currentTime = new Date().getTime();
 			duration = currentTime - initialTime;
-			labelTime.setText(String.format("%02d:%02d:%02d:%02d", getHours(), getMinutes(), getSeconds(),
-					getHundredthSeconds()));
+			labelTime.setText(getStringTimer());
 		}
 
 	};
+
+	private String getStringTimer() {
+		return String.format("%02d:%02d:%02d:%02d", getHours(), getMinutes(), getSeconds(), getHundredthSeconds());
+	}
 
 	private ActionListener onPause = new ActionListener() {
 		@Override
@@ -48,12 +51,23 @@ public class Stopwatch {
 		}
 	};
 
+	public void reset() {
+		if (duration == 0)
+			return;
+		
+		isRunning = false;
+		isVisible = true;
+		duration = 0;
+		timer.removeActionListener(onPause);
+		timer.removeActionListener(taskPerformer);
+	}
+
 	private Stopwatch() {
 		this.isRunning = false;
 		this.isVisible = true;
 		this.duration = 0;
 		this.timer = new Timer(10, null);
-		this.labelTime = new JLabel("00:00:00");
+		this.labelTime = new JLabel(getStringTimer());
 	}
 
 	public static Stopwatch getInstance() {
@@ -87,8 +101,12 @@ public class Stopwatch {
 		return isRunning;
 	}
 
-	public Component initialize(PuzzleFrame puzzleInternalFrame) {
+	public long getDuration() {
+		return duration;
+	}
 
+	public Component initialize(PuzzleFrame puzzleInternalFrame) {
+		reset();
 		JPanel panelStopWatch = new JPanel();
 		panelStopWatch.setLayout(null);
 		panelStopWatch.setBorder(new LineBorder(new Color(0, 0, 128)));
@@ -166,16 +184,14 @@ public class Stopwatch {
 		switchTimer();
 		long currentTime = new Date().getTime();
 		initialTime = currentTime - duration;
-		if (!timer.isRunning())
-			timer.start();
-
 		btnStart.setEnabled(false);
 		btnPause.setEnabled(true);
 		btnStop.setEnabled(true);
 	}
 
-	private void pause() {
-		switchTimer();
+	public void pause() {
+		if (isRunning)
+			switchTimer();
 		btnPause.setEnabled(false);
 		btnStart.setEnabled(true);
 		btnStop.setEnabled(true);
