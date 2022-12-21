@@ -26,7 +26,7 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class LoginFrame {
+public class LoginFrame extends AbstractWindow{
 
 	private JFrame frame;
 	private JTextField fieldRegisterUsername;
@@ -41,19 +41,7 @@ public class LoginFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Windows".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-
+		setTheme();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
