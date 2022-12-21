@@ -1,5 +1,6 @@
 package ui.components;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -10,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import interfaces.ShuffleListener;
@@ -24,6 +27,7 @@ public class PuzzleBoard extends Component{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static PuzzleBoard instance;
 	private List<PieceButton> buttons;
 	private Puzzle puzzle;
 	private File defaultImage;
@@ -32,29 +36,37 @@ public class PuzzleBoard extends Component{
 	 * Create the application.
 	 * @throws IOException 
 	 */
-	public static PuzzleBoard getInstance(JPanel panelGame, int size) throws IOException {
-		return new PuzzleBoard(panelGame, size);
+	public static PuzzleBoard getInstance(){
+		if(instance == null) {
+			instance = new PuzzleBoard();
+		}
+		return instance;
 	}
 	
-	private PuzzleBoard(JPanel panelGame, int size) throws IOException {
+	private PuzzleBoard(){
 		this.buttons = new ArrayList<PieceButton>();
 		this.defaultImage = new File("img//naruto.jpg");
-		initialize(panelGame, size);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 * @throws IOException 
 	 */
-	private void initialize(JPanel panelGame, int size) throws IOException {
+	public Component initialize(JFrame frame, int size) throws IOException {
+		
+		JPanel panelPuzzle = new JPanel();
+		panelPuzzle.setBorder(new LineBorder(new Color(0, 0, 128)));
+		panelPuzzle.setBounds(10, 91, 631, 571);
+		frame.getContentPane().add(panelPuzzle);
+		
 		File img = chooseImage();
 		puzzle = new Puzzle(size, size,img,TypeShuffle.pairs);
 		
 		GridLayout gridLayout = new GridLayout(puzzle.getLINES(), puzzle.getCOLUMNS());
-		panelGame.setLayout(gridLayout);
+		panelPuzzle.setLayout(gridLayout);
 		
-		int whith = panelGame.getWidth() / puzzle.getLINES();
-		int height = panelGame.getHeight() / puzzle.getCOLUMNS();
+		int whith = panelPuzzle.getWidth() / puzzle.getLINES();
+		int height = panelPuzzle.getHeight() / puzzle.getCOLUMNS();
 		puzzle.getPieces().forEach(e -> buttons.add(new PieceButton(e, whith, height)));
 		
 		ShuffleListener listener = new ShuffleListener() {
@@ -63,8 +75,7 @@ public class PuzzleBoard extends Component{
 				buttons.forEach(button -> button.configImg());
 			}
 		};
-
-		buttons.forEach(e -> panelGame.add(e));
+		buttons.forEach(e -> panelPuzzle.add(e));
 
 		Thread shuffle = new Thread(() -> {
 			puzzle.shuffleTable(listener);
@@ -79,6 +90,8 @@ public class PuzzleBoard extends Component{
 		});
 		shuffle.start();
 		
+		return panelPuzzle;
+		
 	}
 	
 	private void makeMovement(PieceButton button) {
@@ -87,6 +100,7 @@ public class PuzzleBoard extends Component{
 		button.configImg();
 		piece.configImg();
 		if (puzzle.completedPuzzle()) {
+			Stopwatch.getInstance().stop();
 			JOptionPane.showMessageDialog(null, "Parabéns, você ganhou!!!");
 		}
 	}

@@ -108,13 +108,9 @@ public class KernelFrame {
 		lblEmailDoUsurio.setText(lblEmailDoUsurio.getText() + player.getPlayerEmail());
 		panelInformation.add(lblEmailDoUsurio);
 		
-		JPanel panelPuzzle = new JPanel();
-		panelPuzzle.setBorder(new LineBorder(new Color(0, 0, 128)));
-		panelPuzzle.setBounds(10, 91, 631, 571);
-		frame.getContentPane().add(panelPuzzle);
 		
 		try {
-			PuzzleBoard.getInstance(panelPuzzle, 8);
+			PuzzleBoard.getInstance().initialize(frame, 2);
 			Stopwatch.getInstance().initialize(frame);
 		} catch (IOException e) {
 			e.printStackTrace();
