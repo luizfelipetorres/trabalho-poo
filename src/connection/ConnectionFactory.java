@@ -71,7 +71,7 @@ public class ConnectionFactory {
 	public static void createTables(Connection con) {
 		if (tableCreated)
 			return;
-		
+
 		StringBuilder str = new StringBuilder();
 		char i;
 		try {
