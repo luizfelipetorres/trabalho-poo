@@ -113,14 +113,9 @@ public class KernelFrame {
 		panelPuzzle.setBounds(10, 91, 631, 571);
 		frame.getContentPane().add(panelPuzzle);
 		
-		JPanel panelStopWatch = new JPanel();
-		panelStopWatch.setBorder(new LineBorder(new Color(0, 0, 128)));
-		panelStopWatch.setBounds(651, 11, 423, 69);
-		frame.getContentPane().add(panelStopWatch);
-		
 		try {
-			PuzzleBoard.getInstance(panelPuzzle, 3);
-			Stopwatch.getInstance(panelStopWatch);
+			PuzzleBoard.getInstance(panelPuzzle, 8);
+			Stopwatch.getInstance().initialize(frame);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

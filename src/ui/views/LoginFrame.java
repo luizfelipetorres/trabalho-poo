@@ -138,7 +138,7 @@ public class LoginFrame {
 		separatorLoginPassword.setForeground(new Color(0, 0, 128));
 		separatorLoginPassword.setBackground(new Color(0, 0, 128));
 
-		btnLogin = new StrongButton("Entrar", new Color(255, 255, 255), new Color(0, 0, 128), 90, 279, 270, 50);
+		btnLogin = new StrongButton("Entrar", "", new Color(255, 255, 255), new Color(0, 0, 128), 90, 279, 270, 50);
 		btnLogin.setBounds(20, 279, 270, 50);
 		containerLogin.add(btnLogin);
 		btnLogin.addActionListener(new ActionListener() {
@@ -249,7 +249,7 @@ public class LoginFrame {
 		separatorRegisterPassword.setForeground(new Color(0, 0, 128));
 		separatorRegisterPassword.setBackground(new Color(0, 0, 128));
 
-		btnRegister = new StrongButton("Cadastrar", new Color(255, 255, 255), new Color(0, 0, 128), 90, 373, 270, 50);
+		btnRegister = new StrongButton("Cadastrar", "", new Color(255, 255, 255), new Color(0, 0, 128), 90, 373, 270, 50);
 		btnRegister.setBounds(21, 374, 270, 50);
 		containerRegister.add(btnRegister);	
 		btnRegister.addActionListener(new ActionListener() {
