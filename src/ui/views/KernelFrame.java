@@ -22,13 +22,9 @@ import java.awt.Font;
 public class KernelFrame extends AbstractWindow{
 
 	private JFrame frame;
-
-	/**
-	 * Launch the application.
-	 */
+	private Player player;
 	
 	public static void main(String[] args, Player player) {
-		setTheme();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -42,17 +38,14 @@ public class KernelFrame extends AbstractWindow{
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	private KernelFrame(Player player) {
-		initialize(player);
+		this.player = player;
+		setTheme();
+		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize(Player player) {
+	@Override
+	protected void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
 		frame.setBounds(100, 100, 1100, 734);

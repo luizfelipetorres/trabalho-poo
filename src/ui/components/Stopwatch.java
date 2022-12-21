@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
-public class Stopwatch{
-	
+public class Stopwatch {
+
 	private static Stopwatch instance;
 	private JLabel labelTime;
 	private JButton btnStart;
@@ -29,30 +29,39 @@ public class Stopwatch{
 	private int hours;
 	private int timeInSeconds;
 	private boolean isRunning;
+	private boolean isVisible;
 	private ActionListener taskPerformer = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			hundredthSeconds ++;
-			if(hundredthSeconds == 100) {
-				seconds ++;
-				timeInSeconds ++;
+			hundredthSeconds++;
+			if (hundredthSeconds == 100) {
+				seconds++;
+				timeInSeconds++;
 				hundredthSeconds = 0;
-			}else if(seconds == 60) {
-				minutes ++;
+			} else if (seconds == 60) {
+				minutes++;
 				seconds = 0;
-			}else if(minutes == 60) {
-				hours ++;
+			} else if (minutes == 60) {
+				hours++;
 				minutes = 0;
-			}else if(hours == 24) {
+			} else if (hours == 24) {
 				hours = 0;
 			}
 			labelTime.setText(String.format("%02d:%02d:%02d:%02d", hours, minutes, seconds, hundredthSeconds));
 		}
-	  };
+	};
+
+	private ActionListener onPause = new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			labelTime.setVisible(isVisible = !isVisible);
+		}
+	};
 
 	private Stopwatch() {
 		this.isRunning = false;
 		this.hundredthSeconds = 0;
+		this.isVisible = true;
 		this.seconds = 0;
 		this.minutes = 0;
 		this.hours = 0;
@@ -60,33 +69,28 @@ public class Stopwatch{
 		this.timer = new Timer(10, taskPerformer);
 		this.labelTime = new JLabel("00:00:00");
 	}
-	
+
 	public static Stopwatch getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new Stopwatch();
 		}
 		return instance;
 	}
 
 	public Component initialize(JFrame frame) {
-		
+
 		JPanel panelStopWatch = new JPanel();
 		panelStopWatch.setLayout(null);
 		panelStopWatch.setBorder(new LineBorder(new Color(0, 0, 128)));
 		panelStopWatch.setBounds(651, 11, 423, 69);
 		frame.getContentPane().add(panelStopWatch);
-			
+
 		labelTime = new JLabel("00:00:00:00");
 		labelTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		labelTime.setBounds(10, 11, 161, 48);
-		
-		btnStart = new StrongButton(
-				"", 
-				"img\\icons\\icon-play.png", 
-				new Color(255, 255, 255), 
-				new Color(0, 0, 128), 
-				183, 11, 70, 48
-				);	
+
+		btnStart = new StrongButton("", "img\\icons\\icon-play.png", new Color(255, 255, 255), new Color(0, 0, 128),
+				183, 11, 70, 48);
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Stopwatch.getInstance().start();
@@ -97,18 +101,14 @@ public class Stopwatch{
 			public void mouseEntered(MouseEvent e) {
 				btnStart.setBackground(new Color(249, 13, 72));
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnStart.setBackground(new Color(0, 0, 128));
 			}
 		});
-		btnPause = new StrongButton(
-				"", 
-				"img\\icons\\icon-pause.png", 
-				new Color(255, 255, 255), 
-				new Color(0, 0, 128), 
-				260, 11, 70, 48
-				);
+		btnPause = new StrongButton("", "img\\icons\\icon-pause.png", new Color(255, 255, 255), new Color(0, 0, 128),
+				260, 11, 70, 48);
 		btnPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Stopwatch.getInstance().pause();
@@ -119,17 +119,14 @@ public class Stopwatch{
 			public void mouseEntered(MouseEvent e) {
 				btnPause.setBackground(new Color(249, 13, 72));
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnPause.setBackground(new Color(0, 0, 128));
 			}
 		});
-		btnStop = new StrongButton(
-				"", 
-				"img\\icons\\icon-stop.png", 
-				new Color(255, 255, 255),
-				new Color(0, 0, 128), 
-				337, 11, 70, 48);
+		btnStop = new StrongButton("", "img\\icons\\icon-stop.png", new Color(255, 255, 255), new Color(0, 0, 128), 337,
+				11, 70, 48);
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Stopwatch.getInstance().stop();
@@ -140,43 +137,43 @@ public class Stopwatch{
 			public void mouseEntered(MouseEvent e) {
 				btnStop.setBackground(new Color(249, 13, 72));
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnStop.setBackground(new Color(0, 0, 128));
 			}
 		});
-		
+
 		btnStop.setEnabled(false);
 		btnStart.setEnabled(true);
 		btnPause.setEnabled(false);
-		
+
 		panelStopWatch.add(labelTime);
 		panelStopWatch.add(btnStart);
 		panelStopWatch.add(btnPause);
 		panelStopWatch.add(btnStop);
-		
+
 		return panelStopWatch;
-	
+
 	}
-	
+
 	private void start() {
+		switchTimer();
 		timer.start();
-		isRunning = true;
 		btnStart.setEnabled(false);
 		btnPause.setEnabled(true);
 		btnStop.setEnabled(true);
 	}
-	
+
 	private void pause() {
-		timer.stop();
-		isRunning = false;
+		switchTimer();
 		btnPause.setEnabled(false);
 		btnStart.setEnabled(true);
 		btnStop.setEnabled(true);
 	}
 
 	public void stop() {
-		if(timer.isRunning()) {
+		if (timer.isRunning()) {
 			timer.stop();
 			isRunning = false;
 			btnStop.setEnabled(false);
@@ -193,9 +190,22 @@ public class Stopwatch{
 	public int getTimeInSeconds() {
 		return timeInSeconds;
 	}
-	
+
 	public boolean isRunning() {
 		return isRunning;
 	}
 
+	public void switchTimer() {
+		isRunning = !isRunning;
+		if (isRunning) {
+			timer.setDelay(10);
+			timer.addActionListener(taskPerformer);
+			timer.removeActionListener(onPause);
+			labelTime.setVisible(true);
+		} else {
+			timer.setDelay(500);
+			timer.addActionListener(onPause);
+			timer.removeActionListener(taskPerformer);
+		}
+	}
 }

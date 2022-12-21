@@ -37,11 +37,7 @@ public class LoginFrame extends AbstractWindow{
 	private StrongButton btnLogin;
 	private StrongButton btnRegister;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
-		setTheme();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -54,18 +50,13 @@ public class LoginFrame extends AbstractWindow{
 			}
 		});
 	}
-
-	/**
-	 * Create the application.
-	 */
-	private LoginFrame() {
+	
+	public LoginFrame() {
+		super();
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
+	protected void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

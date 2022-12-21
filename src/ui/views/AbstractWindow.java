@@ -1,7 +1,12 @@
 package ui.views;
 
-public class AbstractWindow {
-	protected static void setTheme() {
+public abstract class AbstractWindow {
+	public AbstractWindow() {
+		setTheme();
+	}
+	protected abstract void initialize();
+	
+	protected void setTheme() {
 		try {
 			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 				if ("Windows".equals(info.getName())) {
