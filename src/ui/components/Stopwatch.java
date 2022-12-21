@@ -28,6 +28,7 @@ public class Stopwatch{
 	private int minutes;
 	private int hours;
 	private int timeInSeconds;
+	private boolean isRunning;
 	private ActionListener taskPerformer = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -50,6 +51,7 @@ public class Stopwatch{
 	  };
 
 	private Stopwatch() {
+		this.isRunning = false;
 		this.hundredthSeconds = 0;
 		this.seconds = 0;
 		this.minutes = 0;
@@ -159,6 +161,7 @@ public class Stopwatch{
 	
 	private void start() {
 		timer.start();
+		isRunning = true;
 		btnStart.setEnabled(false);
 		btnPause.setEnabled(true);
 		btnStop.setEnabled(true);
@@ -166,6 +169,7 @@ public class Stopwatch{
 	
 	private void pause() {
 		timer.stop();
+		isRunning = false;
 		btnPause.setEnabled(false);
 		btnStart.setEnabled(true);
 		btnStop.setEnabled(true);
@@ -174,6 +178,7 @@ public class Stopwatch{
 	public void stop() {
 		if(timer.isRunning()) {
 			timer.stop();
+			isRunning = false;
 			btnStop.setEnabled(false);
 			btnStart.setEnabled(true);
 			btnPause.setEnabled(false);
@@ -187,6 +192,10 @@ public class Stopwatch{
 
 	public int getTimeInSeconds() {
 		return timeInSeconds;
+	}
+	
+	public boolean isRunning() {
+		return isRunning;
 	}
 
 }

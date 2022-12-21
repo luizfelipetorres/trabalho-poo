@@ -83,7 +83,9 @@ public class PuzzleBoard extends Component{
 				button.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseReleased(MouseEvent e) {
-						makeMovement(button);
+						if(Stopwatch.getInstance().isRunning()) {
+							makeMovement(button);
+						}
 					}
 				});
 			});
