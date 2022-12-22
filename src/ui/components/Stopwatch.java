@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,32 +25,19 @@ public class Stopwatch {
 	private JButton btnPause;
 	private JButton btnStop;
 	private Timer timer;
-	private int hundredthSeconds;
-	private int seconds;
-	private int minutes;
-	private int hours;
-	private int timeInSeconds;
 	private boolean isRunning;
 	private boolean isVisible;
+	private long initialTime;
+	private long duration;
 	private ActionListener taskPerformer = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			hundredthSeconds++;
-			if (hundredthSeconds == 100) {
-				seconds++;
-				timeInSeconds++;
-				hundredthSeconds = 0;
-			} else if (seconds == 60) {
-				minutes++;
-				seconds = 0;
-			} else if (minutes == 60) {
-				hours++;
-				minutes = 0;
-			} else if (hours == 24) {
-				hours = 0;
-			}
-			labelTime.setText(String.format("%02d:%02d:%02d:%02d", hours, minutes, seconds, hundredthSeconds));
+			long currentTime = new Date().getTime();
+			duration = currentTime - initialTime;
+			labelTime.setText(String.format("%02d:%02d:%02d:%02d", getHours(), getMinutes(), getSeconds(),
+					getHundredthSeconds()));
 		}
+
 	};
 
 	private ActionListener onPause = new ActionListener() {
@@ -60,13 +49,9 @@ public class Stopwatch {
 
 	private Stopwatch() {
 		this.isRunning = false;
-		this.hundredthSeconds = 0;
 		this.isVisible = true;
-		this.seconds = 0;
-		this.minutes = 0;
-		this.hours = 0;
-		this.timeInSeconds = 0;
-		this.timer = new Timer(10, taskPerformer);
+		this.duration = 0;
+		this.timer = new Timer(10, null);
 		this.labelTime = new JLabel("00:00:00");
 	}
 
@@ -75,6 +60,30 @@ public class Stopwatch {
 			instance = new Stopwatch();
 		}
 		return instance;
+	}
+
+	private long getHundredthSeconds() {
+		return duration / 10 % 100;
+	}
+
+	private long getSeconds() {
+		return duration / 1000 % 60;
+	}
+
+	private long getMinutes() {
+		return duration / 1000 / 60 % 60;
+	}
+
+	private long getHours() {
+		return duration / 1000 / 60 / 60 % 24;
+	}
+
+	public long getTimeInSeconds() {
+		return duration / 1000;
+	}
+
+	public boolean isRunning() {
+		return isRunning;
 	}
 
 	public Component initialize(JFrame frame) {
@@ -86,7 +95,7 @@ public class Stopwatch {
 		frame.getContentPane().add(panelStopWatch);
 
 		labelTime = new JLabel("00:00:00:00");
-		labelTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		labelTime.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		labelTime.setBounds(10, 11, 161, 48);
 
 		btnStart = new StrongButton("", "img\\icons\\icon-play.png", new Color(255, 255, 255), new Color(0, 0, 128),
@@ -148,18 +157,17 @@ public class Stopwatch {
 		btnStart.setEnabled(true);
 		btnPause.setEnabled(false);
 
-		panelStopWatch.add(labelTime);
-		panelStopWatch.add(btnStart);
-		panelStopWatch.add(btnPause);
-		panelStopWatch.add(btnStop);
-
+		Arrays.asList(labelTime, btnStart, btnPause, btnStop).forEach(panelStopWatch::add);
 		return panelStopWatch;
-
 	}
 
 	private void start() {
 		switchTimer();
-		timer.start();
+		long currentTime = new Date().getTime();
+		initialTime = currentTime - duration;
+		if (!timer.isRunning())
+			timer.start();
+
 		btnStart.setEnabled(false);
 		btnPause.setEnabled(true);
 		btnStop.setEnabled(true);
@@ -175,37 +183,30 @@ public class Stopwatch {
 	public void stop() {
 		if (timer.isRunning()) {
 			timer.stop();
+			Arrays.asList(onPause, taskPerformer).forEach(timer::removeActionListener);
+			this.duration = 0;
 			isRunning = false;
 			btnStop.setEnabled(false);
 			btnStart.setEnabled(true);
 			btnPause.setEnabled(false);
-			this.hundredthSeconds = 0;
-			this.seconds = 0;
-			this.minutes = 0;
-			this.hours = 0;
 			labelTime.setText("00:00:00:00");
+			labelTime.setVisible(true);
 		}
-	}
-
-	public int getTimeInSeconds() {
-		return timeInSeconds;
-	}
-
-	public boolean isRunning() {
-		return isRunning;
 	}
 
 	public void switchTimer() {
 		isRunning = !isRunning;
+		timer.stop();
 		if (isRunning) {
-			timer.setDelay(10);
 			timer.addActionListener(taskPerformer);
 			timer.removeActionListener(onPause);
+			timer.setDelay(10);
 			labelTime.setVisible(true);
 		} else {
-			timer.setDelay(500);
-			timer.addActionListener(onPause);
 			timer.removeActionListener(taskPerformer);
+			timer.addActionListener(onPause);
+			timer.setDelay(500);
 		}
+		timer.start();
 	}
 }
