@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import connection.ConnectionFactory;
 import model.Player;
 
@@ -54,7 +56,7 @@ public class PlayerDAO implements PlayerDAOListener {
 	}
 
 	@Override
-	public void save(Player player) {
+	public boolean save(Player player) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "INSERT INTO PLAYER(PLAYER_USERNAME, PLAYER_EMAIL, PLAYER_PASSWORD) VALUES (?,?,?)";
@@ -65,9 +67,12 @@ public class PlayerDAO implements PlayerDAOListener {
 			ps.execute();
 			ps.close();
 			connection.close();
-
+			JOptionPane.showMessageDialog(null, "Usuário criado com sucesso!", "Feito", JOptionPane.INFORMATION_MESSAGE);
+			return true;
 		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", 0);;
 			System.out.println(e.toString());
+			return false;
 		}
 	}
 
