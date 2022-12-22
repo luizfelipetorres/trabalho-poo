@@ -6,13 +6,11 @@ import java.util.List;
 public class Match {
 	
 	private int id;
-	private List<Player> players;
 	private Puzzle puzzle;
 	
-	public Match(int id, List<Player> players, Puzzle puzzle) {
+	public Match(int id, Puzzle puzzle) {
 		super();
 		this.id = id;
-		this.players = new ArrayList<Player>();
 		this.puzzle = puzzle;
 	}
 
@@ -22,14 +20,6 @@ public class Match {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public List<Player> getPlayers() {
-		return players;
-	}
-
-	public void setPlayers(List<Player> players) {
-		this.players = players;
 	}
 
 	public Puzzle getPuzzle() {

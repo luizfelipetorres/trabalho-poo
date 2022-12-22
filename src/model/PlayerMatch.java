@@ -7,14 +7,16 @@ public class PlayerMatch {
 	private int playerId;
 	private int matchId;
 	private int duration;
+	private boolean isCompleted;
 	private double playerPoints;
 	
-	public PlayerMatch(int playerId, int matchId, LocalDateTime startTime, LocalDateTime endTime, int duration) {
+	public PlayerMatch(int playerId, int matchId, LocalDateTime startTime, LocalDateTime endTime, int duration, boolean isCompleted) {
 		super();
 		this.playerId = playerId;
 		this.matchId = matchId;
 		this.duration = duration;
-		this.playerPoints = 0;
+		this.isCompleted = isCompleted;
+		this.playerPoints = calculetePoints(duration);
 	}
 	
 	public static float calculetePoints(int duration) {

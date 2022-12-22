@@ -19,27 +19,12 @@ import ui.components.Stopwatch;
 
 import java.awt.Font;
 
-public class KernelFrame {
+public class KernelFrame extends AbstractWindow{
 
 	private JFrame frame;
-
-	/**
-	 * Launch the application.
-	 */
+	private Player player;
 	
 	public static void main(String[] args, Player player) {
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Windows".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -53,17 +38,14 @@ public class KernelFrame {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	private KernelFrame(Player player) {
-		initialize(player);
+		this.player = player;
+		setTheme();
+		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize(Player player) {
+	@Override
+	protected void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
 		frame.setBounds(100, 100, 1100, 734);

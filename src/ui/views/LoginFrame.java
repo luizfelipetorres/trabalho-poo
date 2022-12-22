@@ -26,7 +26,7 @@ import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class LoginFrame {
+public class LoginFrame extends AbstractWindow{
 
 	private JFrame frame;
 	private JTextField fieldRegisterUsername;
@@ -37,23 +37,7 @@ public class LoginFrame {
 	private StrongButton btnLogin;
 	private StrongButton btnRegister;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
-
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Windows".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(LoginFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -66,18 +50,13 @@ public class LoginFrame {
 			}
 		});
 	}
-
-	/**
-	 * Create the application.
-	 */
-	private LoginFrame() {
+	
+	public LoginFrame() {
+		super();
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
+	protected void initialize() {
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
