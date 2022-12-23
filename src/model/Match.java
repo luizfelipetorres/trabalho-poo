@@ -1,24 +1,25 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Match {
 	
-	private int id;
+	private Long id;
 	private Puzzle puzzle;
 	
-	public Match(int id, Puzzle puzzle) {
+	public Match(Long id, Puzzle puzzle) {
+    private int id;
+    private Puzzle puzzle;
+	}
+
+	public Match(Puzzle puzzle) {
 		super();
-		this.id = id;
 		this.puzzle = puzzle;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

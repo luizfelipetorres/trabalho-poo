@@ -7,64 +7,64 @@ import dao.PlayerDAO;
 import model.Player;
 
 public class PlayerController {
-	
+
 	private static PlayerController instance;
 
-    private PlayerController() {
-    }
+	private PlayerController() {
+	}
 
-    public static PlayerController getInstance() {
-        if (instance == null) {
-            instance = new PlayerController();
-        }
-        return instance;
-    }
-    
-    public void authenticate(String name, String password) throws SQLException {
+	public static PlayerController getInstance() {
+		if (instance == null) {
+			instance = new PlayerController();
+		}
+		return instance;
+	}
 
-        Player player = new Player();
+	public void authenticate(String name, String password) throws SQLException {
 
-        player.setPlayerUsername(name);
-        player.setPlayerPassword(password);
+		Player player = new Player();
 
-        PlayerDAO.getInstance().authenticate(player);      
-    }
+		player.setPlayerUsername(name);
+		player.setPlayerPassword(password);
 
-    public void save(String name, String email, String password) throws SQLException {
+		PlayerDAO.getInstance().authenticate(player);
+	}
 
-        Player player = new Player();
+	public void save(String name, String email, String password) throws SQLException {
 
-        player.setPlayerUsername(name);
-        player.setPlayerEmail(email);
-        player.setPlayerPassword(password);
+		Player player = new Player();
 
-        PlayerDAO.getInstance().save(player);      
-    }
+		player.setPlayerUsername(name);
+		player.setPlayerEmail(email);
+		player.setPlayerPassword(password);
 
-    public void update(int id, String name, String email, String password) throws SQLException {
+		PlayerDAO.getInstance().save(player);
+	}
 
-    	Player player = new Player();
+	public void update(int id, String name, String email, String password) throws SQLException {
 
-    	player.setPlayerUsername(name);
-        player.setPlayerEmail(email);
-        player.setPlayerPassword(password);
-        
-        PlayerDAO.getInstance().update(player);
-    }
+		Player player = new Player();
 
-    public List<Player> findAll() {
-        return PlayerDAO.getInstance().findAll();
-    }
+		player.setPlayerUsername(name);
+		player.setPlayerEmail(email);
+		player.setPlayerPassword(password);
 
-    public Player findById(int id) throws Exception {
-        return PlayerDAO.getInstance().findById(id);
-    }
+		PlayerDAO.getInstance().update(player);
+	}
 
-    public List<Player> findByName(String name) throws Exception {
-        return PlayerDAO.getInstance().findByName(name);
-    }
+	public List<Player> findAll() {
+		return PlayerDAO.getInstance().findAll();
+	}
 
-    public void remove(int id) {
-    	PlayerDAO.getInstance().remove(id);
-    }
+	public Player findById(int id) throws Exception {
+		return PlayerDAO.getInstance().findById(id);
+	}
+
+	public List<Player> findByName(String name) throws Exception {
+		return PlayerDAO.getInstance().findByName(name);
+	}
+
+	public void remove(int id) {
+		PlayerDAO.getInstance().remove(id);
+	}
 }

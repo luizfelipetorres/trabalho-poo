@@ -52,7 +52,8 @@ public class Piece {
 		return false;
 	}
 	
-	void exchange(Piece destiny) {
+	
+	public void exchange(Piece destiny) {
 		int index = destiny.getIndex();
 		ImageIcon img = destiny.getImg();
 		boolean isEmpty = destiny.isEmpty();

@@ -16,24 +16,40 @@ import interfaces.ShuffleListener;
 import util.TypeShuffle;
 
 public class Puzzle {
-
+	private Long id;
 	private final int LINES;
 	private final int COLUMNS;
 	private final List<Piece> pieces;
 	private final TypeShuffle typeShuffle;
+	private File file;
 
 	public Puzzle(int lines, int columns, File file, TypeShuffle typeShuffle) throws IOException {
 		this.LINES = lines;
 		this.COLUMNS = columns;
 		this.typeShuffle = typeShuffle;
 		this.pieces = new ArrayList<Piece>();
-		this.generatepieces(file);
-		this.associateNeighbors();
-		this.addEmpty();
+		this.file = file;
+		initialize();
 	}
-
-	private void generatepieces(File file) throws IOException {
-		BufferedImage imagem = ImageIO.read(file);
+	
+	public Puzzle( Long id, int lines, int columns, File file, TypeShuffle typeShuffle) throws IOException {
+		this.id = id;
+		this.LINES = lines;
+		this.COLUMNS = columns;
+		this.typeShuffle = typeShuffle;
+		this.pieces = new ArrayList<Piece>();
+		this.file = file;
+		initialize();
+	}
+	
+	private void initialize() throws IOException {
+		generatepieces();
+		associateNeighbors();
+		addEmpty();
+	}
+	
+	private void generatepieces() throws IOException {
+		BufferedImage imagem = ImageIO.read(getFile());
 		int w = imagem.getWidth() / this.getCOLUMNS();
 		int h = imagem.getHeight() / this.getLINES();
 		int index = 1;
@@ -90,6 +106,14 @@ public class Puzzle {
 			e.printStackTrace();
 		}
 	}
+	
+	public void exchange(int origin,  int destiny) {
+		if((origin < getSize() && origin >=0) && (destiny < getSize() && destiny >=0)   ) {
+			Piece pieceOrigin = pieces.get(origin);
+			Piece pieceDestiny = pieces.get(destiny);
+			pieceOrigin.exchange(pieceDestiny);
+		}
+	}
 
 	private boolean isPair(int number) {
 		return number % 2 == 0;
@@ -123,5 +147,25 @@ public class Puzzle {
 
 	public List<Piece> getPieces() {
 		return pieces;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public TypeShuffle getTypeShuffle() {
+		return typeShuffle;
 	}
 }
