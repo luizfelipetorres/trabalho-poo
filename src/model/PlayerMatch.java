@@ -6,6 +6,7 @@ public class PlayerMatch {
 	private Player player;
 	private Match match;
 	private int duration;
+	private boolean isCompleted;
 	private double playerPoints;
 	private boolean isComplete;
 	
@@ -18,6 +19,8 @@ public class PlayerMatch {
 		this.duration = duration;
 		this.playerPoints = playerPoints;
 		this.isComplete = isComplete;
+		this.isCompleted = isCompleted;
+		this.playerPoints = calculetePoints(duration);
 	}
 	
 	public PlayerMatch(Player player, Match match, int duration, double playerPoints, boolean isComplete) {
