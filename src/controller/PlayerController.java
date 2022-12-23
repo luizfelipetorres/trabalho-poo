@@ -20,35 +20,15 @@ public class PlayerController {
 		return instance;
 	}
 
-	public void authenticate(String name, String password) throws SQLException {
-
-		Player player = new Player();
-
-		player.setPlayerUsername(name);
-		player.setPlayerPassword(password);
-
+	public void authenticate(Player player) throws SQLException {
 		PlayerDAO.getInstance().authenticate(player);
 	}
 
-	public void save(String name, String email, String password) throws SQLException {
-
-		Player player = new Player();
-
-		player.setPlayerUsername(name);
-		player.setPlayerEmail(email);
-		player.setPlayerPassword(password);
-
+	public void save(Player player) throws SQLException {
 		PlayerDAO.getInstance().save(player);
 	}
 
-	public void update(int id, String name, String email, String password) throws SQLException {
-
-		Player player = new Player();
-
-		player.setPlayerUsername(name);
-		player.setPlayerEmail(email);
-		player.setPlayerPassword(password);
-
+	public void update(Player player) throws SQLException {
 		PlayerDAO.getInstance().update(player);
 	}
 

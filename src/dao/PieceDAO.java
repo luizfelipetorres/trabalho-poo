@@ -25,7 +25,7 @@ public class PieceDAO implements PieceDAOListener{
 	}
 	
 	@Override
-	public void save(Long PlayerMatch, List<Piece> pieces) {
+	public void save(Long playerMatch, List<Piece> pieces) {
 		Connection connection = ConnectionFactory.getConnection();
 		String sql = "INSERT INTO PIECE(PLAYER_MATCH_ID, PIECE_INDEX, PIECE_CURRENT_POSITION,PIECE_EMPTY) VALUES (?,?,?,?)";
 		PreparedStatement ps;
@@ -33,11 +33,11 @@ public class PieceDAO implements PieceDAOListener{
 		
 		try {
 			ps = connection.prepareStatement(sql);
-			for (int i = 0; i < pieces.size(); i++) {
-				ps.setLong(1, PlayerMatch);
-				ps.setInt(2, pieces.get(i).getIndex());
+			for (Piece piece : pieces) {
+				ps.setLong(1, playerMatch);
+				ps.setInt(2, piece.getIndex());
 				ps.setInt(3, currentPosition++);
-				ps.setBoolean(4, pieces.get(i).isEmpty());
+				ps.setBoolean(4, piece.isEmpty());
 				ps.execute();
 			}
 			
@@ -52,18 +52,18 @@ public class PieceDAO implements PieceDAOListener{
 	}
 
 	@Override
-	public void update(Long PlayerMatch, List<Piece> pieces) {
+	public void update(Long playerMatch, List<Piece> pieces) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "UPDATE PIECE SET PIECE_CURRENT_POSITION=?, PIECE_EMPTY=? WHERE PLAYER_MATCH_ID=? AND PIECE_INDEX=?;";
 			PreparedStatement ps = connection.prepareStatement(sql);
 			int currentPosition = 0;
 			
-			for (int i = 0; i < pieces.size(); i++) {
+			for (Piece piece : pieces) {
 				ps.setInt(1, currentPosition++);
-				ps.setBoolean(2, pieces.get(i).isEmpty());
-				ps.setLong(3, PlayerMatch);
-				ps.setInt(4, pieces.get(i).getIndex());
+				ps.setBoolean(2, piece.isEmpty());
+				ps.setLong(3, playerMatch);
+				ps.setInt(4, piece.getIndex());
 				ps.execute();
 			}
 					
@@ -76,10 +76,10 @@ public class PieceDAO implements PieceDAOListener{
 	}
 
 	@Override
-	public void configPiece(Long PlayerMatch, List<Piece> pieces){
+	public void configPiece(Long playerMatch, List<Piece> pieces){
 
 		Connection connection = ConnectionFactory.getConnection();
-		String sql = "SELECT * FROM PIECE WHERE PLAYER_MATCH_ID = " + PlayerMatch;
+		String sql = "SELECT * FROM PIECE WHERE PLAYER_MATCH_ID = " + playerMatch;
 		Statement stmt;
 		try {
 			stmt = (Statement) connection.createStatement();

@@ -45,11 +45,7 @@ public class Piece {
 	
 	public boolean verifyMovement() {
 		Optional<Piece> piece = neighbors.stream().filter(e -> e.isEmpty()).findFirst();
-
-		if(piece.isPresent()) {
-			return true;
-		}
-		return false;
+		return piece.isPresent() ? true : false;
 	}
 	
 	
