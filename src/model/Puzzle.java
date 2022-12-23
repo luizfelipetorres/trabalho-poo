@@ -69,7 +69,7 @@ public class Puzzle {
 				numberExchange = random.nextInt(0, this.getSize());
 			}
 			animationTime /= numberExchange;
-			Set<Swap> swaps = new HashSet<>();
+			Set<Swap> swaps = new HashSet<Swap>();
 
 			while (swaps.size() < numberExchange) {
 				Piece pieceOrigin = pieces.get(random.nextInt(this.getSize() - 1));

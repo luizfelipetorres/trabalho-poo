@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import javax.swing.ImageIcon;
@@ -11,21 +10,21 @@ public class Piece {
 	private final int LINE;
 	private final int COLUMN;
 	
-	private  int index;
+	private int index;
 	private ImageIcon img;
 	private boolean isEmpty;
-	
-	public List<Piece> neighbors = new ArrayList<Piece>();
+	public List<Piece> neighbors;
 	
 	public Piece(int index, int line, int column, boolean isEmpty) {
 		this.index = index;
 		this.LINE = line;
 		this.COLUMN = column;
 		this.isEmpty = isEmpty;
+		this.neighbors = new ArrayList<Piece>();
 	}
 	
 	void addNeighbor(Piece neighbor) {
-		boolean different =  this.getLINE() != neighbor.getLINE() && this.getCOLUMN() != neighbor.getCOLUMN() ;
+		boolean different =  this.getLINE() != neighbor.getLINE() && this.getCOLUMN() != neighbor.getCOLUMN();
 		
 		int deltaLine = Math.abs(this.getLINE() - neighbor.getLINE());
 		int deltaColumn = Math.abs(this.getCOLUMN() - neighbor.getCOLUMN());
@@ -42,6 +41,15 @@ public class Piece {
 		if(piece.isPresent()) {
 			exchange(piece.get());
 		}
+	}
+	
+	public boolean verifyMovement() {
+		Optional<Piece> piece = neighbors.stream().filter(e -> e.isEmpty()).findFirst();
+
+		if(piece.isPresent()) {
+			return true;
+		}
+		return false;
 	}
 	
 	void exchange(Piece destiny) {
@@ -94,24 +102,5 @@ public class Piece {
 	public void setImg(ImageIcon img) {
 		this.img = img;
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(COLUMN, LINE, img, index, isEmpty, neighbors);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Piece other = (Piece) obj;
-		return COLUMN == other.COLUMN && LINE == other.LINE && Objects.equals(img, other.img) && index == other.index
-				&& isEmpty == other.isEmpty && Objects.equals(neighbors, other.neighbors);
-	}
-
 
 }
