@@ -1,24 +1,37 @@
 package model;
 
-import java.time.LocalDateTime;
-
 public class PlayerMatch {
 	
-	private int playerId;
-	private int matchId;
+	private Long id;
+	private Player player;
+	private Match match;
 	private int duration;
 	private boolean isCompleted;
 	private double playerPoints;
+	private boolean isComplete;
 	
-	public PlayerMatch(int playerId, int matchId, LocalDateTime startTime, LocalDateTime endTime, int duration, boolean isCompleted) {
+
+	public PlayerMatch(Long id, Player player, Match match, int duration, double playerPoints, boolean isComplete) {
 		super();
-		this.playerId = playerId;
-		this.matchId = matchId;
+		this.id = id;
+		this.player = player;
+		this.match = match;
 		this.duration = duration;
+		this.playerPoints = playerPoints;
+		this.isComplete = isComplete;
 		this.isCompleted = isCompleted;
 		this.playerPoints = calculetePoints(duration);
 	}
 	
+	public PlayerMatch(Player player, Match match, int duration, double playerPoints, boolean isComplete) {
+		super();
+		this.player = player;
+		this.match = match;
+		this.duration = duration;
+		this.playerPoints = playerPoints;
+		this.isComplete = isComplete;
+	}
+
 	public static float calculetePoints(int duration) {
 		int minute = 60;
 		float points = 0;
@@ -33,12 +46,28 @@ public class PlayerMatch {
 		return points;
 	}
 
-	public int getPlayerId() {
-		return playerId;
+	public Long getId() {
+		return id;
 	}
 
-	public int getMatchId() {
-		return matchId;
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public Match getMatch() {
+		return match;
+	}
+
+	public void setMatch(Match match) {
+		this.match = match;
 	}
 
 	public int getDuration() {
@@ -53,4 +82,17 @@ public class PlayerMatch {
 		return playerPoints;
 	}
 
+	public void setPlayerPoints(double playerPoints) {
+		this.playerPoints = playerPoints;
+	}
+
+	public boolean isComplete() {
+		return isComplete;
+	}
+
+	public void setComplete(boolean isComplete) {
+		this.isComplete = isComplete;
+	}
+
+	
 }
