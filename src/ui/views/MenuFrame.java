@@ -59,40 +59,40 @@ public class MenuFrame extends JFrame {
 		setBounds(100, 100, 890, 588);
 		panelMain.setBounds(contentPane.getBounds());
 		contentPane.add(panelMain);
-		
-		JPanel minimizedMenu = new JPanel();
-		minimizedMenu.setBackground(Color.DARK_GRAY);
-		minimizedMenu.setBounds(0, 0, 54, 549);
-		minimizedMenu.setLayout(null);
-		minimizedMenu.setVisible(false);
-		contentPane.add(minimizedMenu);
-		
-		JLabel navBarMinimized = new JLabel("New label");
-		navBarMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
-		navBarMinimized.setBounds(0, 0, 54, 45);
-		imgNavBar.setImage(imgNavBar.getImage().getScaledInstance(navBarMinimized.getWidth(), navBarMinimized.getHeight(), 100));
-		navBarMinimized.setIcon(imgNavBar);
-		minimizedMenu.add(navBarMinimized);
-		
-		JLabel createMatchMinimized = new JLabel("New label");
-		createMatchMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
-		createMatchMinimized.setBounds(0, 61, 54, 45);
-		minimizedMenu.add(createMatchMinimized);
-		
-		JLabel fetchMatchMinimized = new JLabel("New label");
-		fetchMatchMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
-		fetchMatchMinimized.setBounds(0, 106, 54, 45);
-		minimizedMenu.add(fetchMatchMinimized);
-		
-		JLabel rankingMinimized = new JLabel("New label");
-		rankingMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
-		rankingMinimized.setBounds(0, 152, 54, 45);
-		minimizedMenu.add(rankingMinimized);
-		
-		JLabel logoutMinimized = new JLabel("New label");
-		logoutMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
-		logoutMinimized.setBounds(0, 492, 54, 45);
-		minimizedMenu.add(logoutMinimized);
+//		
+//		JPanel minimizedMenu = new JPanel();
+//		minimizedMenu.setBackground(Color.DARK_GRAY);
+//		minimizedMenu.setBounds(0, 0, 54, 549);
+//		minimizedMenu.setLayout(null);
+//		minimizedMenu.setVisible(false);
+//		contentPane.add(minimizedMenu);
+//		
+//		JLabel navBarMinimized = new JLabel("New label");
+//		navBarMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
+//		navBarMinimized.setBounds(0, 0, 54, 45);
+//		imgNavBar.setImage(imgNavBar.getImage().getScaledInstance(navBarMinimized.getWidth(), navBarMinimized.getHeight(), 100));
+//		navBarMinimized.setIcon(imgNavBar);
+//		minimizedMenu.add(navBarMinimized);
+//		
+//		JLabel createMatchMinimized = new JLabel("New label");
+//		createMatchMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
+//		createMatchMinimized.setBounds(0, 61, 54, 45);
+//		minimizedMenu.add(createMatchMinimized);
+//		
+//		JLabel fetchMatchMinimized = new JLabel("New label");
+//		fetchMatchMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
+//		fetchMatchMinimized.setBounds(0, 106, 54, 45);
+//		minimizedMenu.add(fetchMatchMinimized);
+//		
+//		JLabel rankingMinimized = new JLabel("New label");
+//		rankingMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
+//		rankingMinimized.setBounds(0, 152, 54, 45);
+//		minimizedMenu.add(rankingMinimized);
+//		
+//		JLabel logoutMinimized = new JLabel("New label");
+//		logoutMinimized.setHorizontalAlignment(SwingConstants.TRAILING);
+//		logoutMinimized.setBounds(0, 492, 54, 45);
+//		minimizedMenu.add(logoutMinimized);
 
 		JPanel panelMenu = new JPanel();
 		panelMenu.setBackground(Color.DARK_GRAY);
@@ -200,26 +200,26 @@ public class MenuFrame extends JFrame {
 		backgroundPhoto.setIcon(imgBackgroundPhoto);
 		main.add(backgroundPhoto);	
 		
-		
-		navBarMinimized.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				panelMenu.setVisible(true);
-				main.setBounds(190,0,683,548);
-				minimizedMenu.setVisible(false);
-			}
-		});
-
-		navBar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				panelMenu.setVisible(false);
-				main.setBounds(53,0,820,548);
-				minimizedMenu.setVisible(true);
-				
-			}
-		});
-		
+//		
+//		navBarMinimized.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				panelMenu.setVisible(true);
+//				main.setBounds(190,0,683,548);
+//				minimizedMenu.setVisible(false);
+//			}
+//		});
+//
+//		navBar.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				panelMenu.setVisible(false);
+//				main.setBounds(53,0,820,548);
+//				minimizedMenu.setVisible(true);
+//				
+//			}
+//		});
+//		
 		
 	}
 }
