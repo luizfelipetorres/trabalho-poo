@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -54,20 +55,18 @@ public class PuzzleBoard extends Component{
 	 */
 	public Component initialize(JFrame frame, int size) throws IOException {
 		
-		JPanel panelPuzzle = new JPanel();
-		panelPuzzle.setBorder(new LineBorder(new Color(0, 0, 128)));
-		panelPuzzle.setBounds(10, 91, 631, 571);
-		frame.getContentPane().add(panelPuzzle);
-		
 		File img = chooseImage();
 		puzzle = new Puzzle(size, size,img,TypeShuffle.pairs);
 		
-		GridLayout gridLayout = new GridLayout(puzzle.getLINES(), puzzle.getCOLUMNS());
-		panelPuzzle.setLayout(gridLayout);
+		JPanel panelPuzzle = new JPanel();
+		panelPuzzle.setBorder(new LineBorder(new Color(0, 0, 128)));
+		panelPuzzle.setBounds(10, 91, 631, 571);
+		panelPuzzle.setLayout(new GridLayout(puzzle.getLINES(), puzzle.getCOLUMNS()));
+		frame.getContentPane().add(panelPuzzle);
 		
-		int whith = panelPuzzle.getWidth() / puzzle.getLINES();
+		int width = panelPuzzle.getWidth() / puzzle.getLINES();
 		int height = panelPuzzle.getHeight() / puzzle.getCOLUMNS();
-		puzzle.getPieces().forEach(e -> buttons.add(new PieceButton(e, whith, height)));
+		puzzle.getPieces().forEach(e -> buttons.add(new PieceButton(e, width, height)));
 		
 		ShuffleListener listener = new ShuffleListener() {
 			@Override
@@ -75,22 +74,37 @@ public class PuzzleBoard extends Component{
 				buttons.forEach(button -> button.configImg());
 			}
 		};
-		buttons.forEach(e -> panelPuzzle.add(e));
 
 		Thread shuffle = new Thread(() -> {
 			puzzle.shuffleTable(listener);
-			buttons.forEach(button -> {
-				button.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseReleased(MouseEvent e) {
-						if(Stopwatch.getInstance().isRunning()) {
-							makeMovement(button);
-						}
+		});
+		
+		shuffle.start();
+		
+		buttons.forEach(button -> {
+			panelPuzzle.add(button);
+			button.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					if(Stopwatch.getInstance().isRunning()) {
+						makeMovement(button);
+						button.setBorder(null);
 					}
-				});
+				}
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					if(button.getPiece().verifyMovement() && Stopwatch.getInstance().isRunning()) {
+						button.setBorder(BorderFactory.createLineBorder(Color.green, 3));
+					}
+				}
+				@Override
+				public void mouseExited(MouseEvent e) {
+					if(Stopwatch.getInstance().isRunning()) {
+						button.setBorder(null);
+					}		
+				}
 			});
 		});
-		shuffle.start();
 		
 		return panelPuzzle;
 		
