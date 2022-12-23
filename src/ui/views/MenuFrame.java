@@ -14,6 +14,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ui.components.JlabelRound;
+import java.awt.Window.Type;
+import java.awt.Toolkit;
 
 public class MenuFrame extends JFrame {
 
@@ -39,6 +41,8 @@ public class MenuFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MenuFrame() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("img\\icons\\icon-defaultToolkit.png"));
+		setResizable(false);
         
 		ImageIcon imgNavBar = new ImageIcon("img\\icons\\icon-menuBar.png");
 		ImageIcon imgPerfil = new ImageIcon("img\\icons\\icon-homem.png");
@@ -58,7 +62,7 @@ public class MenuFrame extends JFrame {
 		
 		JPanel minimizedMenu = new JPanel();
 		minimizedMenu.setBackground(Color.DARK_GRAY);
-		minimizedMenu.setBounds(0, 0, 54, 548);
+		minimizedMenu.setBounds(0, 0, 54, 549);
 		minimizedMenu.setLayout(null);
 		minimizedMenu.setVisible(false);
 		contentPane.add(minimizedMenu);
@@ -92,7 +96,7 @@ public class MenuFrame extends JFrame {
 
 		JPanel panelMenu = new JPanel();
 		panelMenu.setBackground(Color.DARK_GRAY);
-		panelMenu.setBounds(0, 0, 191, 548);
+		panelMenu.setBounds(0, 0, 191, 549);
 		panelMenu.setLayout(null);
 		contentPane.add(panelMenu);
 		
@@ -188,20 +192,20 @@ public class MenuFrame extends JFrame {
 		txtLogout.setBounds(57, 13, 121, 20);
 		logout.add(txtLogout);
 		
-		JPanel visualization = new JPanel();
-		visualization.setBounds(192, 0, 681, 548);
-		contentPane.add(visualization);
+		JPanel main = new JPanel();
+		main.setBounds(192, 0, 681, 548);
+		contentPane.add(main);
 		
 		JLabel backgroundPhoto = new JLabel("New label");
 		backgroundPhoto.setIcon(imgBackgroundPhoto);
-		visualization.add(backgroundPhoto);	
+		main.add(backgroundPhoto);	
 		
 		
 		navBarMinimized.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				panelMenu.setVisible(true);
-				visualization.setBounds(190,0,683,548);
+				main.setBounds(190,0,683,548);
 				minimizedMenu.setVisible(false);
 			}
 		});
@@ -210,12 +214,11 @@ public class MenuFrame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				panelMenu.setVisible(false);
-				visualization.setBounds(53,0,820,548);
+				main.setBounds(53,0,820,548);
 				minimizedMenu.setVisible(true);
 				
 			}
 		});
-//		190.0.683.548	
 		
 		
 	}
