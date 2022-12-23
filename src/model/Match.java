@@ -6,8 +6,8 @@ public class Match {
 	private Puzzle puzzle;
 	
 	public Match(Long id, Puzzle puzzle) {
-    private int id;
-    private Puzzle puzzle;
+		this.id =  id;
+		this.puzzle = puzzle;
 	}
 
 	public Match(Puzzle puzzle) {

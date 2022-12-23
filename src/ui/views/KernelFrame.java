@@ -1,23 +1,22 @@
 package ui.views;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.io.IOException;
 
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.Color;
-import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import model.Player;
 import ui.components.PuzzleBoard;
 import ui.components.Stopwatch;
-
-import java.awt.Font;
 
 public class KernelFrame extends AbstractWindow{
 
