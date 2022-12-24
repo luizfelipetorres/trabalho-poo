@@ -4,19 +4,17 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
-import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import java.awt.Color;
-import javax.swing.JSeparator;
 
 import dao.PlayerDAO;
 import model.Player;
-import ui.components.StrongButton;
+import ui.components.CustomButton;
+import ui.components.CustomField;
 
 import javax.swing.JTabbedPane;
 import java.awt.event.ActionListener;
@@ -29,13 +27,8 @@ import java.awt.event.MouseEvent;
 public class LoginFrame extends AbstractWindow{
 
 	private JFrame frame;
-	private JTextField fieldRegisterUsername;
-	private JPasswordField fieldRegisterPassword;
-	private JTextField fieldLoginUsername;
-	private JPasswordField fieldLoginPassword;
-	private JTextField fieldRegisterEmail;
-	private StrongButton btnLogin;
-	private StrongButton btnRegister;
+	private CustomButton btnLogin;
+	private CustomButton btnRegister;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -74,60 +67,21 @@ public class LoginFrame extends AbstractWindow{
 		tabbedPane.addTab("Entrar", null, containerLogin, null);
 		containerLogin.setLayout(null);
 
-		JLabel lbLoginUsername = new JLabel("Nome do usuário:");
-		lbLoginUsername.setBounds(20, 31, 270, 30);
-		containerLogin.add(lbLoginUsername);
-		lbLoginUsername.setForeground(new Color(69, 69, 69));
-		lbLoginUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
+		CustomField fieldLoginUsername = new CustomField("Nome do usuário:", 270, 30, 50, false);
+		CustomField fieldLoginPassword = new CustomField("Senha:", 270, 30, 150, true);
+		
+		containerLogin.add(fieldLoginUsername.initialize());
+		containerLogin.add(fieldLoginPassword.initialize());
 
-		fieldLoginUsername = new JTextField();
-		fieldLoginUsername.setBounds(20, 72, 270, 40);
-		containerLogin.add(fieldLoginUsername);
-		fieldLoginUsername.setHorizontalAlignment(SwingConstants.CENTER);
-		fieldLoginUsername.setForeground(new Color(0, 0, 0));
-		fieldLoginUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		fieldLoginUsername.setColumns(10);
-		fieldLoginUsername.setBorder(null);
-		fieldLoginUsername.setBackground(new Color(255, 255, 255));
-
-		JSeparator separatorLoginUsername = new JSeparator();
-		separatorLoginUsername.setBounds(21, 115, 270, 2);
-		containerLogin.add(separatorLoginUsername);
-		separatorLoginUsername.setForeground(new Color(0, 0, 128));
-		separatorLoginUsername.setBackground(new Color(0, 0, 128));
-
-		JLabel lbLoginPassword = new JLabel("Senha:");
-		lbLoginPassword.setBounds(20, 140, 270, 30);
-		containerLogin.add(lbLoginPassword);
-		lbLoginPassword.setForeground(new Color(69, 69, 69));
-		lbLoginPassword.setFont(new Font("Tahoma", Font.BOLD, 15));
-
-		fieldLoginPassword = new JPasswordField();
-		fieldLoginPassword.setBounds(21, 184, 270, 40);
-		containerLogin.add(fieldLoginPassword);
-		fieldLoginPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		fieldLoginPassword.setForeground(new Color(0, 0, 0));
-		fieldLoginPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		fieldLoginPassword.setBorder(null);
-		fieldLoginPassword.setBackground(new Color(255, 255, 255));
-
-		JSeparator separatorLoginPassword = new JSeparator();
-		separatorLoginPassword.setBounds(21, 226, 270, 2);
-		containerLogin.add(separatorLoginPassword);
-		separatorLoginPassword.setForeground(new Color(0, 0, 128));
-		separatorLoginPassword.setBackground(new Color(0, 0, 128));
-
-		btnLogin = new StrongButton("Entrar", "", new Color(255, 255, 255), new Color(0, 0, 128), 90, 279, 270, 50);
-		btnLogin.setBounds(20, 279, 270, 50);
+		btnLogin = new CustomButton("Entrar", "img\\icons\\icon-login.png", new Color(255, 255, 255), new Color(0, 0, 128), 20, 279, 270, 50);
 		containerLogin.add(btnLogin);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				Player player = new Player(fieldLoginUsername.getText(),
 						Arrays.toString(fieldLoginPassword.getPassword()));
-
-				PlayerDAO playerDAO = PlayerDAO.getInstance();
-				Player playerSelected = playerDAO.authenticate(player);
+				
+				Player playerSelected = PlayerDAO.getInstance().authenticate(player);
 
 				if (playerSelected != null) {
 					
@@ -163,73 +117,15 @@ public class LoginFrame extends AbstractWindow{
 		tabbedPane.addTab("Cadastrar-se", null, containerRegister, null);
 		containerRegister.setLayout(null);
 
-		JLabel lbRegisterUsername = new JLabel("Nome do usuário:");
-		lbRegisterUsername.setBounds(21, 32, 270, 30);
-		containerRegister.add(lbRegisterUsername);
-		lbRegisterUsername.setForeground(new Color(69, 69, 69));
-		lbRegisterUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
-
-		fieldRegisterUsername = new JTextField();
-		fieldRegisterUsername.setBounds(21, 73, 270, 40);
-		containerRegister.add(fieldRegisterUsername);
-		fieldRegisterUsername.setHorizontalAlignment(SwingConstants.CENTER);
-		fieldRegisterUsername.setForeground(new Color(0, 0, 0));
-		fieldRegisterUsername.setBackground(new Color(255, 255, 255));
-		fieldRegisterUsername.setBorder(null);
-		fieldRegisterUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		fieldRegisterUsername.setColumns(10);
-
-		JSeparator separatorRegisterUsername = new JSeparator();
-		separatorRegisterUsername.setBounds(22, 116, 270, 2);
-		containerRegister.add(separatorRegisterUsername);
-		separatorRegisterUsername.setForeground(new Color(0, 0, 128));
-		separatorRegisterUsername.setBackground(new Color(0, 0, 128));
+		CustomField fieldRegisterUsername = new CustomField("Nome do usuário:", 270, 30, 50, false);
+		CustomField fieldRegisterEmail = new CustomField("E-mail:", 270, 30, 150, false);
+		CustomField fieldRegisterPassword = new CustomField("Senha:", 270, 30, 250, true);
 		
-		JLabel lbRegisterEmail = new JLabel("E-mail:");
-		lbRegisterEmail.setBounds(20, 240, 270, 30);
-		containerRegister.add(lbRegisterEmail);
-		lbRegisterEmail.setForeground(new Color(69, 69, 69));
-		lbRegisterEmail.setFont(new Font("Tahoma", Font.BOLD, 15));
+		containerRegister.add(fieldRegisterUsername.initialize());
+		containerRegister.add(fieldRegisterEmail.initialize());
+		containerRegister.add(fieldRegisterPassword.initialize());
 		
-		fieldRegisterEmail = new JTextField();
-		fieldRegisterEmail.setBounds(20, 281, 270, 40);
-		containerRegister.add(fieldRegisterEmail);
-		fieldRegisterEmail.setHorizontalAlignment(SwingConstants.CENTER);
-		fieldRegisterEmail.setForeground(Color.BLACK);
-		fieldRegisterEmail.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		fieldRegisterEmail.setColumns(10);
-		fieldRegisterEmail.setBorder(null);
-		fieldRegisterEmail.setBackground(Color.WHITE);
-
-		JSeparator separatorRegisterEmail = new JSeparator();
-		separatorRegisterEmail.setBounds(21, 324, 270, 2);
-		containerRegister.add(separatorRegisterEmail);
-		separatorRegisterEmail.setForeground(new Color(0, 0, 128));
-		separatorRegisterEmail.setBackground(new Color(0, 0, 128));
-
-		JLabel lbRegisterPassword = new JLabel("Senha:");
-		lbRegisterPassword.setBounds(21, 141, 270, 30);
-		containerRegister.add(lbRegisterPassword);
-		lbRegisterPassword.setForeground(new Color(69, 69, 69));
-		lbRegisterPassword.setFont(new Font("Tahoma", Font.BOLD, 15));
-
-		fieldRegisterPassword = new JPasswordField();
-		fieldRegisterPassword.setBounds(22, 185, 270, 40);
-		containerRegister.add(fieldRegisterPassword);
-		fieldRegisterPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		fieldRegisterPassword.setForeground(new Color(0, 0, 0));
-		fieldRegisterPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		fieldRegisterPassword.setBackground(new Color(255, 255, 255));
-		fieldRegisterPassword.setBorder(null);
-
-		JSeparator separatorRegisterPassword = new JSeparator();
-		separatorRegisterPassword.setBounds(22, 227, 270, 2);
-		containerRegister.add(separatorRegisterPassword);
-		separatorRegisterPassword.setForeground(new Color(0, 0, 128));
-		separatorRegisterPassword.setBackground(new Color(0, 0, 128));
-
-		btnRegister = new StrongButton("Cadastrar", "", new Color(255, 255, 255), new Color(0, 0, 128), 90, 373, 270, 50);
-		btnRegister.setBounds(21, 374, 270, 50);
+		btnRegister = new CustomButton("Cadastrar", "img\\icons\\icon-adduser.png", new Color(255, 255, 255), new Color(0, 0, 128), 21, 374, 270, 50);
 		containerRegister.add(btnRegister);	
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

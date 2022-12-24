@@ -4,7 +4,6 @@ public abstract class AbstractWindow {
 	public AbstractWindow() {
 		setTheme();
 	}
-	protected abstract void initialize();
 	
 	protected void setTheme() {
 		try {
