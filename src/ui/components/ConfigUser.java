@@ -43,9 +43,7 @@ public class ConfigUser extends JPanel {
 		initiation();
 	}
 
-	public void initiation() throws Exception {
-		player = PlayerController.getInstance().findById(2);
-		
+	public void initiation() throws Exception {		
 		Border lineBorder = BorderFactory.createLineBorder(Color.BLACK);
 		
 		profilePicture = new JlabelRound();
