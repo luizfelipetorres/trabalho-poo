@@ -1,10 +1,7 @@
 package ui.components;
 
-import java.awt.Color;
-
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.border.LineBorder;
 
 public class JlabelRound extends JLabel{
 	

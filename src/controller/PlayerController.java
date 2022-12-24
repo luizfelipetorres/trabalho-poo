@@ -51,6 +51,10 @@ public class PlayerController {
 
 		PlayerDAO.getInstance().update(player);
 	}
+	
+	public void update(Player player) throws SQLException {
+		PlayerDAO.getInstance().update(player);
+	}
 
 	public List<Player> findAll() {
 		return PlayerDAO.getInstance().findAll();
