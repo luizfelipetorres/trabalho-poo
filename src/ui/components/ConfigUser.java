@@ -213,7 +213,6 @@ public class ConfigUser extends JPanel {
 					attention.setText("senhar atual inválida");
 					attention.setVisible(true);
 				}else {
-					System.out.println("hello");
 					if(attention.isVisible()) attention.setVisible(false);
 					player.setPlayerUsername(textName.getText());
 					player.setPlayerEmail(textEmail.getText());
@@ -233,7 +232,6 @@ public class ConfigUser extends JPanel {
 					} catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null, "não foi possivel salva suas alterações");
 					}
-					System.out.println("hello");
 				}
 			}
 		});

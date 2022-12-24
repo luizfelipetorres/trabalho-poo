@@ -11,5 +11,6 @@ public interface PlayerMatchDAOListener {
 	public PlayerMatch findById(Long id);
 	public List<PlayerMatch> findAll();
 	public void remove(Long id);
-
+	public int totalPages(int page, boolean isComplete);
+	public List<PlayerMatch> findAll(int page,int limit , boolean isComplete) ;
 }

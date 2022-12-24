@@ -39,4 +39,10 @@ public class PlayerMatchController {
 	public void remove(Long id) {
 		PlayerMatchDAO.getInstance().remove(id);
 	}
+	public int totalPages(int page, boolean isComplete) {
+		return PlayerMatchDAO.getInstance().totalPages(page, isComplete);
+	}
+	public List<PlayerMatch> findAll(int page,int limit , boolean isComplete) {
+		return PlayerMatchDAO.getInstance().findAll(page, limit, isComplete);
+	}
 }

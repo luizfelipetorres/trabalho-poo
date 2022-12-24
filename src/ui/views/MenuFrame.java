@@ -3,6 +3,7 @@ package ui.views;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -14,8 +15,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import ui.components.JlabelRound;
-import java.awt.Window.Type;
-import java.awt.Toolkit;
 
 public class MenuFrame extends JFrame {
 
@@ -221,5 +220,13 @@ public class MenuFrame extends JFrame {
 //		});
 //		
 		
+		Ranking.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				main.setVisible(false);
+				JPanel jPanel = new ui.components.Ranking();
+				contentPane.add(jPanel);
+			}
+		});
 	}
 }
