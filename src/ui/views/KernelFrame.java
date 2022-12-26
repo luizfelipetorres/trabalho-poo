@@ -22,9 +22,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 
-public class KernelFrame {
+public class KernelFrame extends JFrame{
 
-	private JFrame frame;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JButton btnPlay;
 	private JButton btnConfig;
 	private JButton btnLogout;
@@ -34,8 +37,8 @@ public class KernelFrame {
 			public void run() {
 				try {
 					KernelFrame window = new KernelFrame(player);
-					window.frame.setVisible(true);
-					window.frame.setLocationRelativeTo(null);
+					window.setVisible(true);
+					window.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -49,11 +52,10 @@ public class KernelFrame {
 
 	private void initialize(Player player) {
 		
-		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(255, 255, 255));
-		frame.setBounds(100, 100, 1300, 750);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		this.getContentPane().setBackground(new Color(255, 255, 255));
+		this.setBounds(100, 100, 1300, 750);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.getContentPane().setLayout(null);
 		
 		JPanel panelPersona = new JPanel();
 		panelPersona.setBackground(new Color(45, 45, 45));
@@ -98,7 +100,7 @@ public class KernelFrame {
 		panelLeftMenu.setBounds(0, 0, 70, 711);
 		panelLeftMenu.setBackground(new Color(60, 60, 60));
 		panelLeftMenu.setLayout(null);
-		frame.getContentPane().add(panelLeftMenu);
+		this.getContentPane().add(panelLeftMenu);
 		panelLeftMenu.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -119,7 +121,7 @@ public class KernelFrame {
 		JDesktopPane desktopPane = new JDesktopPane();
 		desktopPane.setBackground(new Color(255, 255, 255));
 		desktopPane.setBounds(200, 60, 1084, 651);
-		frame.getContentPane().add(desktopPane);
+		this.getContentPane().add(desktopPane);
 		
 		btnPlay.setIcon(new ImageIcon("img\\icons\\icon-control.png"));
 		btnPlay.setText("JOGAR ");
@@ -203,6 +205,11 @@ public class KernelFrame {
 				btnConfig.setLocation(0, 122);
 			}
 		});
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 /* implements method in next issue */
+			}
+		});
 		
 		JLabel lbIconMenu = new JLabel("");
 		lbIconMenu.setHorizontalAlignment(SwingConstants.CENTER);
@@ -218,7 +225,6 @@ public class KernelFrame {
 		JPanel panelHeader = new JPanel();
 		panelHeader.setBounds(69, 0, 1215, 55);
 		panelHeader.setBackground(new Color(45, 45, 45));
-		frame.getContentPane().add(panelHeader);
 		panelHeader.setLayout(null);
 		
 		JLabel lbTitle = new JLabel("█▓▒­░⡷⠂ S̳L̳I̳D̳E̳R̳ ̳P̳U̳Z̳Z̳L̳E̳ ⠐⢾░▒▓█");
@@ -228,6 +234,8 @@ public class KernelFrame {
 		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lbTitle.setBounds(10, 11, 1195, 33);
 		panelHeader.add(lbTitle);
+		
+		this.getContentPane().add(panelHeader);
 		
 	}
 }
