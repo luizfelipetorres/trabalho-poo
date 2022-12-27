@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
@@ -20,6 +19,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import interfaces.ShuffleListener;
 import model.Puzzle;
+import ui.views.PuzzleFrame;
 import util.TypeShuffle;
 
 public class PuzzleBoard extends Component{
@@ -53,16 +53,16 @@ public class PuzzleBoard extends Component{
 	 * Initialize the contents of the frame.
 	 * @throws IOException 
 	 */
-	public Component initialize(JFrame frame, int size) throws IOException {
+	public Component initialize(PuzzleFrame puzzleFrame, int size) throws IOException {
 		
 		File img = chooseImage();
 		puzzle = new Puzzle(size, size,img,TypeShuffle.pairs);
 		
 		JPanel panelPuzzle = new JPanel();
 		panelPuzzle.setBorder(new LineBorder(new Color(0, 0, 128)));
-		panelPuzzle.setBounds(10, 91, 631, 571);
+		panelPuzzle.setBounds(10, 80, 630, 560);
 		panelPuzzle.setLayout(new GridLayout(puzzle.getLINES(), puzzle.getCOLUMNS()));
-		frame.getContentPane().add(panelPuzzle);
+		puzzleFrame.add(panelPuzzle);
 		
 		int width = panelPuzzle.getWidth() / puzzle.getLINES();
 		int height = panelPuzzle.getHeight() / puzzle.getCOLUMNS();

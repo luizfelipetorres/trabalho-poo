@@ -11,11 +11,12 @@ import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
+
+import ui.views.PuzzleFrame;
 
 public class Stopwatch {
 
@@ -86,20 +87,20 @@ public class Stopwatch {
 		return isRunning;
 	}
 
-	public Component initialize(JFrame frame) {
+	public Component initialize(PuzzleFrame puzzleInternalFrame) {
 
 		JPanel panelStopWatch = new JPanel();
 		panelStopWatch.setLayout(null);
 		panelStopWatch.setBorder(new LineBorder(new Color(0, 0, 128)));
-		panelStopWatch.setBounds(651, 11, 423, 69);
-		frame.getContentPane().add(panelStopWatch);
+		panelStopWatch.setBounds(10, 0, 630, 70);
+		puzzleInternalFrame.add(panelStopWatch);
 
 		labelTime = new JLabel("00:00:00:00");
-		labelTime.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		labelTime.setBounds(10, 11, 161, 48);
+		labelTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
+		labelTime.setBounds(10, 10, 200, 50);
 
-		btnStart = new StrongButton("", "img\\icons\\icon-play.png", new Color(255, 255, 255), new Color(0, 0, 128),
-				183, 11, 70, 48);
+		btnStart = new CustomButton("", "img\\icons\\icon-play.png", new Color(255, 255, 255), new Color(0, 0, 128),
+				390, 10, 70, 50);
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Stopwatch.getInstance().start();
@@ -116,8 +117,8 @@ public class Stopwatch {
 				btnStart.setBackground(new Color(0, 0, 128));
 			}
 		});
-		btnPause = new StrongButton("", "img\\icons\\icon-pause.png", new Color(255, 255, 255), new Color(0, 0, 128),
-				260, 11, 70, 48);
+		btnPause = new CustomButton("", "img\\icons\\icon-pause.png", new Color(255, 255, 255), new Color(0, 0, 128),
+				470, 10, 70, 50);
 		btnPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Stopwatch.getInstance().pause();
@@ -134,8 +135,8 @@ public class Stopwatch {
 				btnPause.setBackground(new Color(0, 0, 128));
 			}
 		});
-		btnStop = new StrongButton("", "img\\icons\\icon-stop.png", new Color(255, 255, 255), new Color(0, 0, 128), 337,
-				11, 70, 48);
+		btnStop = new CustomButton("", "img\\icons\\icon-stop.png", new Color(255, 255, 255), new Color(0, 0, 128), 550,
+				10, 70, 50);
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Stopwatch.getInstance().stop();

@@ -1,36 +1,44 @@
 package ui.views;
 
 import java.awt.EventQueue;
-import java.io.IOException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
+
+import ui.components.CustomButton;
+
+import java.awt.Color;
+import javax.swing.JDesktopPane;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
 
 import model.Player;
-import ui.components.PuzzleBoard;
-import ui.components.Stopwatch;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.Font;
 
-public class KernelFrame extends AbstractWindow{
+public class KernelFrame extends JFrame{
 
-	private JFrame frame;
-	private Player player;
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JButton btnPlay;
+	private JButton btnConfig;
+	private JButton btnLogout;
+
 	public static void main(String[] args, Player player) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					KernelFrame window = new KernelFrame(player);
-					window.frame.setVisible(true);
-					window.frame.setLocationRelativeTo(null);
+					window.setVisible(true);
+					window.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -38,65 +46,196 @@ public class KernelFrame extends AbstractWindow{
 		});
 	}
 
-	private KernelFrame(Player player) {
-		this.player = player;
-		setTheme();
-		initialize();
+	public KernelFrame(Player player) {
+		initialize(player);
 	}
 
-	@Override
-	protected void initialize() {
-		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(255, 255, 255));
-		frame.setBounds(100, 100, 1100, 734);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	private void initialize(Player player) {
 		
-		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
+		this.getContentPane().setBackground(new Color(255, 255, 255));
+		this.setBounds(100, 100, 1300, 750);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.getContentPane().setLayout(null);
 		
-		JMenu menuOptions = new JMenu("Opções");
-		menuBar.add(menuOptions);
+		JPanel panelPersona = new JPanel();
+		panelPersona.setBackground(new Color(45, 45, 45));
+		panelPersona.setBounds(10, 63, 180, 217);
+		panelPersona.setLayout(null);
+		panelPersona.setVisible(false);
 		
-		JMenuItem menuItemMyProfile = new JMenuItem("Meu perfil");
-		menuOptions.add(menuItemMyProfile);
+		JLabel lbPhotoPersona = new JLabel("");
+		lbPhotoPersona.setHorizontalAlignment(SwingConstants.CENTER);
+		lbPhotoPersona.setIcon(new ImageIcon("img\\icons\\icon-persona.png"));
+		lbPhotoPersona.setBounds(10, 11, 160, 110);
+		panelPersona.add(lbPhotoPersona);
 		
-		JMenuItem menuItemRankingVerify = new JMenuItem("Verificar ranking");
-		menuOptions.add(menuItemRankingVerify);
+		JLabel lbUsername = new JLabel(player.getPlayerUsername());
+		lbUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lbUsername.setForeground(new Color(255, 255, 255));
+		lbUsername.setHorizontalAlignment(SwingConstants.CENTER);
+		lbUsername.setBounds(10, 132, 160, 30);
+		panelPersona.add(lbUsername);
 		
-		JMenuItem menuItemQuit = new JMenuItem("Sair");
-		menuOptions.add(menuItemQuit);
-		frame.getContentPane().setLayout(null);
+		JLabel lbEmail = new JLabel(player.getPlayerEmail());
+		lbEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lbEmail.setForeground(new Color(255, 255, 255));
+		lbEmail.setHorizontalAlignment(SwingConstants.CENTER);
+		lbEmail.setBounds(10, 173, 160, 30);
+		panelPersona.add(lbEmail);
 		
-		JLabel lbBgmain = new JLabel("");
-		lbBgmain.setIcon(new ImageIcon("img\\bg-main.jpg"));
-		lbBgmain.setBounds(651, 91, 433, 582);
-		frame.getContentPane().add(lbBgmain);
+		btnPlay = new CustomButton("", "img\\icons\\icon-control.png", 
+				new Color(255, 255, 255), 
+				new Color(0, 0, 128),
+				0, 63, 200, 48);
+		btnConfig = new CustomButton("", "img\\icons\\icon-config.png", 
+				new Color(255, 255, 255), 
+				new Color(0, 0, 128),
+				0, 122, 200, 48);
+		btnLogout = new CustomButton("", "img\\icons\\icon-logout.png", 
+				new Color(255, 255, 255), 
+				new Color(0, 0, 128),
+				0, 200, 200, 48);
 		
-		JPanel panelInformation = new JPanel();
-		panelInformation.setBorder(new LineBorder(new Color(0, 0, 128)));
-		panelInformation.setBounds(10, 11, 631, 69);
-		frame.getContentPane().add(panelInformation);
-		panelInformation.setLayout(null);
+		JPanel panelLeftMenu = new JPanel();
+		panelLeftMenu.setBounds(0, 0, 70, 711);
+		panelLeftMenu.setBackground(new Color(60, 60, 60));
+		panelLeftMenu.setLayout(null);
+		this.getContentPane().add(panelLeftMenu);
+		panelLeftMenu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				panelLeftMenu.setBounds(0, 0, 200, 711);
+				panelPersona.setVisible(true);
+				btnPlay.setLocation(0, 300);
+				btnConfig.setLocation(0, 360);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				panelLeftMenu.setBounds(0, 0, 70, 711);
+				panelPersona.setVisible(false);
+				btnPlay.setLocation(0, 63);
+				btnConfig.setLocation(0, 122);
+			}
+		});
 		
-		JLabel lbUsername = new JLabel("Nome do usuário: ");
-		lbUsername.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lbUsername.setBounds(10, 11, 300, 47);
-		lbUsername.setText(lbUsername.getText() + player.getPlayerUsername());
-		panelInformation.add(lbUsername);
+		JDesktopPane desktopPane = new JDesktopPane();
+		desktopPane.setBackground(new Color(255, 255, 255));
+		desktopPane.setBounds(200, 60, 1084, 651);
+		this.getContentPane().add(desktopPane);
 		
-		JLabel lblEmailDoUsurio = new JLabel("E-mail do usuário: ");
-		lblEmailDoUsurio.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblEmailDoUsurio.setBounds(321, 11, 300, 47);
-		lblEmailDoUsurio.setText(lblEmailDoUsurio.getText() + player.getPlayerEmail());
-		panelInformation.add(lblEmailDoUsurio);
+		btnPlay.setIcon(new ImageIcon("img\\icons\\icon-control.png"));
+		btnPlay.setText("JOGAR ");
+		btnPlay.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnPlay.setBackground(new Color(249, 13, 72));
+				panelLeftMenu.setBounds(0, 0, 200, 711);
+				panelPersona.setVisible(true);
+				btnPlay.setLocation(0, 300);
+				btnConfig.setLocation(0, 360);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnPlay.setBackground(new Color(0, 0, 128));
+				panelLeftMenu.setBounds(0, 0, 70, 711);
+				panelPersona.setVisible(false);
+				btnPlay.setLocation(0, 63);
+				btnConfig.setLocation(0, 122);
+			}
+		});
+		btnPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PuzzleFrame frame = new PuzzleFrame(player);
+				desktopPane.removeAll();
+				desktopPane.add(frame);
+				frame.setVisible(true);
+			}
+		});
 		
+		btnConfig.setIcon(new ImageIcon("img\\icons\\icon-config.png"));
+		btnConfig.setText("AJUSTE");
+		btnConfig.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnConfig.setBackground(new Color(249, 13, 72));
+				panelLeftMenu.setBounds(0, 0, 200, 711);
+				panelPersona.setVisible(true);
+				btnPlay.setLocation(0, 300);
+				btnConfig.setLocation(0, 360);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnConfig.setBackground(new Color(0, 0, 128));
+				panelLeftMenu.setBounds(0, 0, 70, 711);
+				panelPersona.setVisible(false);
+				btnPlay.setLocation(0, 63);
+				btnConfig.setLocation(0, 122);
+			}
+		});
+		btnConfig.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PlayerFrame frame = new PlayerFrame();
+				desktopPane.removeAll();
+				desktopPane.add(frame);
+				frame.setVisible(true);
+			}
+		});
 		
-		try {
-			PuzzleBoard.getInstance().initialize(frame, 2);
-			Stopwatch.getInstance().initialize(frame);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		btnLogout.setLocation(0, 650);
+		btnLogout.setIcon(new ImageIcon("img\\icons\\icon-logout.png"));
+		btnLogout.setText("SAIR    ");
+		btnLogout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnLogout.setBackground(new Color(249, 13, 72));
+				panelLeftMenu.setBounds(0, 0, 200, 711);
+				panelPersona.setVisible(true);
+				btnPlay.setLocation(0, 300);
+				btnConfig.setLocation(0, 360);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnLogout.setBackground(new Color(0, 0, 128));
+				panelLeftMenu.setBounds(0, 0, 70, 711);
+				panelPersona.setVisible(false);
+				btnPlay.setLocation(0, 63);
+				btnConfig.setLocation(0, 122);
+			}
+		});
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				 /* implements method in next issue */
+			}
+		});
+		
+		JLabel lbIconMenu = new JLabel("");
+		lbIconMenu.setHorizontalAlignment(SwingConstants.CENTER);
+		lbIconMenu.setIcon(new ImageIcon("img\\icons\\icon-menu.png"));
+		lbIconMenu.setBounds(10, 11, 50, 40);
+		
+		panelLeftMenu.add(lbIconMenu);
+		panelLeftMenu.add(panelPersona);
+		panelLeftMenu.add(btnPlay);
+		panelLeftMenu.add(btnConfig);
+		panelLeftMenu.add(btnLogout);
+		
+		JPanel panelHeader = new JPanel();
+		panelHeader.setBounds(69, 0, 1215, 55);
+		panelHeader.setBackground(new Color(45, 45, 45));
+		panelHeader.setLayout(null);
+		
+		JLabel lbTitle = new JLabel("█▓▒­░⡷⠂ S̳L̳I̳D̳E̳R̳ ̳P̳U̳Z̳Z̳L̳E̳ ⠐⢾░▒▓█");
+		lbTitle.setForeground(new Color(240, 240, 240));
+		lbTitle.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbTitle.setBackground(new Color(240, 240, 240));
+		lbTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		lbTitle.setBounds(10, 11, 1195, 33);
+		panelHeader.add(lbTitle);
+		
+		this.getContentPane().add(panelHeader);
 		
 	}
 }

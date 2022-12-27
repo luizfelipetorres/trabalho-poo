@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 
-public class StrongButton extends JButton {
+public class CustomButton extends JButton {
 
 	/**
 	 * 
@@ -18,10 +18,10 @@ public class StrongButton extends JButton {
 	private Color colorBackground;
 	private int x;
 	private int y;
-	int width;
-	int height;
+	private int width;
+	private int height;
 	
-	public StrongButton(String title, String iconPath, Color colorForeground, Color colorBackground, int x, int y, int width, int height) {
+	public CustomButton(String title, String iconPath, Color colorForeground, Color colorBackground, int x, int y, int width, int height) {
 		super(title);
 		this.iconPath = iconPath;
 		this.colorForeground = colorForeground;
@@ -34,8 +34,11 @@ public class StrongButton extends JButton {
 	}
 	
 	private void initialize() {
+		this.setFocusable(false);
+		this.setIconTextGap(70);
 		this.setForeground(colorForeground);
 		this.setBackground(colorBackground);
+		this.setBorder(null);
 		this.setIcon(new ImageIcon(iconPath));
 		this.setContentAreaFilled(false);
 		this.setOpaque(true);
