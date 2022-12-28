@@ -1,5 +1,6 @@
 package dao;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,11 +44,13 @@ public class PlayerDAO implements PlayerDAOListener {
 				playerIntern.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
 				playerIntern.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
 				playerIntern.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
-				rs.close();
-				connection.close();
-				return playerIntern;
+				if(rs.getString("PLAYER_URL_IMAGE") == null) playerIntern.setFile(null);
+				else playerIntern.setFile(new File(rs.getString("PLAYER_URL_IMAGE")));
 			}
 
+			rs.close();
+			connection.close();
+			return playerIntern;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,28 +80,36 @@ public class PlayerDAO implements PlayerDAOListener {
 	}
 
 	@Override
-	public void update(Player player) {
-		try {
-			Connection connection = ConnectionFactory.getConnection();
-			String sql = "UPDATE PLAYER SET "
-					+ "PLAYER_USERNAME = " + player.getPlayerUsername() 
-					+ ", PLAYER_EMAIL = " + player.getPlayerEmail() 
-					+ ", PLAYER_PASSWORD = " + player.getPlayerPassword() 
-					+ " WHERE PLAYER_ID = " + player.getPlayerId();
-			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setString(1, player.getPlayerUsername());
-			ps.setString(2, player.getPlayerEmail());
-			ps.setString(3, player.getPlayerPassword());
+	public void update(Player player) throws SQLException {
 
-			ps.execute();
-			ps.close();
-			connection.close();
+		Connection connection = ConnectionFactory.getConnection();
+		String sql = "UPDATE PLAYER SET PLAYER_USERNAME = ?, PLAYER_EMAIL = ?, PLAYER_PASSWORD = ? WHERE PLAYER_ID = ?";
+		PreparedStatement ps = connection.prepareStatement(sql);
+		ps.setString(1, player.getPlayerUsername());
+		ps.setString(2, player.getPlayerEmail());
+		ps.setString(3, player.getPlayerPassword());
+		ps.setInt(4, player.getPlayerId());
 
-		} catch (Exception e) {
-			System.out.println(e.toString());
-		}
+		ps.execute();
+		ps.close();
+		connection.close();
+
 	}
-
+	
+	@Override
+	public void updatePhoto(Player player) throws SQLException {
+		Connection connection = ConnectionFactory.getConnection();
+		String sql = "UPDATE PLAYER SET PLAYER_URL_IMAGE = ? WHERE PLAYER_ID = ?";
+		PreparedStatement ps = connection.prepareStatement(sql);
+		if(player.getFile() == null) ps.setString(1, null);
+		else ps.setString(1, player.getFile().getPath());
+		ps.setInt(2, player.getPlayerId());
+	
+		ps.execute();
+		ps.close();
+		connection.close();
+	}
+	
 	@Override
 	public List<Player> findAll() {
 
@@ -143,6 +154,8 @@ public class PlayerDAO implements PlayerDAOListener {
 				player.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
 				player.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
 				player.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
+				if(rs.getString("PLAYER_URL_IMAGE") == null) player.setFile(null);
+				else player.setFile(new File(rs.getString("PLAYER_URL_IMAGE")));
 				rs.close();
 				connection.close();
 				return player;

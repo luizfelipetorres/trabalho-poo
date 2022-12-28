@@ -1,7 +1,11 @@
 package controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import dao.PlayerDAO;
 import model.Player;
@@ -31,12 +35,27 @@ public class PlayerController {
 	public void update(Player player) throws SQLException {
 		PlayerDAO.getInstance().update(player);
 	}
+	
+	public void updatePhoto(File file,Player player) throws SQLException, IOException {
+		
+		String extension = file.getPath().substring(file.getPath().length() - 3 );
+        File outputfile = new File("img//users//"+player.getPlayerUsername()+"." + extension);
+        if(player.getFile() != null) player.getFile().delete();
+        ImageIO.write(ImageIO.read(file), extension, outputfile);
+        player.setFile(outputfile);
+		PlayerDAO.getInstance().updatePhoto(player);
+	}
+	
+	public void removePhoto(Player player) throws SQLException {
+        player.setFile(null);
+		PlayerDAO.getInstance().updatePhoto(player);
+	}
 
 	public List<Player> findAll() {
 		return PlayerDAO.getInstance().findAll();
 	}
 
-	public Player findById(int id) throws Exception {
+	public Player findById(int id) {
 		return PlayerDAO.getInstance().findById(id);
 	}
 

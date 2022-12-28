@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import dao.PlayerMatchDAO;
 import model.PlayerMatch;
+import util.RecordPlayerMatch;
 
 public class PlayerMatchController {
 
@@ -39,4 +40,9 @@ public class PlayerMatchController {
 	public void remove(Long id) {
 		PlayerMatchDAO.getInstance().remove(id);
 	}
+	
+	public RecordPlayerMatch recordPlayerMatchByPlayer(Integer idPlayer) {
+		return PlayerMatchDAO.getInstance().recordPlayerMatchByPlayer(idPlayer);
+	}
+
 }

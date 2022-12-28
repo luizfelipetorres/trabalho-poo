@@ -1,22 +1,15 @@
 package ui.views;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 import model.Player;
 import ui.components.PuzzleBoard;
 import ui.components.Stopwatch;
-import javax.swing.JFrame;
 
 public class PuzzleFrame extends JPanel {
 

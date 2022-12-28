@@ -1,13 +1,18 @@
 package model;
 
-public class Player {
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
+public class Player {
 
     private Integer playerId;
     private String playerUsername;
     private String playerEmail;
     private String playerPassword;
-
+    private File file;
+    
     public Player() {
     }
     
@@ -54,10 +59,11 @@ public class Player {
 		this.playerPassword = playerPassword;
 	}
 
-	@Override
-	public String toString() {
-		return "Player [playerUsername=" + playerUsername + ", playerEmail=" + playerEmail + "]";
+	public File getFile() {
+		return file;
 	}
-	
-	
+
+	public void setFile(File file) {
+		this.file = file;
+	}
 }
