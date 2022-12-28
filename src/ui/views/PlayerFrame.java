@@ -260,9 +260,8 @@ public class PlayerFrame extends JPanel {
 					try {
 						PlayerController.getInstance().update(player);
 						JOptionPane.showMessageDialog(null, "salvo com sucesso");
-						kernelFrame
-								.updateUserInformation(PlayerController.getInstance().findById(player.getPlayerId()));
-					} catch (SQLException e1) {
+						kernelFrame.updateUserInformation(PlayerController.getInstance().findById(player.getPlayerId()));
+					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(null, "não foi possivel salva suas alterações");
 					}
 				}
@@ -379,18 +378,18 @@ public class PlayerFrame extends JPanel {
 		}
 	}
 
-	private void btnRemovePhotoActionPerformed(ActionEvent evt) {
+	private void btnRemovePhotoActionPerformed(ActionEvent evt)  {
 		try {
 			if (player.getFile() == null) {
 				JOptionPane.showMessageDialog(null, "Você não possui foto de perfil");
 				kernelFrame.updateUserInformation(player);
 			} else {
-				PlayerController.getInstance().removePhoto(player);
-				configImg(null);
+				PlayerController.getInstance().updatePhoto(null, player);
 				kernelFrame.updateUserInformation(PlayerController.getInstance().findById(player.getPlayerId()));
 				JOptionPane.showMessageDialog(null, "Foto do perfil foi removida com sucesso");
+				configImg(null);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Não foi possivel remover sua foto do perfil");
 		}
 	}

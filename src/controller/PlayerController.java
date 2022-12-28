@@ -32,23 +32,23 @@ public class PlayerController {
 		PlayerDAO.getInstance().save(player);
 	}
 
-	public void update(Player player) throws SQLException {
+	public void update(Player player)  {
 		PlayerDAO.getInstance().update(player);
 	}
 	
 	public void updatePhoto(File file,Player player) throws SQLException, IOException {
 		
-		String extension = file.getPath().substring(file.getPath().length() - 3 );
-        File outputfile = new File("img//users//"+player.getPlayerUsername()+"." + extension);
-        if(player.getFile() != null) player.getFile().delete();
-        ImageIO.write(ImageIO.read(file), extension, outputfile);
-        player.setFile(outputfile);
-		PlayerDAO.getInstance().updatePhoto(player);
-	}
-	
-	public void removePhoto(Player player) throws SQLException {
-        player.setFile(null);
-		PlayerDAO.getInstance().updatePhoto(player);
+		if(file != null) {
+			String extension = file.getPath().substring(file.getPath().length() - 3 );
+			File outputfile = new File("img//users//"+player.getPlayerUsername()+"." + extension);
+			if(player.getFile() != null) player.getFile().delete();
+			ImageIO.write(ImageIO.read(file), extension, outputfile);
+			player.setFile(outputfile);
+		}else {
+			player.setFile(null);
+		}
+		
+		update(player);
 	}
 
 	public List<Player> findAll() {
