@@ -32,10 +32,15 @@ public class CustomButton extends JButton {
 		this.height = height;
 		initialize();
 	}
+
+
+	public CustomButton(String title, String iconPath, int x, int y, int width, int height) {
+		this(title, iconPath, new Color(255, 255, 255), new Color(0, 0, 128), x, y, width, height);
+	}
 	
 	private void initialize() {
 		this.setFocusable(false);
-		this.setIconTextGap(70);
+		this.setIconTextGap(iconPath != null ? 70 : 0);
 		this.setForeground(colorForeground);
 		this.setBackground(colorBackground);
 		this.setBorder(null);

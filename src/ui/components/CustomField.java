@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 
-public class CustomField{
+public class CustomField extends Component{
 
 	private JTextField fieldCommon;
 	private JPasswordField fieldPassword;
@@ -37,10 +37,7 @@ public class CustomField{
 		container.setBorder(null);
 		container.setBounds(x, y, width, 75);
 		
-		JLabel label = new JLabel(title);
-		label.setBounds(0, 0, width, 30);
-		label.setForeground(new Color(69, 69, 69));
-		label.setFont(new Font("Tahoma", Font.BOLD, 15));
+		JLabel label = new CustomLabel(title, 0, 0, width, 30);
 		
 		if(!isFieldPassword) {
 			fieldCommon = new JTextField();
@@ -70,7 +67,6 @@ public class CustomField{
 		
 		container.add(label);
 		container.add(separator);
-		
 		return container;
 	}
 	

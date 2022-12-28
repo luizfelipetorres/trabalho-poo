@@ -391,3 +391,4 @@ public class PlayerFrame extends JPanel {
 		return df.format(number);
 	}
 }
+
