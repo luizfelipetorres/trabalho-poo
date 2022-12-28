@@ -42,13 +42,13 @@ public class PuzzleBoard extends Component {
 		this.buttons = new ArrayList<PieceButton>();
 	}
 
-	public Component initialize(PuzzleFrame puzzleFrame, int size, File image) throws IOException {
+	public Component initialize(PuzzleFrame puzzleFrame, int size, File image, TypeShuffle typeShuffle) throws IOException {
 		reset();
 		this.puzzleFrame = puzzleFrame;
 		this.size = size;
 		this.image = image;
 
-		puzzle = new Puzzle(size, size, image, TypeShuffle.pairs);
+		puzzle = new Puzzle(size, size, image, typeShuffle);
 
 		JPanel panelPuzzle = new JPanel();
 		panelPuzzle.setBorder(new LineBorder(new Color(0, 0, 128)));

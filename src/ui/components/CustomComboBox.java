@@ -19,17 +19,10 @@ public class CustomComboBox<T> extends JComboBox<T> {
 	private static final long serialVersionUID = 1L;
 
 	public CustomComboBox(T[] model, int x, int y, int width, int height) {
-
 		setForeground(new Color(0, 0, 0));
 		setBackground(new Color(255, 255, 255));
 		setModel(new DefaultComboBoxModel<T>(model));
 		setBounds(x, y, width, height);
 		setFont(new Font("Tahoma", Font.BOLD, 15));
-	}
-	
-	@Override
-	protected void paintComponent(Graphics g) {
-		// TODO Auto-generated method stub
-		super.paintComponent(g);
 	}
 }

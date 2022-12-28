@@ -3,6 +3,7 @@ package ui.views;
 import static javax.swing.JOptionPane.YES_OPTION;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -23,6 +24,7 @@ import javax.swing.SwingConstants;
 import interfaces.ClickListener;
 import model.Player;
 import ui.components.CustomButton;
+import ui.components.PuzzleBoard;
 import ui.components.Stopwatch;
 
 public class KernelFrame extends JFrame {
@@ -35,6 +37,7 @@ public class KernelFrame extends JFrame {
 	private File image;
 	private JPanel panelPersona;
 	private JPanel panelLeftMenu;
+	private PuzzleFrame puzzleFrame;
 
 	public static void main(String[] args, Player player) {
 		EventQueue.invokeLater(new Runnable() {
@@ -146,18 +149,23 @@ public class KernelFrame extends JFrame {
 
 		btnPlay.addMouseListener(mouseAdapter);
 
-		ClickListener listener = (image, size) -> {
-			showFrame(new PuzzleFrame(player, image, size));
+		ClickListener listener = (image, size, shuffle) -> {
+			puzzleFrame = new PuzzleFrame(player, image, size, shuffle);
+			showFrame(puzzleFrame);
 		};
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Stopwatch watch = Stopwatch.getInstance();
+				
 				if (watch.getDuration() > 0) {
+					showFrame(PuzzleBoard.getInstance());
 					watch.pause();
 					String message = "Quer desistir da partida atual e iniciar uma nova?";
 					int newGame = JOptionPane.showConfirmDialog(btnPlay, message);
-					if (newGame != YES_OPTION)
-						return;
+					if (newGame != YES_OPTION) {
+						showFrame(puzzleFrame);
+						return;						
+					}
 				}
 				showFrame(new PreGameFrame(player, listener));
 			}
@@ -210,7 +218,7 @@ public class KernelFrame extends JFrame {
 		this.getContentPane().add(panelHeader);
 	}
 
-	private void showFrame(JPanel frame) {
+	private void showFrame(Component frame) {
 		desktopPane.removeAll();
 		desktopPane.add(frame);
 		frame.setVisible(true);

@@ -2,7 +2,7 @@ package ui.views;
 
 import javax.swing.JPanel;
 
-public abstract class AbstractWindow extends JPanel{
+public abstract class AbstractWindow{
 
 	private static final long serialVersionUID = 1L;
 

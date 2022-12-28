@@ -11,12 +11,19 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
@@ -26,8 +33,11 @@ import interfaces.ClickListener;
 import model.Player;
 import ui.components.CustomButton;
 import ui.components.CustomComboBox;
+import ui.components.CustomField;
+import ui.components.CustomLabel;
+import util.TypeShuffle;
 
-public class PreGameFrame extends AbstractWindow {
+public class PreGameFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -39,6 +49,7 @@ public class PreGameFrame extends AbstractWindow {
 	private JLabel labelImageName;
 	private CustomButton buttonChooseImg;
 	private ClickListener clickListener;
+	private static final int widthColumnLeft = 253;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -54,18 +65,19 @@ public class PreGameFrame extends AbstractWindow {
 	}
 
 	public PreGameFrame(Player player, ClickListener listener) {
-		image = new File("img//naruto.jpg");
+		super();
 		this.clickListener = listener;
+		image = new File("img//naruto.jpg");
 		initialize();
 	}
 
 	public PreGameFrame() {
+		super();
 		image = new File("img//naruto.jpg");
 		initialize();
 	}
 
 	private void initialize() {
-		// frame = new JFrame();
 		this.setBounds(0, 0, 1175, 670);
 		this.setLayout(null);
 
@@ -81,9 +93,32 @@ public class PreGameFrame extends AbstractWindow {
 			}
 		};
 
-		String[] options = new String[] { "Seleciona o tamanho...", "3x3", "4x4", "5x5" };
-		CustomComboBox<String> cbSize = new CustomComboBox<>(options, 38, 51, 253, 22);
+		Map<String, Integer> optionsSize = new HashMap<>() {
+			{
+				put("3x3", 3);
+				put("4x4", 4);
+				put("5x5", 5);
+			}
+		};
+
+		Map<String, TypeShuffle> optionsShuffle = new HashMap<>() {
+			{
+				put("Par", TypeShuffle.pairs);
+				put("Ímpar", TypeShuffle.odd);
+			}
+		};
+
+		CustomLabel labelSize = new CustomLabel("Selecione o tamanho...", 38, 20, widthColumnLeft, 22);
+		add(labelSize);
+		CustomComboBox<Object> cbSize = new CustomComboBox<>(optionsSize.keySet().stream().sorted().toArray(), 38, 50,
+				widthColumnLeft, 22);
 		add(cbSize);
+
+		CustomLabel labelShuffle = new CustomLabel("Selecione o embaralhamento...", 38, 80, widthColumnLeft, 22);
+		add(labelShuffle);
+		CustomComboBox<Object> cbShuffle = new CustomComboBox<>(optionsShuffle.keySet().stream().sorted().toArray(), 38,
+				110, widthColumnLeft, 22);
+		add(cbShuffle);
 
 		labelRanking = new JLabel("Ranking");
 		labelRanking.setVerticalAlignment(SwingConstants.TOP);
@@ -92,7 +127,7 @@ public class PreGameFrame extends AbstractWindow {
 		add(labelRanking);
 		labelRanking.setBorder(new LineBorder(new Color(0, 0, 128)));
 
-		buttonChooseImg = new CustomButton("Escolha uma imagem", null, 38, 107, 253, 23);
+		buttonChooseImg = new CustomButton("Escolha uma imagem", null, 38, 160, widthColumnLeft, 23);
 		buttonChooseImg.addMouseListener(hoverEffect);
 		buttonChooseImg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -104,7 +139,7 @@ public class PreGameFrame extends AbstractWindow {
 
 		labelImge = new JLabel("");
 		labelImge.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		labelImge.setBounds(38, 152, 253, 14);
+		labelImge.setBounds(38, 260, widthColumnLeft, 14);
 		labelImge.setHorizontalTextPosition(SwingConstants.RIGHT);
 		labelImge.setIconTextGap(50);
 		labelImge.setVerticalTextPosition(SwingConstants.TOP);
@@ -116,21 +151,16 @@ public class PreGameFrame extends AbstractWindow {
 
 		labelImageName = new JLabel("Imagem escolhida: ");
 		labelImageName.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		labelImageName.setBounds(38, 138, 253, 14);
+		labelImageName.setBounds(38, 190, widthColumnLeft, 14);
 		add(labelImageName);
 
 		buttonInit = new CustomButton("Jogar", "img\\icons\\icon-control.png", 20, 500, 270, 50);
 		buttonInit.addMouseListener(hoverEffect);
 		buttonInit.addActionListener((e) -> {
-			int selected = cbSize.getSelectedIndex();
-
-			// TODO: Tentar usar um Enum no combobox
-			if (selected == 0) {
-				String message = "Selecione o tamanho do tabuleiro";
-				JOptionPane.showInternalMessageDialog(cbSize, message, "Atenção", JOptionPane.ERROR_MESSAGE);
-			} else {
-				clickListener.onClick(image, selected + 2);
-			}
+			int selectedSize = optionsSize.get(cbSize.getSelectedItem());
+			TypeShuffle selectedShuffle = optionsShuffle.get(cbShuffle.getSelectedItem());
+			clickListener.onClick(image, selectedSize, selectedShuffle);
+			this.removeAll();
 		});
 		add(buttonInit);
 
@@ -155,9 +185,9 @@ public class PreGameFrame extends AbstractWindow {
 		labelImageName.setText(concatImageName());
 		try {
 			BufferedImage resized = ImageIO.read(image);
-			Image newImage = resized.getScaledInstance(253, -1, 0);
+			Image newImage = resized.getScaledInstance(widthColumnLeft, -1, 0);
 			labelImge.setIcon(new ImageIcon(newImage));
-			labelImge.setBounds(38, 130, 253, newImage.getHeight(labelImge) + 50);
+			labelImge.setBounds(38, 200, widthColumnLeft, newImage.getHeight(labelImge) + 50);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

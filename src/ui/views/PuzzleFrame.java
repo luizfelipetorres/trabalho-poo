@@ -17,6 +17,8 @@ import javax.swing.border.LineBorder;
 import model.Player;
 import ui.components.PuzzleBoard;
 import ui.components.Stopwatch;
+import util.TypeShuffle;
+
 import javax.swing.JFrame;
 
 public class PuzzleFrame extends JPanel {
@@ -24,8 +26,10 @@ public class PuzzleFrame extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private PuzzleBoard puzzleBoard;
 	private Stopwatch stopWatch;
+	private TypeShuffle typeShuffle;
 
-	public PuzzleFrame(Player player, File image, int size) {
+	public PuzzleFrame(Player player, File image, int size, TypeShuffle typeShuffle) {
+		this.typeShuffle = typeShuffle;
 		this.puzzleBoard = PuzzleBoard.getInstance();
 		this.stopWatch = Stopwatch.getInstance();
 		this.initialize(player, image, size);
@@ -42,7 +46,7 @@ public class PuzzleFrame extends JPanel {
 		this.add(lbBgmain);
 				
 		try {
-			puzzleBoard.initialize(this, size, image);
+			puzzleBoard.initialize(this, size, image, typeShuffle);
 			stopWatch.initialize(this);
 		} catch (IOException e) {
 			e.printStackTrace();
