@@ -27,10 +27,10 @@ public class PlayerFrame extends JPanel {
 		CustomField fieldPassword = new CustomField("Senha:", 300, 500, 250, true);
 		CustomField fieldConfirmPassword = new CustomField("Confirmar senha:", 300, 500, 350, true);
 		
-		this.add(fieldUsername.initialize());
-		this.add(fieldEmail.initialize());
-		this.add(fieldPassword.initialize());
-		this.add(fieldConfirmPassword.initialize());
+		this.add(fieldUsername);
+		this.add(fieldEmail);
+		this.add(fieldPassword);
+		this.add(fieldConfirmPassword);
 		
 		CustomButton btnRegister = new CustomButton("Atualizar", "img\\icons\\icon-update.png", new Color(255, 255, 255), new Color(0, 0, 128), 500, 600, 270, 50);
 		btnRegister.setBounds(500, 590, 300, 50);
@@ -61,3 +61,4 @@ public class PlayerFrame extends JPanel {
 		panelInformationPersona.add(lbTitleInformationPersona);
 	}
 }
+
