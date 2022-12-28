@@ -9,7 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
@@ -257,12 +256,8 @@ public class PlayerFrame extends JPanel {
 				}
 
 				if (isValid) {
-					try {
-						PlayerController.getInstance().update(player);
-						JOptionPane.showMessageDialog(null, "salvo com sucesso");
-						kernelFrame.updateUserInformation(PlayerController.getInstance().findById(player.getPlayerId()));
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(null, "não foi possivel salva suas alterações");
+					if(PlayerController.getInstance().update(player)) {
+						kernelFrame.updateUserInformation(player);
 					}
 				}
 
@@ -362,35 +357,23 @@ public class PlayerFrame extends JPanel {
 		int res = fc.showOpenDialog(null);
 
 		if (res == JFileChooser.APPROVE_OPTION) {
-			try {
+			if(PlayerController.getInstance().updatePhoto(fc.getSelectedFile(), player)) {
 				configImg(fc.getSelectedFile());
-				PlayerController.getInstance().updatePhoto(fc.getSelectedFile(), player);
-				kernelFrame.updateUserInformation(PlayerController.getInstance().findById(player.getPlayerId()));
-				JOptionPane.showMessageDialog(null, "Foto do perfil atualizada com sucesso");
-			} catch (IOException ex) {
-				JOptionPane.showMessageDialog(null, "Selecionou um arquivo válido");
-			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(null, "Não foi possivel atualizar sua foto do perfil");
+				kernelFrame.updateUserInformation(player);
 			}
-
-		} else {
+		}else{
 			JOptionPane.showMessageDialog(null, "Voce nao selecionou nenhum arquivo.");
 		}
 	}
 
 	private void btnRemovePhotoActionPerformed(ActionEvent evt)  {
-		try {
-			if (player.getFile() == null) {
-				JOptionPane.showMessageDialog(null, "Você não possui foto de perfil");
+		if (player.getFile() == null) {
+			JOptionPane.showMessageDialog(null, "Você não possui foto de perfil");
+		} else {
+			if(PlayerController.getInstance().updatePhoto(null, player)) {
 				kernelFrame.updateUserInformation(player);
-			} else {
-				PlayerController.getInstance().updatePhoto(null, player);
-				kernelFrame.updateUserInformation(PlayerController.getInstance().findById(player.getPlayerId()));
-				JOptionPane.showMessageDialog(null, "Foto do perfil foi removida com sucesso");
-				configImg(null);
+				configImg(null);					
 			}
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Não foi possivel remover sua foto do perfil");
 		}
 	}
 

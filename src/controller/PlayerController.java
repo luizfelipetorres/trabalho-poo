@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 import dao.PlayerDAO;
 import model.Player;
@@ -32,23 +33,30 @@ public class PlayerController {
 		PlayerDAO.getInstance().save(player);
 	}
 
-	public void update(Player player)  {
-		PlayerDAO.getInstance().update(player);
+	public boolean update(Player player) {
+		return PlayerDAO.getInstance().update(player);
 	}
 	
-	public void updatePhoto(File file,Player player) throws SQLException, IOException {
+	public boolean updatePhoto(File file,Player player) {
 		
 		if(file != null) {
 			String extension = file.getPath().substring(file.getPath().length() - 3 );
 			File outputfile = new File("img//users//"+player.getPlayerUsername()+"." + extension);
 			if(player.getFile() != null) player.getFile().delete();
-			ImageIO.write(ImageIO.read(file), extension, outputfile);
+			
+			try {
+				ImageIO.write(ImageIO.read(file), extension, outputfile);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Selecionou um arquivo inválido");
+				return false;
+			}
+			
 			player.setFile(outputfile);
 		}else {
 			player.setFile(null);
 		}
 		
-		update(player);
+		return update(player);
 	}
 
 	public List<Player> findAll() {

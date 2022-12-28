@@ -80,7 +80,7 @@ public class PlayerDAO implements PlayerDAOListener {
 	}
 
 	@Override
-	public void update(Player player){
+	public boolean update(Player player){
 
 		try {
 			Connection connection = ConnectionFactory.getConnection();
@@ -96,9 +96,11 @@ public class PlayerDAO implements PlayerDAOListener {
 			ps.execute();
 			ps.close();
 			connection.close();
+			JOptionPane.showMessageDialog(null, "Usuário atualizado com sucesso!", "Feito", JOptionPane.INFORMATION_MESSAGE);
+			return true;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", 0);;
+			return false;
 		}
 
 	}
