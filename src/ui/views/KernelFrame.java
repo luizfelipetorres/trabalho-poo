@@ -11,14 +11,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
+import ui.components.CustomButton;
+import ui.components.JLabelRound;
+
+import java.awt.Color;
+import javax.swing.JDesktopPane;
+import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
 import interfaces.ClickListener;
@@ -33,6 +42,10 @@ public class KernelFrame extends JFrame {
 	private JButton btnPlay;
 	private JButton btnConfig;
 	private JButton btnLogout;
+	private JLabelRound lbPhotoPersona;
+	private JLabel lbEmail;
+	private JLabel lbUsername;
+	private KernelFrame kernelFrame;
 	private JDesktopPane desktopPane;
 	private File image;
 	private JPanel panelPersona;
@@ -58,6 +71,7 @@ public class KernelFrame extends JFrame {
 	}
 
 	private void initialize(Player player) {
+		kernelFrame = this;
 		this.getContentPane().setBackground(new Color(255, 255, 255));
 		this.setBounds(100, 100, 1300, 750);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -88,27 +102,28 @@ public class KernelFrame extends JFrame {
 		panelPersona.setBounds(10, 63, 180, 217);
 		panelPersona.setLayout(null);
 		panelPersona.setVisible(false);
-
-		JLabel lbPhotoPersona = new JLabel("");
+ 		
+		lbPhotoPersona = new JLabelRound();
 		lbPhotoPersona.setHorizontalAlignment(SwingConstants.CENTER);
-		lbPhotoPersona.setIcon(new ImageIcon("img\\icons\\icon-persona.png"));
 		lbPhotoPersona.setBounds(10, 11, 160, 110);
 		panelPersona.add(lbPhotoPersona);
-
-		JLabel lbUsername = new JLabel(player.getPlayerUsername());
+		
+		lbUsername = new JLabel();
 		lbUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lbUsername.setForeground(new Color(255, 255, 255));
 		lbUsername.setHorizontalAlignment(SwingConstants.CENTER);
 		lbUsername.setBounds(10, 132, 160, 30);
 		panelPersona.add(lbUsername);
-
-		JLabel lbEmail = new JLabel(player.getPlayerEmail());
+		
+		lbEmail = new JLabel();
 		lbEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lbEmail.setForeground(new Color(255, 255, 255));
 		lbEmail.setHorizontalAlignment(SwingConstants.CENTER);
 		lbEmail.setBounds(10, 173, 160, 30);
 		panelPersona.add(lbEmail);
-
+    
+		updateUserInformation(player);
+	
 		btnPlay = new CustomButton("", "img\\icons\\icon-control.png", new Color(255, 255, 255), new Color(0, 0, 128),
 				0, 63, 200, 48);
 		btnConfig = new CustomButton("", "img\\icons\\icon-config.png", new Color(255, 255, 255), new Color(0, 0, 128),
@@ -176,7 +191,7 @@ public class KernelFrame extends JFrame {
 		btnConfig.addMouseListener(mouseAdapter);
 		btnConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showFrame(new PlayerFrame());
+				showFrame(new PlayerFrame(player, kernelFrame));
 			}
 		});
 
@@ -206,7 +221,7 @@ public class KernelFrame extends JFrame {
 		panelHeader.setBackground(new Color(45, 45, 45));
 		panelHeader.setLayout(null);
 
-		JLabel lbTitle = new JLabel("█▓▒­░⡷⠂ S̳L̳I̳D̳E̳R̳ ̳P̳U̳Z̳Z̳L̳E̳ ⠐⢾░▒▓█");
+		JLabel lbTitle = new JLabel("█▓▒░⡷⠂ S̳L̳I̳D̳E̳R̳ ̳P̳U̳Z̳Z̳L̳E̳ ⠐⢾░▒▓█");
 		lbTitle.setForeground(new Color(240, 240, 240));
 		lbTitle.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbTitle.setBackground(new Color(240, 240, 240));
@@ -223,4 +238,26 @@ public class KernelFrame extends JFrame {
 		desktopPane.add(frame);
 		frame.setVisible(true);
 	}
+	
+	public void updateUserInformation(Player player) {
+		File file = player.getFile();
+		
+		
+		if(file == null) {
+			file = new File("img//users//defaultUsers.png");
+		}
+
+		try {
+			ImageIcon imgPersona = new ImageIcon(ImageIO.read(file));
+			imgPersona.setImage(imgPersona.getImage().getScaledInstance(lbPhotoPersona.getWidth(), lbPhotoPersona.getHeight(), 100));
+			lbPhotoPersona.setIcon(imgPersona);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		lbUsername.setText(player.getPlayerUsername());
+		lbEmail.setText(player.getPlayerEmail());
+	}
+	
+	
 }

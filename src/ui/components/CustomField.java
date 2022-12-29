@@ -74,6 +74,10 @@ public class CustomField extends Component{
 		return fieldCommon.getText();
 	}
 	
+	public void setText(String text) {
+		fieldCommon.setText(text);
+	}
+	
 	public char[] getPassword() {
 		return fieldPassword.getPassword();
 	}
