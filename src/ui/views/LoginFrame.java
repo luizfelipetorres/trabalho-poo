@@ -82,12 +82,7 @@ public class LoginFrame extends AbstractWindow {
 		CustomField fieldLoginUsername = new CustomField("Nome do usuário:", 270, 30, 50, false);
 		CustomField fieldLoginPassword = new CustomField("Senha:", 270, 30, 150, true);
 
-		containerLogin.add(fieldLoginUsername.initialize());
-		containerLogin.add(fieldLoginPassword.initialize());
-
-		btnLogin = new CustomButton("Entrar", "img\\icons\\icon-login.png", new Color(255, 255, 255),
-				new Color(0, 0, 128), 20, 279, 270, 50);
-		containerLogin.add(btnLogin);
+		btnLogin = new CustomButton("Entrar", "img\\icons\\icon-login.png", new Color(255, 255, 255), new Color(0, 0, 128), 20, 279, 270, 50);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -97,9 +92,7 @@ public class LoginFrame extends AbstractWindow {
 				Player playerSelected = PlayerDAO.getInstance().authenticate(player);
 
 				if (playerSelected != null) {
-
 					KernelFrame.main(null, playerSelected);
-
 				} else {
 					JOptionPane.showMessageDialog(btnLogin,
 							"Dados inválidos, por favor insira as credenciais novamente!");
@@ -124,26 +117,30 @@ public class LoginFrame extends AbstractWindow {
 		CustomField fieldRegisterEmail = new CustomField("E-mail:", 270, 30, 150, false);
 		CustomField fieldRegisterPassword = new CustomField("Senha:", 270, 30, 250, true);
 
-		containerRegister.add(fieldRegisterUsername.initialize());
-		containerRegister.add(fieldRegisterEmail.initialize());
-		containerRegister.add(fieldRegisterPassword.initialize());
-
-		btnRegister = new CustomButton("Cadastrar", "img\\icons\\icon-adduser.png", new Color(255, 255, 255),
-				new Color(0, 0, 128), 21, 374, 270, 50);
-		containerRegister.add(btnRegister);
+		btnRegister = new CustomButton("Cadastrar", "img\\icons\\icon-adduser.png", new Color(255, 255, 255), new Color(0, 0, 128), 21, 374, 270, 50);
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				Player player = new Player(fieldRegisterUsername.getText(), fieldRegisterEmail.getText(),
 						Arrays.toString(fieldRegisterPassword.getPassword()));
 
-				PlayerDAO playerDAO = PlayerDAO.getInstance();
-				if (playerDAO.save(player))
-					;
-				tabbedPane.setSelectedIndex(0);
+				if (PlayerDAO.getInstance().save(player)) {
+					JOptionPane.showMessageDialog(null, "Usuário criado com sucesso!", "Feito", JOptionPane.INFORMATION_MESSAGE);
+					tabbedPane.setSelectedIndex(0);
+				}
+				
 			}
 		});
 		btnRegister.addMouseListener(hoverEffect);
+		
+		containerLogin.add(fieldLoginUsername.initialize());
+		containerLogin.add(fieldLoginPassword.initialize());
+		containerLogin.add(btnLogin);
+		
+		containerRegister.add(fieldRegisterUsername.initialize());
+		containerRegister.add(fieldRegisterEmail.initialize());
+		containerRegister.add(fieldRegisterPassword.initialize());
+		containerRegister.add(btnRegister);
 
 		JLabel lbBG = new JLabel("");
 		lbBG.setIcon(new ImageIcon("img\\bg-login.jpg"));

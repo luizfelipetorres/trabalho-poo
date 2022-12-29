@@ -36,7 +36,7 @@ public class PlayerMatchDAO implements PlayerMatchDAOListener {
 			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, playerMatch.getDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
-			ps.setBoolean(3, playerMatch.isComplete());
+			ps.setBoolean(3, playerMatch.isCompleted());
 			ps.setInt(4, playerMatch.getPlayer().getPlayerId());
 			ps.setLong(5, playerMatch.getMatch().getId());
 			ps.execute();
@@ -64,7 +64,7 @@ public class PlayerMatchDAO implements PlayerMatchDAOListener {
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setInt(1, playerMatch.getDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
-			ps.setBoolean(3, playerMatch.isComplete());
+			ps.setBoolean(3, playerMatch.isCompleted());
 			ps.setInt(4, playerMatch.getPlayer().getPlayerId());
 			ps.setLong(5, playerMatch.getMatch().getId());
 			ps.setLong(6, playerMatch.getId());

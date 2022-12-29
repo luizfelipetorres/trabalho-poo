@@ -8,28 +8,26 @@ public class PlayerMatch {
 	private int duration;
 	private boolean isCompleted;
 	private double playerPoints;
-	private boolean isComplete;
 	
 
-	public PlayerMatch(Long id, Player player, Match match, int duration, double playerPoints, boolean isComplete) {
+	public PlayerMatch(Long id, Player player, Match match, int duration, double playerPoints, boolean isCompleted) {
 		super();
 		this.id = id;
 		this.player = player;
 		this.match = match;
 		this.duration = duration;
 		this.playerPoints = playerPoints;
-		this.isComplete = isComplete;
 		this.isCompleted = isCompleted;
 		this.playerPoints = calculetePoints(duration);
 	}
 	
-	public PlayerMatch(Player player, Match match, int duration, double playerPoints, boolean isComplete) {
+	public PlayerMatch(Player player, Match match, int duration, double playerPoints, boolean isCompleted) {
 		super();
 		this.player = player;
 		this.match = match;
 		this.duration = duration;
 		this.playerPoints = playerPoints;
-		this.isComplete = isComplete;
+		this.isCompleted = isCompleted;
 	}
 
 	public static float calculetePoints(int duration) {
@@ -86,12 +84,12 @@ public class PlayerMatch {
 		this.playerPoints = playerPoints;
 	}
 
-	public boolean isComplete() {
-		return isComplete;
+	public boolean isCompleted() {
+		return isCompleted;
 	}
 
-	public void setComplete(boolean isComplete) {
-		this.isComplete = isComplete;
+	public void setCompleted(boolean isComplete) {
+		this.isCompleted = isComplete;
 	}
 
 	

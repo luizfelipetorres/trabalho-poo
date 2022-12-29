@@ -11,29 +11,20 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import interfaces.ClickListener;
 import model.Player;
 import ui.components.CustomButton;
 import ui.components.CustomComboBox;
-import ui.components.CustomField;
 import ui.components.CustomLabel;
 import util.TypeShuffle;
 
@@ -42,14 +33,11 @@ public class PreGameFrame extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private CustomButton buttonInit;
-	private JTable table;
 	private File image;
-	private JLabel labelRanking;
 	private JLabel labelImge;
 	private JLabel labelImageName;
 	private CustomButton buttonChooseImg;
 	private ClickListener clickListener;
-	private static final int widthColumnLeft = 253;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -93,7 +81,8 @@ public class PreGameFrame extends JPanel {
 			}
 		};
 
-		Map<String, Integer> optionsSize = new HashMap<>() {
+		Map<String, Integer> optionsSize = new HashMap<String, Integer>() {
+			private static final long serialVersionUID = 1L;
 			{
 				put("3x3", 3);
 				put("4x4", 4);
@@ -101,33 +90,34 @@ public class PreGameFrame extends JPanel {
 			}
 		};
 
-		Map<String, TypeShuffle> optionsShuffle = new HashMap<>() {
+		Map<String, TypeShuffle> optionsShuffle = new HashMap<String, TypeShuffle>() {
+			private static final long serialVersionUID = 1L;
 			{
 				put("Par", TypeShuffle.pairs);
 				put("Ímpar", TypeShuffle.odd);
 			}
 		};
+		
+		JLabel labelTitle = new CustomLabel("PRÉ-CONFIGURAÇÃO", 10, 0, 270, 30);
+		this.add(labelTitle);
+		
+		CustomComboBox<Object> cbSize = new CustomComboBox<>(
+				"Selecione o tamanho do tabuleiro:", 
+				optionsSize.keySet().stream().sorted().toArray(), 
+				10, 50,
+				270);
+		
 
-		CustomLabel labelSize = new CustomLabel("Selecione o tamanho...", 38, 20, widthColumnLeft, 22);
-		add(labelSize);
-		CustomComboBox<Object> cbSize = new CustomComboBox<>(optionsSize.keySet().stream().sorted().toArray(), 38, 50,
-				widthColumnLeft, 22);
-		add(cbSize);
+		CustomComboBox<Object> cbShuffle = new CustomComboBox<>(
+				"Selecione o tipo de permutação:", 
+				optionsShuffle.keySet().stream().sorted().toArray(), 
+				10, 135, 
+				270);
+		
+		this.add(cbSize.initialize());
+		this.add(cbShuffle.initialize());
 
-		CustomLabel labelShuffle = new CustomLabel("Selecione o embaralhamento...", 38, 80, widthColumnLeft, 22);
-		add(labelShuffle);
-		CustomComboBox<Object> cbShuffle = new CustomComboBox<>(optionsShuffle.keySet().stream().sorted().toArray(), 38,
-				110, widthColumnLeft, 22);
-		add(cbShuffle);
-
-		labelRanking = new JLabel("Ranking");
-		labelRanking.setVerticalAlignment(SwingConstants.TOP);
-		labelRanking.setHorizontalAlignment(SwingConstants.CENTER);
-		labelRanking.setBounds(301, 39, 474, 458);
-		add(labelRanking);
-		labelRanking.setBorder(new LineBorder(new Color(0, 0, 128)));
-
-		buttonChooseImg = new CustomButton("Escolha uma imagem", null, 38, 160, widthColumnLeft, 23);
+		buttonChooseImg = new CustomButton("Escolha uma imagem", null, 10, 225, 270, 40);
 		buttonChooseImg.addMouseListener(hoverEffect);
 		buttonChooseImg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -136,25 +126,26 @@ public class PreGameFrame extends JPanel {
 			}
 		});
 		add(buttonChooseImg);
-
-		labelImge = new JLabel("");
-		labelImge.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		labelImge.setBounds(38, 260, widthColumnLeft, 14);
-		labelImge.setHorizontalTextPosition(SwingConstants.RIGHT);
-		labelImge.setIconTextGap(50);
-		labelImge.setVerticalTextPosition(SwingConstants.TOP);
-		add(labelImge);
-
-		table = new JTable();
-		table.setBounds(86, 323, 82, -65);
-		add(table);
-
+		
+		JPanel containerImage = new JPanel();
+		containerImage.setLayout(null);
+		containerImage.setBorder(null);
+		containerImage.setBounds(290, 0, 500, 638);
+		containerImage.setBackground(new Color(220, 220, 220));
+		
 		labelImageName = new JLabel("Imagem escolhida: ");
-		labelImageName.setFont(new Font("Tahoma", Font.ITALIC, 11));
-		labelImageName.setBounds(38, 190, widthColumnLeft, 14);
-		add(labelImageName);
+		labelImageName.setFont(new Font("Tahoma", Font.BOLD, 15));
+		labelImageName.setBounds(10, 0, 270, 30);
+		
+		labelImge = new JLabel("");
 
-		buttonInit = new CustomButton("Jogar", "img\\icons\\icon-control.png", 20, 500, 270, 50);
+		containerImage.add(labelImageName);
+		containerImage.add(labelImge);
+
+		this.add(containerImage);
+
+
+		buttonInit = new CustomButton("Jogar", "img\\icons\\icon-control.png", 10, 589, 270, 50);
 		buttonInit.addMouseListener(hoverEffect);
 		buttonInit.addActionListener((e) -> {
 			int selectedSize = optionsSize.get(cbSize.getSelectedItem());
@@ -181,13 +172,12 @@ public class PreGameFrame extends JPanel {
 	}
 
 	private void showChoosedImage() {
-		ImageIcon icon = new ImageIcon(image.getAbsolutePath());
 		labelImageName.setText(concatImageName());
 		try {
 			BufferedImage resized = ImageIO.read(image);
-			Image newImage = resized.getScaledInstance(widthColumnLeft, -1, 0);
+			Image newImage = resized.getScaledInstance(480, 400, 1);
 			labelImge.setIcon(new ImageIcon(newImage));
-			labelImge.setBounds(38, 200, widthColumnLeft, newImage.getHeight(labelImge) + 50);
+			labelImge.setBounds(10, 50, 480, newImage.getHeight(labelImge));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

@@ -1,7 +1,6 @@
 package ui.views;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 
@@ -13,7 +12,6 @@ import model.Player;
 import ui.components.PuzzleBoard;
 import ui.components.Stopwatch;
 import util.TypeShuffle;
-import javax.swing.JFrame;
 
 public class PuzzleFrame extends JPanel {
 

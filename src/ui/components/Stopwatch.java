@@ -106,6 +106,19 @@ public class Stopwatch {
 	}
 
 	public Component initialize(PuzzleFrame puzzleInternalFrame) {
+		
+		MouseAdapter hoverEffect = new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				e.getComponent().setBackground(new Color(249, 13, 72));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				e.getComponent().setBackground(new Color(0, 0, 128));
+			}
+		};
+		
 		reset();
 		JPanel panelStopWatch = new JPanel();
 		panelStopWatch.setLayout(null);
@@ -124,17 +137,8 @@ public class Stopwatch {
 				Stopwatch.getInstance().start();
 			}
 		});
-		btnStart.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnStart.setBackground(new Color(249, 13, 72));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnStart.setBackground(new Color(0, 0, 128));
-			}
-		});
+		btnStart.addMouseListener(hoverEffect);
+		
 		btnPause = new CustomButton("", "img\\icons\\icon-pause.png", new Color(255, 255, 255), new Color(0, 0, 128),
 				470, 10, 70, 50);
 		btnPause.addActionListener(new ActionListener() {
@@ -142,17 +146,8 @@ public class Stopwatch {
 				Stopwatch.getInstance().pause();
 			}
 		});
-		btnPause.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnPause.setBackground(new Color(249, 13, 72));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnPause.setBackground(new Color(0, 0, 128));
-			}
-		});
+		btnPause.addMouseListener(hoverEffect);
+		
 		btnStop = new CustomButton("", "img\\icons\\icon-stop.png", new Color(255, 255, 255), new Color(0, 0, 128), 550,
 				10, 70, 50);
 		btnStop.addActionListener(new ActionListener() {
@@ -160,17 +155,7 @@ public class Stopwatch {
 				Stopwatch.getInstance().stop();
 			}
 		});
-		btnStop.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnStop.setBackground(new Color(249, 13, 72));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnStop.setBackground(new Color(0, 0, 128));
-			}
-		});
+		btnStop.addMouseListener(hoverEffect);
 
 		btnStop.setEnabled(false);
 		btnStart.setEnabled(true);
@@ -190,8 +175,7 @@ public class Stopwatch {
 	}
 
 	public void pause() {
-		if (isRunning)
-			switchTimer();
+		switchTimer();
 		btnPause.setEnabled(false);
 		btnStart.setEnabled(true);
 		btnStop.setEnabled(true);
@@ -201,7 +185,7 @@ public class Stopwatch {
 		if (timer.isRunning()) {
 			timer.stop();
 			Arrays.asList(onPause, taskPerformer).forEach(timer::removeActionListener);
-			this.duration = 0;
+			duration = 0;
 			isRunning = false;
 			btnStop.setEnabled(false);
 			btnStart.setEnabled(true);

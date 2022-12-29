@@ -3,6 +3,8 @@ package ui.components;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +34,20 @@ public class CustomField extends Component{
 	
 	public Component initialize() {
 		
+		MouseAdapter hoverEffect = new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				e.getComponent().setForeground(new Color(249, 13, 72));
+				e.getComponent().setBackground(new Color(249, 13, 72));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				e.getComponent().setForeground(new Color(0, 0, 128));
+				e.getComponent().setBackground(new Color(0, 0, 128));
+			}
+		};
+
 		JPanel container = new JPanel();
 		container.setLayout(null);
 		container.setBorder(null);
@@ -64,6 +80,7 @@ public class CustomField extends Component{
 		separator.setBounds(0, 70, width, 2);
 		separator.setForeground(new Color(0, 0, 128));
 		separator.setBackground(new Color(0, 0, 128));
+		separator.addMouseListener(hoverEffect);
 		
 		container.add(label);
 		container.add(separator);

@@ -18,21 +18,17 @@ import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import ui.components.CustomButton;
 import ui.components.JLabelRound;
 
-import java.awt.Color;
-import javax.swing.JDesktopPane;
-import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
 import interfaces.ClickListener;
 import model.Player;
-import ui.components.CustomButton;
 import ui.components.PuzzleBoard;
 import ui.components.Stopwatch;
 
@@ -47,7 +43,6 @@ public class KernelFrame extends JFrame {
 	private JLabel lbUsername;
 	private KernelFrame kernelFrame;
 	private JDesktopPane desktopPane;
-	private File image;
 	private JPanel panelPersona;
 	private JPanel panelLeftMenu;
 	private PuzzleFrame puzzleFrame;

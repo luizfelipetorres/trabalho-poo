@@ -11,11 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import interfaces.ShuffleListener;
 import model.Puzzle;
@@ -27,9 +25,6 @@ public class PuzzleBoard extends Component {
 	private static final long serialVersionUID = 1L;
 	private List<PieceButton> buttons;
 	private Puzzle puzzle;
-	private PuzzleFrame puzzleFrame;
-	private int size;
-	private File image;
 	private static PuzzleBoard instance;
 	
 	public static PuzzleBoard getInstance() {
@@ -44,9 +39,6 @@ public class PuzzleBoard extends Component {
 
 	public Component initialize(PuzzleFrame puzzleFrame, int size, File image, TypeShuffle typeShuffle) throws IOException {
 		reset();
-		this.puzzleFrame = puzzleFrame;
-		this.size = size;
-		this.image = image;
 
 		puzzle = new Puzzle(size, size, image, typeShuffle);
 
