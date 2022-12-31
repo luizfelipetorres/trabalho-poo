@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import interfaces.PuzzleFrameListener;
-import model.Player;
 import util.TypeShuffle;
 import view.components.CustomButton;
 import view.components.CustomComboBox;
@@ -30,15 +29,13 @@ import view.components.CustomLabel;
 public class PreGameFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Player player; /* future used */
 	private File image;
 	private JLabel lbImage;
 	private JLabel lbImageDescription;
 	private PuzzleFrameListener clickListener;
 
-	public PreGameFrame(Player player, PuzzleFrameListener listener) {
+	public PreGameFrame(PuzzleFrameListener listener) {
 		super();
-		this.player = player;
 		this.clickListener = listener;
 		image = new File("img//naruto.jpg");
 		initialize();
@@ -128,8 +125,8 @@ public class PreGameFrame extends JPanel {
 		});
 
 		this.add(labelTitle);
-		this.add(cbSize.initialize());
-		this.add(cbShuffle.initialize());
+		this.add(cbSize);
+		this.add(cbShuffle);
 		this.add(buttonChooseImg);
 		this.add(containerImage);
 		this.add(buttonInit);

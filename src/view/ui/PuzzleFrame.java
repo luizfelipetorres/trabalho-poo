@@ -2,12 +2,12 @@ package view.ui;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import interfaces.StopwatchListener;
 import model.Player;
 import util.TypeShuffle;
 import view.components.PuzzleBoard;
@@ -19,33 +19,56 @@ public class PuzzleFrame extends JPanel {
 	private Player player; /* future used */
 	private PuzzleBoard puzzleBoard;
 	private Stopwatch stopWatch;
-	private TypeShuffle typeShuffle;
-
-	public PuzzleFrame(Player player, File image, int size, TypeShuffle typeShuffle){
+	
+	public PuzzleFrame(Player player, int size, File image, TypeShuffle typeShuffle) {
 		super();
 		this.player = player;
-		this.typeShuffle = typeShuffle;
-		this.puzzleBoard = PuzzleBoard.getInstance();
-		this.stopWatch = Stopwatch.getInstance();
-		this.initialize(player, image, size);
+		this.stopWatch = new Stopwatch();
+		this.puzzleBoard = new PuzzleBoard(size, image, typeShuffle, stopwatchListener());
+		this.initialize();
 	}
-	
-	public void initialize(Player player, File image, int size) {
+
+	public void initialize() {
+
 		this.setBounds(0, 0, 1175, 670);
 		this.setBackground(new Color(255, 255, 255));
 		this.setLayout(null);
-		
+
 		JLabel lbBgmain = new JLabel("");
 		lbBgmain.setIcon(new ImageIcon("img\\bg-main.jpg"));
 		lbBgmain.setBounds(645, 0, 430, 640);
 		this.add(lbBgmain);
-				
-		try {
-			puzzleBoard.initialize(this, size, image, typeShuffle);
-			stopWatch.initialize(this);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		this.add(puzzleBoard);
+		this.add(stopWatch);
+
+	}
+
+	public StopwatchListener stopwatchListener() {
+		
+		return new StopwatchListener() {
+			
+			@Override
+			public void pause() {
+				stopWatch.pause();
+			}
+			
+			@Override
+			public void stop() {
+				stopWatch.stop();
+			}
+
+			@Override
+			public boolean isRunning() {
+				return stopWatch.isRunning();
+			}
+
+			@Override
+			public Long getDuration() {
+				return stopWatch.getDuration();
+			} 
+			
+		};
 	}
 
 }

@@ -7,13 +7,11 @@ import model.Piece;
 
 public class PieceButton extends JButton {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Piece piece;
 	private int width;
 	private int height;
+	
 	public PieceButton(Piece piece, int width, int height) {	
 		this.piece = piece;
 		this.width = width;

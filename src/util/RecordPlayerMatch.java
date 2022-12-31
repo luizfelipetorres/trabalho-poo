@@ -24,7 +24,6 @@ public class RecordPlayerMatch {
 		return totalMatchCompleta;
 	}
 	public void setTotalMatchCompleta(int totalMatchCompleta) {
-		System.out.println(totalMatchCompleta);
 		this.totalMatchCompleta = totalMatchCompleta;
 	}
 	public long getTotalPoints() {

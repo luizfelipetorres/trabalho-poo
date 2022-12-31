@@ -139,13 +139,13 @@ public class LoginFrame extends AbstractWindow {
 		});
 		btnRegister.addMouseListener(hoverEffect);
 		
-		containerLogin.add(fieldLoginUsername.initialize());
-		containerLogin.add(fieldLoginPassword.initialize());
+		containerLogin.add(fieldLoginUsername);
+		containerLogin.add(fieldLoginPassword);
 		containerLogin.add(btnLogin);
 		
-		containerRegister.add(fieldRegisterUsername.initialize());
-		containerRegister.add(fieldRegisterEmail.initialize());
-		containerRegister.add(fieldRegisterPassword.initialize());
+		containerRegister.add(fieldRegisterUsername);
+		containerRegister.add(fieldRegisterEmail);
+		containerRegister.add(fieldRegisterPassword);
 		containerRegister.add(btnRegister);
 
 		JLabel lbBG = new JLabel("");

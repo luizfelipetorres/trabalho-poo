@@ -1,7 +1,6 @@
 package view.ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -73,15 +72,13 @@ public class PlayerFrame extends JPanel {
 		currentPassword = new CustomField("Senha atual:", 300, 500, 300, true);
 		newPassword = new CustomField("Nova senha:", 300, 500, 400, true);
 
-		Component componentCurrentPassword = currentPassword.initialize();
-		componentCurrentPassword.setVisible(false);
-		Component componentNewPassword = newPassword.initialize();
-		componentNewPassword.setVisible(false);
+		currentPassword.setVisible(false);
+		newPassword.setVisible(false);
 
-		this.add(fieldUsername.initialize());
-		this.add(fieldEmail.initialize());
-		this.add(componentCurrentPassword);
-		this.add(componentNewPassword);
+		this.add(fieldUsername);
+		this.add(fieldEmail);
+		this.add(currentPassword);
+		this.add(newPassword);
 
 		fieldUsername.setText(player.getPlayerUsername());
 		fieldEmail.setText(player.getPlayerEmail());
@@ -241,14 +238,14 @@ public class PlayerFrame extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 
 				if (changePassword.isSelected()) {
-					componentCurrentPassword.setVisible(true);
-					componentNewPassword.setVisible(true);
+					currentPassword.setVisible(true);
+					newPassword.setVisible(true);
 
 				}
 
 				if (!changePassword.isSelected()) {
-					componentCurrentPassword.setVisible(false);
-					componentNewPassword.setVisible(false);
+					currentPassword.setVisible(false);
+					newPassword.setVisible(false);
 				}
 			}
 		});

@@ -23,7 +23,7 @@ public class Puzzle {
 	private final TypeShuffle typeShuffle;
 	private File file;
 
-	public Puzzle(int lines, int columns, File file, TypeShuffle typeShuffle) throws IOException {
+	public Puzzle(int lines, int columns, File file, TypeShuffle typeShuffle) {
 		this.LINES = lines;
 		this.COLUMNS = columns;
 		this.typeShuffle = typeShuffle;
@@ -32,7 +32,7 @@ public class Puzzle {
 		initialize();
 	}
 	
-	public Puzzle(Long id, int lines, int columns, File file, TypeShuffle typeShuffle) throws IOException {
+	public Puzzle(Long id, int lines, int columns, File file, TypeShuffle typeShuffle) {
 		this.id = id;
 		this.LINES = lines;
 		this.COLUMNS = columns;
@@ -42,25 +42,30 @@ public class Puzzle {
 		initialize();
 	}
 	
-	private void initialize() throws IOException {
+	private void initialize() {
 		generatepieces();
 		associateNeighbors();
 		addEmpty();
 	}
 	
-	private void generatepieces() throws IOException {
-		BufferedImage imagem = ImageIO.read(getFile());
-		int w = imagem.getWidth() / this.getCOLUMNS();
-		int h = imagem.getHeight() / this.getLINES();
-		int index = 1;
-		
-		for (int l = 0; l < this.getLINES(); l++) {
-			for (int c = 0; c < this.getCOLUMNS(); c++) {
-				Piece piece = new Piece(index, l, c, false);
-				piece.setImg(new ImageIcon(imagem.getSubimage(c * w, l * h, w, h)));
-				pieces.add(piece);
-				index++;
+	private void generatepieces() {
+		BufferedImage imagem;
+		try {
+			imagem = ImageIO.read(getFile());
+			int w = imagem.getWidth() / this.getCOLUMNS();
+			int h = imagem.getHeight() / this.getLINES();
+			int index = 1;
+			
+			for (int l = 0; l < this.getLINES(); l++) {
+				for (int c = 0; c < this.getCOLUMNS(); c++) {
+					Piece piece = new Piece(index, l, c, false);
+					piece.setImg(new ImageIcon(imagem.getSubimage(c * w, l * h, w, h)));
+					pieces.add(piece);
+					index++;
+				}
 			}
+		} catch (IOException e) {
+			System.err.println(e);
 		}
 	}
 

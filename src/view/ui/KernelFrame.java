@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -24,10 +25,9 @@ import controller.PlayerController;
 import interfaces.PuzzleFrameListener;
 import interfaces.UserInformationListener;
 import model.Player;
+import util.TypeShuffle;
 import view.components.CustomButton;
 import view.components.JPhotoRound;
-import view.components.PuzzleBoard;
-import view.components.Stopwatch;
 
 public class KernelFrame extends AbstractWindow {
 
@@ -52,12 +52,14 @@ public class KernelFrame extends AbstractWindow {
 	public KernelFrame(Player player) {
 		super();
 		initialize(player);
+		/* initializer fake puzzle - refactor code */
+		puzzleFrame = new PuzzleFrame(player, 2, new File("img\\naruto.jpg"), TypeShuffle.pairs);
 	}
 
 	private void initialize(Player player) {
 
 		PuzzleFrameListener puzzleListener = (image, size, shuffle) -> {
-			puzzleFrame = new PuzzleFrame(player, image, size, shuffle);
+			puzzleFrame = new PuzzleFrame(player, size, image, shuffle);
 			showFrame(puzzleFrame);
 		};
 
@@ -153,18 +155,16 @@ public class KernelFrame extends AbstractWindow {
 		btnPlay.setText("JOGAR ");
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Stopwatch watch = Stopwatch.getInstance();
-
-				if (watch.getDuration() > 0) {
-					showFrame(PuzzleBoard.getInstance());
-					watch.pause();
+				
+				if (puzzleFrame.stopwatchListener().getDuration() > 0) {
+					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
 					String message = "Quer desistir da partida atual e iniciar uma nova?";
 					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
 						showFrame(puzzleFrame);
 						return;
 					}
 				}
-				showFrame(new PreGameFrame(player, puzzleListener));
+				showFrame(new PreGameFrame(puzzleListener));
 			}
 		});
 		btnPlay.addMouseListener(hoverEffect);
@@ -173,11 +173,9 @@ public class KernelFrame extends AbstractWindow {
 		btnConfig.setText("AJUSTE");
 		btnConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Stopwatch watch = Stopwatch.getInstance();
 
-				if (watch.getDuration() > 0) {
-					showFrame(PuzzleBoard.getInstance());
-					watch.pause();
+				if (puzzleFrame.stopwatchListener().getDuration() > 0) {
+					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
 					String message = "Quer desistir da partida atual e iniciar uma nova?";
 					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
 						showFrame(puzzleFrame);

@@ -1,7 +1,6 @@
 package view.components;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,8 +13,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 
-public class CustomField{
+public class CustomField extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	private JTextField fieldCommon;
 	private JPasswordField fieldPassword;
 	private String title;
@@ -30,9 +30,10 @@ public class CustomField{
 		this.x = x;
 		this.y = y;
 		this.isFieldPassword = isFieldPassword;
+		this.initialize();
 	}
 	
-	public Component initialize() {
+	public void initialize() {
 		
 		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
@@ -48,11 +49,10 @@ public class CustomField{
 			}
 		};
 
-		JPanel container = new JPanel();
-		container.setLayout(null);
-		container.setBorder(null);
-		container.setBackground(new Color(255, 255, 255));
-		container.setBounds(x, y, width, 75);
+		this.setLayout(null);
+		this.setBorder(null);
+		this.setBackground(new Color(255, 255, 255));
+		this.setBounds(x, y, width, 75);
 		
 		JLabel label = new CustomLabel(title, 0, 0, width, 30);
 		
@@ -65,7 +65,7 @@ public class CustomField{
 			fieldCommon.setColumns(10);
 			fieldCommon.setBorder(null);
 			fieldCommon.setBackground(new Color(255, 255, 255));
-			container.add(fieldCommon);
+			this.add(fieldCommon);
 		}else{
 			fieldPassword = new JPasswordField();
 			fieldPassword.setBounds(0, 30, width, 40);
@@ -74,7 +74,7 @@ public class CustomField{
 			fieldPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			fieldPassword.setBorder(null);
 			fieldPassword.setBackground(new Color(255, 255, 255));
-			container.add(fieldPassword);
+			this.add(fieldPassword);
 		}
 		
 		JSeparator separator = new JSeparator();
@@ -83,9 +83,9 @@ public class CustomField{
 		separator.setBackground(new Color(0, 0, 128));
 		separator.addMouseListener(hoverEffect);
 		
-		container.add(label);
-		container.add(separator);
-		return container;
+		this.add(label);
+		this.add(separator);
+		
 	}
 	
 	public String getText() {

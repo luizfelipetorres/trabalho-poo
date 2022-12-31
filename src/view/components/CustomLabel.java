@@ -6,10 +6,7 @@ import java.awt.Font;
 import javax.swing.JLabel;
 
 public class CustomLabel extends JLabel {
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	public CustomLabel(String text, int x, int y, int width, int height) {

@@ -1,7 +1,6 @@
 package view.components;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -15,8 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
-public class CustomComboBox<T>{
+public class CustomComboBox<T> extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	private JComboBox<T> comboBox;
 	private String title;
 	private T[] model;
@@ -25,6 +25,7 @@ public class CustomComboBox<T>{
 	private int width;
 
 	public CustomComboBox(String title, T[] model, int x, int y, int width) {
+		super();
 		this.title = title;
 		this.model = model;
 		this.x = x;
@@ -33,7 +34,7 @@ public class CustomComboBox<T>{
 		initialize();
 	}
 	
-	public Component initialize() {
+	public void initialize() {
 		
 		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
@@ -49,10 +50,9 @@ public class CustomComboBox<T>{
 			}
 		};
 		
-		JPanel container = new JPanel();
-		container.setLayout(null);
-		container.setBorder(null);
-		container.setBounds(x, y, width, 75);
+		this.setLayout(null);
+		this.setBorder(null);
+		this.setBounds(x, y, width, 75);
 		
 		JLabel label = new CustomLabel(title, 0, 0, width, 30);
 		
@@ -86,11 +86,9 @@ public class CustomComboBox<T>{
 		separator.setBackground(new Color(0, 0, 128));
 		separator.addMouseListener(hoverEffect);
 		
-		container.add(label);
-		container.add(comboBox);
-		container.add(separator);
-
-		return container;
+		this.add(label);
+		this.add(comboBox);
+		this.add(separator);
 		
 	}
 	
