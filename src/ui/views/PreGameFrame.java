@@ -1,7 +1,6 @@
 package ui.views;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -31,43 +30,21 @@ import util.TypeShuffle;
 public class PreGameFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-
-	private CustomButton buttonInit;
+	private Player player; /* future used */
 	private File image;
-	private JLabel labelImge;
-	private JLabel labelImageName;
-	private CustomButton buttonChooseImg;
+	private JLabel lbImage;
+	private JLabel lbImageDescription;
 	private ClickListener clickListener;
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PreGameFrame window = new PreGameFrame();
-					window.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public PreGameFrame(Player player, ClickListener listener) {
 		super();
+		this.player = player;
 		this.clickListener = listener;
 		image = new File("img//naruto.jpg");
 		initialize();
 	}
 
-	public PreGameFrame() {
-		super();
-		image = new File("img//naruto.jpg");
-		initialize();
-	}
-
 	private void initialize() {
-		this.setBounds(0, 0, 1175, 670);
-		this.setLayout(null);
 
 		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
@@ -84,6 +61,7 @@ public class PreGameFrame extends JPanel {
 		Map<String, Integer> optionsSize = new HashMap<String, Integer>() {
 			private static final long serialVersionUID = 1L;
 			{
+				put("2x2", 2);
 				put("3x3", 3);
 				put("4x4", 4);
 				put("5x5", 5);
@@ -97,9 +75,12 @@ public class PreGameFrame extends JPanel {
 				put("Ímpar", TypeShuffle.odd);
 			}
 		};
-		
+
+		this.setBounds(0, 0, 1175, 670);
+		this.setBackground(new Color(255, 255, 255));
+		this.setLayout(null);
+
 		JLabel labelTitle = new CustomLabel("PRÉ-CONFIGURAÇÃO", 10, 0, 270, 30);
-		this.add(labelTitle);
 		
 		CustomComboBox<Object> cbSize = new CustomComboBox<>(
 				"Selecione o tamanho do tabuleiro:", 
@@ -113,19 +94,15 @@ public class PreGameFrame extends JPanel {
 				optionsShuffle.keySet().stream().sorted().toArray(), 
 				10, 135, 
 				270);
-		
-		this.add(cbSize.initialize());
-		this.add(cbShuffle.initialize());
 
-		buttonChooseImg = new CustomButton("Escolha uma imagem", null, 10, 225, 270, 40);
-		buttonChooseImg.addMouseListener(hoverEffect);
+		CustomButton buttonChooseImg = new CustomButton("Escolha uma imagem", null, 10, 225, 270, 40);
 		buttonChooseImg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				image = chooseImage();
 				showChoosedImage();
 			}
 		});
-		add(buttonChooseImg);
+		buttonChooseImg.addMouseListener(hoverEffect);
 		
 		JPanel containerImage = new JPanel();
 		containerImage.setLayout(null);
@@ -133,27 +110,29 @@ public class PreGameFrame extends JPanel {
 		containerImage.setBounds(290, 0, 500, 638);
 		containerImage.setBackground(new Color(220, 220, 220));
 		
-		labelImageName = new JLabel("Imagem escolhida: ");
-		labelImageName.setFont(new Font("Tahoma", Font.BOLD, 15));
-		labelImageName.setBounds(10, 0, 270, 30);
+		lbImageDescription = new JLabel("Imagem escolhida: ");
+		lbImageDescription.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lbImageDescription.setBounds(10, 0, 270, 30);
 		
-		labelImge = new JLabel("");
+		lbImage = new JLabel("");
 
-		containerImage.add(labelImageName);
-		containerImage.add(labelImge);
+		containerImage.add(lbImageDescription);
+		containerImage.add(lbImage);
 
-		this.add(containerImage);
-
-
-		buttonInit = new CustomButton("Jogar", "img\\icons\\icon-control.png", 10, 589, 270, 50);
+		CustomButton buttonInit = new CustomButton("JOGAR", "img\\icons\\icon-control.png", 10, 589, 270, 50);
 		buttonInit.addMouseListener(hoverEffect);
 		buttonInit.addActionListener((e) -> {
 			int selectedSize = optionsSize.get(cbSize.getSelectedItem());
 			TypeShuffle selectedShuffle = optionsShuffle.get(cbShuffle.getSelectedItem());
-			clickListener.onClick(image, selectedSize, selectedShuffle);
-			this.removeAll();
+			clickListener.onClick(image, selectedSize, selectedShuffle); 
 		});
-		add(buttonInit);
+
+		this.add(labelTitle);
+		this.add(cbSize.initialize());
+		this.add(cbShuffle.initialize());
+		this.add(buttonChooseImg);
+		this.add(containerImage);
+		this.add(buttonInit);
 
 		showChoosedImage();
 
@@ -172,12 +151,12 @@ public class PreGameFrame extends JPanel {
 	}
 
 	private void showChoosedImage() {
-		labelImageName.setText(concatImageName());
+		lbImageDescription.setText(concatImageName());
 		try {
 			BufferedImage resized = ImageIO.read(image);
 			Image newImage = resized.getScaledInstance(480, 400, 1);
-			labelImge.setIcon(new ImageIcon(newImage));
-			labelImge.setBounds(10, 50, 480, newImage.getHeight(labelImge));
+			lbImage.setIcon(new ImageIcon(newImage));
+			lbImage.setBounds(10, 50, 480, newImage.getHeight(lbImage));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

@@ -13,10 +13,28 @@ import javax.swing.border.AbstractBorder;
 
 public class BorderRound extends AbstractBorder {
 	
-	private final RenderingHints antialiasing = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON) ;
+	private static final long serialVersionUID = 1L;
+	private RenderingHints antialiasing;
+	private Component c;
+	private Graphics g;
+	private int x;
+	private int y;
+	private int width; 
+	private int height;
 	
-	public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-        Graphics2D g2d = (Graphics2D) g;
+	public void paintBorder(Component c, Graphics g, int x, int y, int width, int height){
+		this.c = c;
+		this.g = g;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.antialiasing = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        initialize();
+    }
+	
+	private void initialize(){
+		Graphics2D g2d = (Graphics2D) g;
 
         Color oldColor =  c.getParent().getBackground();
         g2d.setColor(oldColor);
@@ -36,6 +54,6 @@ public class BorderRound extends AbstractBorder {
         path.append(inner, false);
         g2d.fill(path);
         g2d.setColor(oldColor);
-    }
+	}
 	
 }

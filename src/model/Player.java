@@ -1,14 +1,12 @@
 package model;
 
-import java.io.File;
-
 public class Player {
 
     private Integer playerId;
     private String playerUsername;
     private String playerEmail;
     private String playerPassword;
-    private File file;
+    private String playerUrlImage;
     
     public Player() {
     }
@@ -56,11 +54,12 @@ public class Player {
 		this.playerPassword = playerPassword;
 	}
 
-	public File getFile() {
-		return file;
+	public String getPlayerUrlImage() {
+		return playerUrlImage;
 	}
 
-	public void setFile(File file) {
-		this.file = file;
+	public void setPlayerUrlImage(String playerUrlImAge) {
+		this.playerUrlImage = playerUrlImAge;
 	}
+
 }

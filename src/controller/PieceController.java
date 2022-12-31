@@ -19,12 +19,12 @@ public class PieceController {
 		return instance;
 	}
 
-	public void save(Long playerMatch, List<Piece> pieces) {
-		PieceDAO.getInstance().save(playerMatch, pieces);
+	public boolean save(Long playerMatch, List<Piece> pieces) {
+		return PieceDAO.getInstance().save(playerMatch, pieces);
 	}
 
-	public void update(Long playerMatch, List<Piece> pieces) {
-		PieceDAO.getInstance().update(playerMatch, pieces);
+	public boolean update(Long playerMatch, List<Piece> pieces) {
+		return PieceDAO.getInstance().update(playerMatch, pieces);
 	}
 
 	public void configPiece(Long playerMatch, List<Piece> pieces) {

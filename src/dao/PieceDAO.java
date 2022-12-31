@@ -8,9 +8,10 @@ import java.sql.Statement;
 import java.util.List;
 
 import connection.ConnectionFactory;
+import interfaces.DAOListener;
 import model.Piece;
 
-public class PieceDAO implements PieceDAOListener{
+public class PieceDAO implements DAOListener<Piece>{
 
 	private static PieceDAO instance;
 
@@ -24,8 +25,7 @@ public class PieceDAO implements PieceDAOListener{
 		return instance;
 	}
 	
-	@Override
-	public void save(Long playerMatch, List<Piece> pieces) {
+	public boolean save(Long playerMatch, List<Piece> pieces) {
 		Connection connection = ConnectionFactory.getConnection();
 		String sql = "INSERT INTO PIECE(PLAYER_MATCH_ID, PIECE_INDEX, PIECE_CURRENT_POSITION,PIECE_EMPTY) VALUES (?,?,?,?)";
 		PreparedStatement ps;
@@ -43,16 +43,14 @@ public class PieceDAO implements PieceDAOListener{
 			
 			ps.close();
 			connection.close();
-			
+			return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.err.println(e);
 		}
-
-				
+		return false;
 	}
 
-	@Override
-	public void update(Long playerMatch, List<Piece> pieces) {
+	public boolean update(Long playerMatch, List<Piece> pieces) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "UPDATE PIECE SET PIECE_CURRENT_POSITION=?, PIECE_EMPTY=? WHERE PLAYER_MATCH_ID=? AND PIECE_INDEX=?;";
@@ -69,13 +67,13 @@ public class PieceDAO implements PieceDAOListener{
 					
 			ps.close();
 			connection.close();
-
-		} catch (Exception e) {
-			System.out.println(e.toString());
+			return true;
+		} catch (SQLException e) {
+			System.err.println(e);
 		}
+		return false;
 	}
 
-	@Override
 	public void configPiece(Long playerMatch, List<Piece> pieces){
 
 		Connection connection = ConnectionFactory.getConnection();
@@ -95,13 +93,42 @@ public class PieceDAO implements PieceDAOListener{
 			rs.close();
 			connection.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.err.println(e);
 		}
 	}
 	
 	private Piece pieceIndice(List<Piece>  pieces, int index) {
 		return  pieces.stream().filter(e -> e.getIndex() == index).findFirst().get();
 	}
-	
+
+	@Override
+	public boolean save(Piece object) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean update(Piece object) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<Piece> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Piece findById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void remove(Long id) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

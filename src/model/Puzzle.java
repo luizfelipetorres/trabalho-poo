@@ -32,7 +32,7 @@ public class Puzzle {
 		initialize();
 	}
 	
-	public Puzzle( Long id, int lines, int columns, File file, TypeShuffle typeShuffle) throws IOException {
+	public Puzzle(Long id, int lines, int columns, File file, TypeShuffle typeShuffle) throws IOException {
 		this.id = id;
 		this.LINES = lines;
 		this.COLUMNS = columns;

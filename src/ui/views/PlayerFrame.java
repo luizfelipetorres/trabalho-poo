@@ -2,18 +2,18 @@ package ui.views;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -21,27 +21,29 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controller.PlayerController;
 import controller.PlayerMatchController;
 import model.Player;
 import ui.components.CustomButton;
 import ui.components.CustomField;
-import ui.components.JLabelRound;
+import ui.components.JPhotoRound;
 import util.RecordPlayerMatch;
 
 public class PlayerFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JLabelRound photoPersona;
 	private Player player;
+	private JPhotoRound photoPersona;
 	private RecordPlayerMatch recordPlayerMatch;
-	private KernelFrame kernelFrame;
+	private File image;
 
-	public PlayerFrame(Player player, KernelFrame kernelFrame) {
+	public PlayerFrame(Player player) {
+		super();
 		this.player = player;
-		this.kernelFrame = kernelFrame;
 		this.recordPlayerMatch = PlayerMatchController.getInstance().recordPlayerMatchByPlayer(player.getPlayerId());
+		this.image = null;
 		initialize();
 	}
 
@@ -76,14 +78,12 @@ public class PlayerFrame extends JPanel {
 		JPanel panelInformationPersona = new JPanel();
 		panelInformationPersona.setBackground(new Color(205, 205, 205));
 		panelInformationPersona.setBounds(10, 11, 457, 630);
-		add(panelInformationPersona);
+		this.add(panelInformationPersona);
 		panelInformationPersona.setLayout(null);
 
-		photoPersona = new JLabelRound();
-		photoPersona.setIcon(new ImageIcon("img\\icons\\icon-persona.png"));
-		photoPersona.setHorizontalAlignment(SwingConstants.CENTER);
-		photoPersona.setBounds(47, 11, 364, 336);
-		configImg(player.getFile());
+		photoPersona = new JPhotoRound(player.getPlayerUrlImage(), 350);
+		photoPersona.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		photoPersona.setBounds(51, 21, 350, 350);
 		panelInformationPersona.add(photoPersona);
 
 		JSeparator separatorPhotoPersona = new JSeparator();
@@ -100,103 +100,119 @@ public class PlayerFrame extends JPanel {
 
 		JLabel titleTotalMatch = new JLabel("Total de partidas: ");
 		titleTotalMatch.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleTotalMatch.setBounds(10, 431, 113, 26);
+		titleTotalMatch.setBounds(10, 431, 136, 25);
 		panelInformationPersona.add(titleTotalMatch);
 
 		JLabel titleMatchComplete = new JLabel("Partidas Completas: ");
 		titleMatchComplete.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleMatchComplete.setBounds(10, 454, 136, 26);
+		titleMatchComplete.setBounds(10, 456, 136, 25);
 		panelInformationPersona.add(titleMatchComplete);
 
 		JLabel titleMatchNotComplete = new JLabel("Partidas nao completadas:");
 		titleMatchNotComplete.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleMatchNotComplete.setBounds(213, 454, 165, 26);
+		titleMatchNotComplete.setBounds(213, 456, 165, 25);
 		panelInformationPersona.add(titleMatchNotComplete);
 
 		JLabel titleTotalPoints = new JLabel("Total de pontos: ");
 		titleTotalPoints.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleTotalPoints.setBounds(10, 549, 113, 26);
+		titleTotalPoints.setBounds(10, 570, 113, 25);
 		panelInformationPersona.add(titleTotalPoints);
 
 		JLabel titleMaxPoints = new JLabel("Maior pontuação:  ");
 		titleMaxPoints.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleMaxPoints.setBounds(10, 572, 116, 26);
+		titleMaxPoints.setBounds(223, 594, 116, 25);
 		panelInformationPersona.add(titleMaxPoints);
 
 		JLabel titleMenorPontis = new JLabel("Menor pontuação: ");
 		titleMenorPontis.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleMenorPontis.setBounds(213, 572, 124, 26);
+		titleMenorPontis.setBounds(10, 594, 124, 25);
 		panelInformationPersona.add(titleMenorPontis);
 
 		JLabel titleTotalDuration = new JLabel("Total de horas jogadas: ");
 		titleTotalDuration.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleTotalDuration.setBounds(10, 491, 156, 26);
+		titleTotalDuration.setBounds(10, 517, 156, 25);
 		panelInformationPersona.add(titleTotalDuration);
 
 		JLabel titleMaxduration = new JLabel("Maior duração : ");
 		titleMaxduration.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleMaxduration.setBounds(10, 512, 99, 26);
+		titleMaxduration.setBounds(10, 545, 113, 25);
 		panelInformationPersona.add(titleMaxduration);
 
 		JLabel titleMinDuration = new JLabel("Menor duração :  ");
 		titleMinDuration.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleMinDuration.setBounds(213, 512, 113, 26);
+		titleMinDuration.setBounds(223, 545, 113, 25);
 		panelInformationPersona.add(titleMinDuration);
 
 		JLabel titleAvgPontuação = new JLabel("Média de pontos: ");
 		titleAvgPontuação.setFont(new Font("Tahoma", Font.BOLD, 12));
-		titleAvgPontuação.setBounds(213, 549, 124, 26);
+		titleAvgPontuação.setBounds(223, 570, 124, 25);
 		panelInformationPersona.add(titleAvgPontuação);
 
 		JLabel textTotalMatch = new JLabel(String.valueOf(recordPlayerMatch.getTotalMatch()));
+		textTotalMatch.setHorizontalAlignment(SwingConstants.RIGHT);
 		textTotalMatch.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textTotalMatch.setBounds(133, 431, 56, 26);
+		textTotalMatch.setBounds(147, 431, 50, 25);
 		panelInformationPersona.add(textTotalMatch);
 
 		JLabel textMatchComplete = new JLabel(String.valueOf(recordPlayerMatch.getTotalMatchCompleta()));
+		textMatchComplete.setHorizontalAlignment(SwingConstants.RIGHT);
 		textMatchComplete.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textMatchComplete.setBounds(147, 454, 56, 26);
+		textMatchComplete.setBounds(147, 456, 50, 25);
 		panelInformationPersona.add(textMatchComplete);
 
 		JLabel textMatchNotComplete = new JLabel(String.valueOf(recordPlayerMatch.getTotalMatchNotCompleta()));
+		textMatchNotComplete.setHorizontalAlignment(SwingConstants.RIGHT);
 		textMatchNotComplete.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textMatchNotComplete.setBounds(383, 454, 64, 26);
+		textMatchNotComplete.setBounds(383, 456, 50, 25);
 		panelInformationPersona.add(textMatchNotComplete);
 
 		JLabel textTotalDuration = new JLabel(formatHours(recordPlayerMatch.getTotalDuration()));
+		textTotalDuration.setHorizontalAlignment(SwingConstants.CENTER);
 		textTotalDuration.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textTotalDuration.setBounds(167, 491, 202, 26);
+		textTotalDuration.setBounds(167, 517, 280, 25);
 		panelInformationPersona.add(textTotalDuration);
 
 		JLabel textMaxduration = new JLabel(formatHours(recordPlayerMatch.getMaxDuration()));
+		textMaxduration.setHorizontalAlignment(SwingConstants.RIGHT);
 		textMaxduration.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textMaxduration.setBounds(121, 512, 56, 26);
+		textMaxduration.setBounds(121, 545, 93, 25);
 		panelInformationPersona.add(textMaxduration);
 
 		JLabel textMinDuration = new JLabel(formatHours(recordPlayerMatch.getMinDuration()));
+		textMinDuration.setHorizontalAlignment(SwingConstants.RIGHT);
 		textMinDuration.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textMinDuration.setBounds(322, 512, 56, 26);
+		textMinDuration.setBounds(335, 546, 112, 25);
 		panelInformationPersona.add(textMinDuration);
 
 		JLabel textTotalPoints = new JLabel(formatNumber(recordPlayerMatch.getTotalPoints()));
+		textTotalPoints.setHorizontalAlignment(SwingConstants.RIGHT);
 		textTotalPoints.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textTotalPoints.setBounds(121, 549, 82, 26);
+		textTotalPoints.setBounds(131, 570, 82, 25);
 		panelInformationPersona.add(textTotalPoints);
 
 		JLabel textMaxPoints = new JLabel(formatNumber(recordPlayerMatch.getMaxPoints()));
+		textMaxPoints.setHorizontalAlignment(SwingConstants.RIGHT);
 		textMaxPoints.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textMaxPoints.setBounds(121, 572, 72, 26);
+		textMaxPoints.setBounds(344, 594, 103, 25);
 		panelInformationPersona.add(textMaxPoints);
 
 		JLabel textMenorPontis = new JLabel(formatNumber(recordPlayerMatch.getMinPoints()));
+		textMenorPontis.setHorizontalAlignment(SwingConstants.RIGHT);
 		textMenorPontis.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textMenorPontis.setBounds(336, 572, 56, 26);
+		textMenorPontis.setBounds(141, 594, 72, 25);
 		panelInformationPersona.add(textMenorPontis);
 
 		JLabel textAvgPontuação = new JLabel(formatNumber(recordPlayerMatch.getAvgPoints()));
+		textAvgPontuação.setHorizontalAlignment(SwingConstants.RIGHT);
 		textAvgPontuação.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textAvgPontuação.setBounds(332, 549, 115, 26);
+		textAvgPontuação.setBounds(346, 570, 99, 25);
 		panelInformationPersona.add(textAvgPontuação);
+
+		JSeparator separatorPhotoPersona_1 = new JSeparator();
+		separatorPhotoPersona_1.setForeground(new Color(74, 74, 74));
+		separatorPhotoPersona_1.setBackground(new Color(74, 74, 74));
+		separatorPhotoPersona_1.setBounds(10, 499, 437, 7);
+		panelInformationPersona.add(separatorPhotoPersona_1);
 
 		JRadioButton changePassword = new JRadioButton("Alterar senha");
 		changePassword.setBackground(Color.WHITE);
@@ -226,38 +242,43 @@ public class PlayerFrame extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				String currentPasswordInt = Arrays.toString(currentPassword.getPassword());
 				String newPasswordInt = Arrays.toString(newPassword.getPassword());
-				String Username = fieldUsername.getText();
+				String username = fieldUsername.getText();
 				String email = fieldEmail.getText();
+				String image = photoPersona.getPath();
 				boolean isValid = false;
 
 				if (changePassword.isSelected()) {
 
 					if (currentPassword.getPassword().length == 0 || newPassword.getPassword().length == 0
-							|| newPasswordInt.isBlank() || currentPasswordInt.isBlank() || Username.isBlank()
+							|| newPasswordInt.isBlank() || currentPasswordInt.isBlank() || username.isBlank()
 							|| email.isBlank()) {
-						JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria");
-					} else if (!currentPasswordInt.equals(player.getPlayerPassword())) {
-						JOptionPane.showMessageDialog(null, "Senha inválida");
+						JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.");
+					} else if (!currentPasswordInt.equals(newPasswordInt)) {
+						JOptionPane.showMessageDialog(null, "Senha inválida.");
 					} else {
-						player.setPlayerUsername(Username);
+						player.setPlayerUrlImage(image);
+						player.setPlayerUsername(username);
 						player.setPlayerEmail(email);
 						player.setPlayerPassword(newPasswordInt);
 						isValid = true;
 					}
 				} else {
 
-					if (Username.isBlank() || email.isBlank()) {
-						JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria");
+					if (username.isBlank() || email.isBlank()) {
+						JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.");
 					} else {
-						player.setPlayerUsername(Username);
+						player.setPlayerUrlImage(image);
+						player.setPlayerUsername(username);
 						player.setPlayerEmail(email);
 						isValid = true;
 					}
 				}
 
 				if (isValid) {
-					if(PlayerController.getInstance().update(player)) {
-						kernelFrame.updateUserInformation(player);
+					if (PlayerController.getInstance().update(player)) {
+						JOptionPane.showMessageDialog(null, "Informações foram atualizadas.");
+						setVisible(false);
+						// kernelFrame.updateUserInformation(player);
 					}
 				}
 
@@ -277,104 +298,72 @@ public class PlayerFrame extends JPanel {
 		photoPersona.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JPanel panel = new JPanel();
 
-				JLabel title = new JLabel("O que deseja fazer com a foto do seu perfil ? ");
-				title.setFont(new Font("Tahoma", Font.PLAIN, 15));
-				panel.add(title);
+				Object message = "O que deseja fazer com a foto do seu perfil ?";
+				Object[] options = { "Editar", "Remover" };
+				int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-				CustomButton editPhoto = new CustomButton("Editar", "img\\icons\\icon-editPhoto.png",
-						new Color(255, 255, 255), new Color(0, 0, 128), 50, 50, 100, 50);
-				CustomButton removePhoto = new CustomButton("Remover", "img\\icons\\icon-remove.png", Color.WHITE,
-						new Color(0, 0, 128), 50, 50, 100, 50);
-				Object[] options1 = { editPhoto, removePhoto };
-
-				editPhoto.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						btnUpdatePhotoActionPerformed(evt);
-
-					}
-
-				});
-
-				removePhoto.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						btnRemovePhotoActionPerformed(evt);
-					}
-
-				});
-
-				editPhoto.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseEntered(MouseEvent e) {
-						editPhoto.setBackground(new Color(249, 13, 72));
-					}
-
-					@Override
-					public void mouseExited(MouseEvent e) {
-						editPhoto.setBackground(new Color(0, 0, 128));
-					}
-				});
-
-				removePhoto.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseEntered(MouseEvent e) {
-						removePhoto.setBackground(new Color(249, 13, 72));
-					}
-
-					@Override
-					public void mouseExited(MouseEvent e) {
-						removePhoto.setBackground(new Color(0, 0, 128));
-					}
-				});
-
-				JOptionPane.showOptionDialog(null, panel, "Perfil", JOptionPane.YES_OPTION, JOptionPane.PLAIN_MESSAGE,
-						null, options1, null);
-
+				if (response == 0) {
+					updatePhoto();
+				} else {
+					removePhoto();
+				}
 			}
 		});
 	}
 
-	private void configImg(File file) {
-
-		if (file == null) {
-			file = new File("img//users//defaultUsers.png");
+	private void updatePhoto() {
+		String destinationPath = "img\\users\\" + player.getPlayerUsername() + ".png";
+		image = this.chooseImage();
+		if (image != null) {
+			try {
+				this.copyFile(new File(image.getAbsolutePath()), new File(destinationPath));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			photoPersona.setPath(destinationPath);
 		}
+	}
 
+	private void removePhoto() {
+		String sourcePath = "img\\icons\\icon-persona.png";
+		String destinationPath = "img\\users\\" + player.getPlayerUsername() + ".png";
 		try {
-			ImageIcon imgPersona = new ImageIcon(ImageIO.read(file));
-			imgPersona.setImage(
-					imgPersona.getImage().getScaledInstance(photoPersona.getWidth(), photoPersona.getHeight(), 100));
-			photoPersona.setIcon(imgPersona);
+			this.copyFile(new File(sourcePath), new File(destinationPath));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		photoPersona.setPath(destinationPath);
 	}
 
-	private void btnUpdatePhotoActionPerformed(ActionEvent evt) {
-		JFileChooser fc = new JFileChooser();
-
-		int res = fc.showOpenDialog(null);
-
-		if (res == JFileChooser.APPROVE_OPTION) {
-			if(PlayerController.getInstance().updatePhoto(fc.getSelectedFile(), player)) {
-				configImg(fc.getSelectedFile());
-				kernelFrame.updateUserInformation(player);
-			}
-		}else{
-			JOptionPane.showMessageDialog(null, "Voce nao selecionou nenhum arquivo.");
-		}
+	private File chooseImage() {
+		JFileChooser fileChooser = new JFileChooser("img\\users");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "png");
+		fileChooser.setFileFilter(filter);
+		boolean choosed = fileChooser.showOpenDialog(fileChooser) == JFileChooser.APPROVE_OPTION;
+		return choosed ? fileChooser.getSelectedFile() : image;
 	}
 
-	private void btnRemovePhotoActionPerformed(ActionEvent evt)  {
-		if (player.getFile() == null) {
-			JOptionPane.showMessageDialog(null, "Você não possui foto de perfil");
-		} else {
-			if(PlayerController.getInstance().updatePhoto(null, player)) {
-				kernelFrame.updateUserInformation(player);
-				configImg(null);					
-			}
+	@SuppressWarnings("resource")
+	public void copyFile(File source, File destination) throws IOException {
+		if (destination.exists())
+			destination.delete();
+
+		FileChannel sourceChannel = null;
+		FileChannel destinationChannel = null;
+
+		try {
+			sourceChannel = new FileInputStream(source).getChannel();
+			destinationChannel = new FileOutputStream(destination).getChannel();
+			sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
+		} finally {
+			if (sourceChannel != null && sourceChannel.isOpen())
+				sourceChannel.close();
+			if (destinationChannel != null && destinationChannel.isOpen())
+				destinationChannel.close();
 		}
+
 	}
 
 	private String formatHours(Long duration) {
@@ -391,4 +380,3 @@ public class PlayerFrame extends JPanel {
 		return df.format(number);
 	}
 }
-

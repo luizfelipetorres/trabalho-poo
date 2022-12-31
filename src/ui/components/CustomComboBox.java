@@ -30,6 +30,7 @@ public class CustomComboBox<T>{
 		this.x = x;
 		this.y = y;
 		this.width = width;
+		initialize();
 	}
 	
 	public Component initialize() {
@@ -88,8 +89,9 @@ public class CustomComboBox<T>{
 		container.add(label);
 		container.add(comboBox);
 		container.add(separator);
-		
+
 		return container;
+		
 	}
 	
 	public Object getSelectedItem(){

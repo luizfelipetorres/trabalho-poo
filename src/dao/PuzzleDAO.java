@@ -6,26 +6,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import connection.ConnectionFactory;
+import interfaces.DAOListener;
 import model.Puzzle;
 import util.TypeShuffle;
 
-public class PuzzlerDAO implements PuzzlerDAOListener {
+public class PuzzleDAO implements DAOListener<Puzzle> {
 	
-	private static PuzzlerDAO instance;
+	private static PuzzleDAO instance;
 
-	private PuzzlerDAO() {}
+	private PuzzleDAO() {}
 
-	public static PuzzlerDAO getInstance() {
+	public static PuzzleDAO getInstance() {
 		if (instance == null) {
-			instance = new PuzzlerDAO();
+			instance = new PuzzleDAO();
 		}
 		return instance;
 	}
 
 	@Override
-	public Puzzle save(Puzzle puzzle) {
+	public boolean save(Puzzle puzzle) {
 		ResultSet id;
 		try {
 			Connection connection = ConnectionFactory.getConnection();
@@ -44,12 +46,18 @@ public class PuzzlerDAO implements PuzzlerDAOListener {
 			
 			ps.close();
 			connection.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			return true;
+		} catch (SQLException e) {
+			System.err.println(e);
 		}
 		
-		return puzzle;
+		return false;
+	}
+	
+	@Override
+	public List<Puzzle> findAll() {
+		/* implements logic */
+		return null;
 	}
 	
 	@Override
@@ -86,7 +94,7 @@ public class PuzzlerDAO implements PuzzlerDAOListener {
 
 	
 	@Override
-	public void update(Puzzle puzzle) {
+	public boolean update(Puzzle puzzle) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "UPDATE PUZZLE SET PUZZLE_LINES = ?, PUZZLE_COLUMNS = ?, PUZZLE_TYPE_SHUFFLE = ?,PUZZLE_URL_IMAGE = ? WHERE PUZZLE_ID=?;";
@@ -99,11 +107,11 @@ public class PuzzlerDAO implements PuzzlerDAOListener {
 			ps.execute();
 			ps.close();
 			connection.close();
-			
+			return true;
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		
+		return false;
 	}
 	
 	@Override

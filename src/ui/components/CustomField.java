@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 
-public class CustomField extends Component{
+public class CustomField{
 
 	private JTextField fieldCommon;
 	private JPasswordField fieldPassword;
@@ -51,6 +51,7 @@ public class CustomField extends Component{
 		JPanel container = new JPanel();
 		container.setLayout(null);
 		container.setBorder(null);
+		container.setBackground(new Color(255, 255, 255));
 		container.setBounds(x, y, width, 75);
 		
 		JLabel label = new CustomLabel(title, 0, 0, width, 30);

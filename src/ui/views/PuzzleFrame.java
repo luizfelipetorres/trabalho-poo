@@ -16,11 +16,14 @@ import util.TypeShuffle;
 public class PuzzleFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private Player player; /* future used */
 	private PuzzleBoard puzzleBoard;
 	private Stopwatch stopWatch;
 	private TypeShuffle typeShuffle;
 
-	public PuzzleFrame(Player player, File image, int size, TypeShuffle typeShuffle) {
+	public PuzzleFrame(Player player, File image, int size, TypeShuffle typeShuffle){
+		super();
+		this.player = player;
 		this.typeShuffle = typeShuffle;
 		this.puzzleBoard = PuzzleBoard.getInstance();
 		this.stopWatch = Stopwatch.getInstance();

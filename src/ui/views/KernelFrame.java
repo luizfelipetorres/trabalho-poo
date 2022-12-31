@@ -10,8 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,11 +17,10 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import ui.components.CustomButton;
-import ui.components.JLabelRound;
+import ui.components.JPhotoRound;
 
 import javax.swing.SwingConstants;
 
@@ -32,28 +29,19 @@ import model.Player;
 import ui.components.PuzzleBoard;
 import ui.components.Stopwatch;
 
-public class KernelFrame extends JFrame {
+public class KernelFrame extends AbstractWindow {
 
-	private static final long serialVersionUID = 1L;
-	private JButton btnPlay;
-	private JButton btnConfig;
-	private JButton btnLogout;
-	private JLabelRound lbPhotoPersona;
-	private JLabel lbEmail;
-	private JLabel lbUsername;
-	private KernelFrame kernelFrame;
+	private JFrame frame;
 	private JDesktopPane desktopPane;
-	private JPanel panelPersona;
-	private JPanel panelLeftMenu;
 	private PuzzleFrame puzzleFrame;
-
+	
 	public static void main(String[] args, Player player) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					KernelFrame window = new KernelFrame(player);
-					window.setVisible(true);
-					window.setLocationRelativeTo(null);
+					window.frame.setVisible(true);
+					window.frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -62,17 +50,73 @@ public class KernelFrame extends JFrame {
 	}
 
 	public KernelFrame(Player player) {
+		super();
 		initialize(player);
 	}
 
 	private void initialize(Player player) {
-		kernelFrame = this;
-		this.getContentPane().setBackground(new Color(255, 255, 255));
-		this.setBounds(100, 100, 1300, 750);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.getContentPane().setLayout(null);
 
-		MouseAdapter mouseAdapter = new MouseAdapter() {
+		frame = new JFrame();
+		frame.getContentPane().setBackground(new Color(255, 255, 255));
+		frame.setBounds(100, 100, 1300, 750);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+
+		JPanel panelPersona = new JPanel();
+		panelPersona.setBackground(new Color(45, 45, 45));
+		panelPersona.setBounds(10, 63, 180, 217);
+		panelPersona.setLayout(null);
+		panelPersona.setVisible(false);
+
+		JLabel lbPhotoPersona = new JPhotoRound(player.getPlayerUrlImage(), 110);
+		lbPhotoPersona.setBounds(35, 10, 110, 110);
+		
+		JLabel lbUsername = new JLabel(player.getPlayerUsername());
+		lbUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lbUsername.setForeground(new Color(255, 255, 255));
+		lbUsername.setHorizontalAlignment(SwingConstants.CENTER);
+		lbUsername.setBounds(10, 132, 160, 30);
+		
+		JLabel lbEmail = new JLabel(player.getPlayerEmail());
+		lbEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lbEmail.setForeground(new Color(255, 255, 255));
+		lbEmail.setHorizontalAlignment(SwingConstants.CENTER);
+		lbEmail.setBounds(10, 173, 160, 30);
+		
+		panelPersona.add(lbPhotoPersona);
+    	panelPersona.add(lbUsername);
+		panelPersona.add(lbEmail);
+
+		JButton btnPlay = new CustomButton("", "img\\icons\\icon-control.png", new Color(255, 255, 255), new Color(0, 0, 128),
+				0, 63, 200, 48);
+		JButton btnConfig = new CustomButton("", "img\\icons\\icon-config.png", new Color(255, 255, 255), new Color(0, 0, 128),
+				0, 122, 200, 48);
+		JButton btnLogout = new CustomButton("", "img\\icons\\icon-logout.png", new Color(255, 255, 255), new Color(0, 0, 128),
+				0, 200, 200, 48);
+		
+		JPanel panelLeftMenu = new JPanel();
+		panelLeftMenu.setBounds(0, 0, 70, 711);
+		panelLeftMenu.setBackground(new Color(60, 60, 60));
+		panelLeftMenu.setLayout(null);
+		panelLeftMenu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				panelLeftMenu.setBounds(0, 0, 200, 711);
+				panelPersona.setVisible(true);
+				btnPlay.setLocation(0, 300);
+				btnConfig.setLocation(0, 360);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				panelLeftMenu.setBounds(0, 0, 70, 711);
+				panelPersona.setVisible(false);
+				btnPlay.setLocation(0, 63);
+				btnConfig.setLocation(0, 122);
+			}
+		});
+		
+		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				e.getComponent().setBackground(new Color(249, 13, 72));
@@ -92,73 +136,13 @@ public class KernelFrame extends JFrame {
 			}
 		};
 
-		panelPersona = new JPanel();
-		panelPersona.setBackground(new Color(45, 45, 45));
-		panelPersona.setBounds(10, 63, 180, 217);
-		panelPersona.setLayout(null);
-		panelPersona.setVisible(false);
- 		
-		lbPhotoPersona = new JLabelRound();
-		lbPhotoPersona.setHorizontalAlignment(SwingConstants.CENTER);
-		lbPhotoPersona.setBounds(10, 11, 160, 110);
-		panelPersona.add(lbPhotoPersona);
-		
-		lbUsername = new JLabel();
-		lbUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lbUsername.setForeground(new Color(255, 255, 255));
-		lbUsername.setHorizontalAlignment(SwingConstants.CENTER);
-		lbUsername.setBounds(10, 132, 160, 30);
-		panelPersona.add(lbUsername);
-		
-		lbEmail = new JLabel();
-		lbEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lbEmail.setForeground(new Color(255, 255, 255));
-		lbEmail.setHorizontalAlignment(SwingConstants.CENTER);
-		lbEmail.setBounds(10, 173, 160, 30);
-		panelPersona.add(lbEmail);
-    
-		updateUserInformation(player);
-	
-		btnPlay = new CustomButton("", "img\\icons\\icon-control.png", new Color(255, 255, 255), new Color(0, 0, 128),
-				0, 63, 200, 48);
-		btnConfig = new CustomButton("", "img\\icons\\icon-config.png", new Color(255, 255, 255), new Color(0, 0, 128),
-				0, 122, 200, 48);
-		btnLogout = new CustomButton("", "img\\icons\\icon-logout.png", new Color(255, 255, 255), new Color(0, 0, 128),
-				0, 200, 200, 48);
-
-		panelLeftMenu = new JPanel();
-		panelLeftMenu.setBounds(0, 0, 70, 711);
-		panelLeftMenu.setBackground(new Color(60, 60, 60));
-		panelLeftMenu.setLayout(null);
-		this.getContentPane().add(panelLeftMenu);
-		panelLeftMenu.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				panelLeftMenu.setBounds(0, 0, 200, 711);
-				panelPersona.setVisible(true);
-				btnPlay.setLocation(0, 300);
-				btnConfig.setLocation(0, 360);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				panelLeftMenu.setBounds(0, 0, 70, 711);
-				panelPersona.setVisible(false);
-				btnPlay.setLocation(0, 63);
-				btnConfig.setLocation(0, 122);
-			}
-		});
-
 		desktopPane = new JDesktopPane();
 		desktopPane.setBackground(new Color(255, 255, 255));
 		desktopPane.setBounds(200, 60, 1084, 651);
-		this.getContentPane().add(desktopPane);
-
+		
 		btnPlay.setIcon(new ImageIcon("img\\icons\\icon-control.png"));
 		btnPlay.setText("JOGAR ");
-
-		btnPlay.addMouseListener(mouseAdapter);
-
+		
 		ClickListener listener = (image, size, shuffle) -> {
 			puzzleFrame = new PuzzleFrame(player, image, size, shuffle);
 			showFrame(puzzleFrame);
@@ -171,8 +155,7 @@ public class KernelFrame extends JFrame {
 					showFrame(PuzzleBoard.getInstance());
 					watch.pause();
 					String message = "Quer desistir da partida atual e iniciar uma nova?";
-					int newGame = JOptionPane.showConfirmDialog(btnPlay, message);
-					if (newGame != YES_OPTION) {
+					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
 						showFrame(puzzleFrame);
 						return;						
 					}
@@ -180,36 +163,31 @@ public class KernelFrame extends JFrame {
 				showFrame(new PreGameFrame(player, listener));
 			}
 		});
-
+		btnPlay.addMouseListener(hoverEffect);
+		
 		btnConfig.setIcon(new ImageIcon("img\\icons\\icon-config.png"));
 		btnConfig.setText("AJUSTE");
-		btnConfig.addMouseListener(mouseAdapter);
 		btnConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showFrame(new PlayerFrame(player, kernelFrame));
+				showFrame(new PlayerFrame(player));
 			}
 		});
+		btnConfig.addMouseListener(hoverEffect);
 
 		btnLogout.setLocation(0, 650);
 		btnLogout.setIcon(new ImageIcon("img\\icons\\icon-logout.png"));
 		btnLogout.setText("SAIR    ");
-		btnLogout.addMouseListener(mouseAdapter);
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/* implements method in next issue */
+				frame.dispose();
 			}
 		});
+		btnLogout.addMouseListener(hoverEffect);
 
 		JLabel lbIconMenu = new JLabel("");
 		lbIconMenu.setHorizontalAlignment(SwingConstants.CENTER);
 		lbIconMenu.setIcon(new ImageIcon("img\\icons\\icon-menu.png"));
 		lbIconMenu.setBounds(10, 11, 50, 40);
-
-		panelLeftMenu.add(lbIconMenu);
-		panelLeftMenu.add(panelPersona);
-		panelLeftMenu.add(btnPlay);
-		panelLeftMenu.add(btnConfig);
-		panelLeftMenu.add(btnLogout);
 
 		JPanel panelHeader = new JPanel();
 		panelHeader.setBounds(69, 0, 1215, 55);
@@ -224,8 +202,15 @@ public class KernelFrame extends JFrame {
 		lbTitle.setBounds(10, 11, 1195, 33);
 		panelHeader.add(lbTitle);
 
-		showFrame(new PreGameFrame(player, listener));
-		this.getContentPane().add(panelHeader);
+		panelLeftMenu.add(lbIconMenu);
+		panelLeftMenu.add(panelPersona);
+		panelLeftMenu.add(btnPlay);
+		panelLeftMenu.add(btnConfig);
+		panelLeftMenu.add(btnLogout);
+
+		frame.getContentPane().add(panelLeftMenu);
+		frame.getContentPane().add(desktopPane);
+		frame.getContentPane().add(panelHeader);
 	}
 
 	private void showFrame(Component frame) {
@@ -233,26 +218,5 @@ public class KernelFrame extends JFrame {
 		desktopPane.add(frame);
 		frame.setVisible(true);
 	}
-	
-	public void updateUserInformation(Player player) {
-		File file = player.getFile();
-		
-		
-		if(file == null) {
-			file = new File("img//users//defaultUsers.png");
-		}
-
-		try {
-			ImageIcon imgPersona = new ImageIcon(ImageIO.read(file));
-			imgPersona.setImage(imgPersona.getImage().getScaledInstance(lbPhotoPersona.getWidth(), lbPhotoPersona.getHeight(), 100));
-			lbPhotoPersona.setIcon(imgPersona);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		lbUsername.setText(player.getPlayerUsername());
-		lbEmail.setText(player.getPlayerEmail());
-	}
-	
 	
 }
