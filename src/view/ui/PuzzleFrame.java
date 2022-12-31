@@ -7,8 +7,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import dao.MatchDAO;
+import dao.PlayerMatchDAO;
+import dao.PuzzleDAO;
+import interfaces.PuzzleBoardListener;
 import interfaces.StopwatchListener;
+import model.Match;
 import model.Player;
+import model.PlayerMatch;
+import model.Puzzle;
 import util.TypeShuffle;
 import view.components.PuzzleBoard;
 import view.components.Stopwatch;
@@ -16,7 +23,7 @@ import view.components.Stopwatch;
 public class PuzzleFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Player player; /* future used */
+	private Player player;
 	private PuzzleBoard puzzleBoard;
 	private Stopwatch stopWatch;
 	
@@ -24,7 +31,7 @@ public class PuzzleFrame extends JPanel {
 		super();
 		this.player = player;
 		this.stopWatch = new Stopwatch();
-		this.puzzleBoard = new PuzzleBoard(size, image, typeShuffle, stopwatchListener());
+		this.puzzleBoard = new PuzzleBoard(size, image, typeShuffle, puzzleBoardListener(), stopwatchListener());
 		this.initialize();
 	}
 
@@ -43,7 +50,30 @@ public class PuzzleFrame extends JPanel {
 		this.add(stopWatch);
 
 	}
+	
+	public PuzzleBoardListener puzzleBoardListener() {
+		
+		return new PuzzleBoardListener() {
 
+			@Override
+			public void persistence(Puzzle puzzle) {
+				PuzzleDAO.getInstance().save(puzzle);
+				Match match = new Match(puzzle);
+				MatchDAO.getInstance().save(match);
+				
+				PlayerMatch playerMatch = new PlayerMatch(
+						player,
+						match,
+						stopWatch.getDuration(),
+						true
+						);
+				PlayerMatchDAO.getInstance().save(playerMatch);
+				stopWatch.stop();
+				
+			}
+			
+		};
+	}
 	public StopwatchListener stopwatchListener() {
 		
 		return new StopwatchListener() {

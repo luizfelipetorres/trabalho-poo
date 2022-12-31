@@ -76,7 +76,7 @@ public class Puzzle {
 	}
 
 	private void addEmpty() {
-		pieces.stream().filter(e -> e.getIndex() == this.getSize()).findFirst().get().setEmpty(true);
+		pieces.stream().filter(e -> e.getIndex() == this.getSIZE()).findFirst().get().setEmpty(true);
 	}
 
 	public void shuffleTable(ShuffleListener listener) {
@@ -87,14 +87,14 @@ public class Puzzle {
 			int numberExchange = 0;
 
 			while (!this.isValidNumber(numberExchange)) {
-				numberExchange = random.nextInt(0, this.getSize());
+				numberExchange = random.nextInt(0, this.getSIZE());
 			}
 			animationTime /= numberExchange;
 			Set<Swap> swaps = new HashSet<Swap>();
 
 			while (swaps.size() < numberExchange) {
-				Piece pieceOrigin = pieces.get(random.nextInt(this.getSize() - 1));
-				Piece pieceDestiny = pieces.get(random.nextInt(this.getSize() - 1));
+				Piece pieceOrigin = pieces.get(random.nextInt(this.getSIZE() - 1));
+				Piece pieceDestiny = pieces.get(random.nextInt(this.getSIZE() - 1));
 
 				if (!pieceOrigin.equals(pieceDestiny)) {
 					Swap current = new Swap(pieceOrigin.getIndex(), pieceDestiny.getIndex());
@@ -113,7 +113,7 @@ public class Puzzle {
 	}
 	
 	public void exchange(int origin,  int destiny) {
-		if((origin < getSize() && origin >=0) && (destiny < getSize() && destiny >=0)   ) {
+		if((origin < getSIZE() && origin >=0) && (destiny < getSIZE() && destiny >=0)   ) {
 			Piece pieceOrigin = pieces.get(origin);
 			Piece pieceDestiny = pieces.get(destiny);
 			pieceOrigin.exchange(pieceDestiny);
@@ -138,7 +138,7 @@ public class Puzzle {
 		return true;
 	}
 
-	private int getSize() {
+	public int getSIZE() {
 		return this.getLINES() * this.getCOLUMNS();
 	}
 

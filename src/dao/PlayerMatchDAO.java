@@ -35,7 +35,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "INSERT INTO PLAYER_MATCH(PLAYER_MATCH_DURATION, PLAYER_MATCH_POINTS, PLAYER_MATCH_COMPLETE, PLAYER_ID, MATCH_ID) VALUES (?,?,?,?,?)";
 			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, playerMatch.getDuration());
+			ps.setLong(1, playerMatch.getDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
 			ps.setBoolean(3, playerMatch.isCompleted());
 			ps.setLong(4, playerMatch.getPlayer().getPlayerId());
@@ -63,7 +63,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "UPDATE PLAYER_MATCH SET PLAYER_MATCH_DURATION = ?, PLAYER_MATCH_POINTS = ?, PLAYER_MATCH_COMPLETE = ?,PLAYER_ID = ?, MATCH_ID=? WHERE PLAYER_MATCH_ID = ?;";
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setInt(1, playerMatch.getDuration());
+			ps.setLong(1, playerMatch.getDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
 			ps.setBoolean(3, playerMatch.isCompleted());
 			ps.setLong(4, playerMatch.getPlayer().getPlayerId());
@@ -92,7 +92,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 				Match match = MatchDAO.getInstance().findById(rs.getLong("MATCH_ID"));
 				Player player = PlayerDAO.getInstance().findById(rs.getLong("PLAYER_ID"));
 				PlayerMatch playerMatch = new PlayerMatch(rs.getLong("PLAYER_MATCH_ID"), player, match,
-						rs.getInt("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
+						rs.getLong("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
 						rs.getBoolean("PLAYER_MATCH_COMPLETE"));
 				rs.close();
 				connection.close();
@@ -119,7 +119,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 				Match match = MatchDAO.getInstance().findById(rs.getLong("MATCH_ID"));
 				Player player = PlayerDAO.getInstance().findById(rs.getLong("PLAYER_ID"));
 				PlayerMatch playerMatch = new PlayerMatch(rs.getLong("PLAYER_MATCH_ID"), player, match,
-						rs.getInt("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
+						rs.getLong("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
 						rs.getBoolean("PLAYER_MATCH_COMPLETE"));
 				listPlayerMatch.add(playerMatch);
 			}

@@ -15,8 +15,15 @@ public class Player {
         this.playerUsername = playerUsername;
         this.playerPassword = playerPassword;
     }
-
+    
     public Player(String playerUsername, String playerEmail, String playerPassword) {
+        this.playerUsername = playerUsername;
+        this.playerEmail = playerEmail;
+        this.playerPassword = playerPassword;
+    }
+
+    public Player(Long playerId, String playerUsername, String playerEmail, String playerPassword) {
+    	this.playerId = playerId;
         this.playerUsername = playerUsername;
         this.playerEmail = playerEmail;
         this.playerPassword = playerPassword;

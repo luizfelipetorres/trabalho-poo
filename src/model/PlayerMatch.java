@@ -5,12 +5,21 @@ public class PlayerMatch {
 	private Long id;
 	private Player player;
 	private Match match;
-	private int duration;
+	private Long duration;
 	private boolean isCompleted;
 	private double playerPoints;
 	
 
-	public PlayerMatch(Long id, Player player, Match match, int duration, double playerPoints, boolean isCompleted) {
+	public PlayerMatch(Player player, Match match, Long duration, boolean isCompleted) {
+		super();
+		this.player = player;
+		this.match = match;
+		this.duration = duration;
+		this.isCompleted = isCompleted;
+		this.playerPoints = calculetePoints(duration);
+	}
+	
+	public PlayerMatch(Long id, Player player, Match match, Long duration, double playerPoints, boolean isCompleted) {
 		super();
 		this.id = id;
 		this.player = player;
@@ -18,19 +27,9 @@ public class PlayerMatch {
 		this.duration = duration;
 		this.playerPoints = playerPoints;
 		this.isCompleted = isCompleted;
-		this.playerPoints = calculetePoints(duration);
-	}
-	
-	public PlayerMatch(Player player, Match match, int duration, double playerPoints, boolean isCompleted) {
-		super();
-		this.player = player;
-		this.match = match;
-		this.duration = duration;
-		this.playerPoints = playerPoints;
-		this.isCompleted = isCompleted;
 	}
 
-	public static float calculetePoints(int duration) {
+	public static float calculetePoints(Long duration) {
 		int minute = 60;
 		float points = 0;
 		
@@ -68,11 +67,11 @@ public class PlayerMatch {
 		this.match = match;
 	}
 
-	public int getDuration() {
+	public Long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(int duration) {
+	public void setDuration(Long duration) {
 		this.duration = duration;
 	}
 

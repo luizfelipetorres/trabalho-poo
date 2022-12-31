@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import interfaces.PuzzleBoardListener;
 import interfaces.ShuffleListener;
 import interfaces.StopwatchListener;
 import model.Puzzle;
@@ -21,11 +22,13 @@ import util.TypeShuffle;
 public class PuzzleBoard extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private PuzzleBoardListener puzzleBoardListener;
 	private StopwatchListener stopwatchListener;
 	private List<PieceButton> buttons;
 	private Puzzle puzzle;
 
-	public PuzzleBoard(int size, File image, TypeShuffle typeShuffle, StopwatchListener stopwatchListener) {
+	public PuzzleBoard(int size, File image, TypeShuffle typeShuffle, PuzzleBoardListener puzzleBoardListener, StopwatchListener stopwatchListener) {
+		this.puzzleBoardListener = puzzleBoardListener;
 		this.stopwatchListener = stopwatchListener;
 		this.buttons = new ArrayList<PieceButton>();
 		this.puzzle = new Puzzle(size, size, image, typeShuffle);
@@ -89,8 +92,8 @@ public class PuzzleBoard extends JPanel {
 		button.configImg();
 		piece.configImg();
 		if (puzzle.completedPuzzle()) {
-			stopwatchListener.stop();
-			JOptionPane.showMessageDialog(null, "Parabéns, você ganhou!!!");
+			puzzleBoardListener.persistence(puzzle);
+			JOptionPane.showMessageDialog(null, "Parabéns, você ganhou!!!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 }

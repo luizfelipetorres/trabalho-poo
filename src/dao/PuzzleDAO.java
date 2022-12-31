@@ -31,19 +31,17 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 		ResultSet id;
 		try {
 			Connection connection = ConnectionFactory.getConnection();
-			String sql = "INSERT INTO PUZZLE(PUZZLE_LINES, PUZZLE_COLUMNS, PUZZLE_TYPE_SHUFFLE,PUZZLE_URL_IMAGE) VALUES (?,?,?,?)";
-			PreparedStatement ps = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, puzzle.getLINES());
-			ps.setInt(2, puzzle.getCOLUMNS());
-			ps.setString(3, puzzle.getTypeShuffle().toString());
-			ps.setString(4, puzzle.getFile().getPath());
+			String sql = "INSERT INTO PUZZLE(PUZZLE_SIZE, PUZZLE_TYPE_SHUFFLE, PUZZLE_URL_IMAGE) VALUES (?,?,?)";
+			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.setInt(1, puzzle.getSIZE());
+			ps.setString(2, puzzle.getTypeShuffle().toString());
+			ps.setString(3, puzzle.getFile().getPath());
 			ps.execute();
 			id = ps.getGeneratedKeys();
 			
 			if(id.next()) {
 				puzzle.setId(id.getLong(1));
 			}
-			
 			ps.close();
 			connection.close();
 			return true;
@@ -97,13 +95,12 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 	public boolean update(Puzzle puzzle) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
-			String sql = "UPDATE PUZZLE SET PUZZLE_LINES = ?, PUZZLE_COLUMNS = ?, PUZZLE_TYPE_SHUFFLE = ?,PUZZLE_URL_IMAGE = ? WHERE PUZZLE_ID=?;";
+			String sql = "UPDATE PUZZLE SET PUZZLE_SIZE = ?, PUZZLE_TYPE_SHUFFLE = ?,PUZZLE_URL_IMAGE = ? WHERE PUZZLE_ID=?;";
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setInt(1, puzzle.getLINES());
-			ps.setInt(2, puzzle.getCOLUMNS());
-			ps.setString(3, puzzle.getTypeShuffle().toString());
-			ps.setString(4, puzzle.getFile().getPath());
-			ps.setLong(5, puzzle.getId());
+			ps.setInt(1, puzzle.getSIZE());
+			ps.setString(2, puzzle.getTypeShuffle().toString());
+			ps.setString(3, puzzle.getFile().getPath());
+			ps.setLong(4, puzzle.getId());
 			ps.execute();
 			ps.close();
 			connection.close();
