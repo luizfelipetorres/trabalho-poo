@@ -1,4 +1,4 @@
-package ui.components;
+package view.components;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
-import ui.views.PuzzleFrame;
+import view.ui.PuzzleFrame;
 
 public class Stopwatch {
 

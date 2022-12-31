@@ -1,4 +1,4 @@
-package ui.components;
+package view.components;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;

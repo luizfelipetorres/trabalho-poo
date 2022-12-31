@@ -1,4 +1,4 @@
-package ui.views;
+package view.ui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -26,10 +26,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import controller.PlayerController;
 import controller.PlayerMatchController;
 import model.Player;
-import ui.components.CustomButton;
-import ui.components.CustomField;
-import ui.components.JPhotoRound;
 import util.RecordPlayerMatch;
+import view.components.CustomButton;
+import view.components.CustomField;
+import view.components.JPhotoRound;
 
 public class PlayerFrame extends JPanel {
 

@@ -1,4 +1,4 @@
-package ui.views;
+package view.ui;
 public abstract class AbstractWindow{
 
 	public AbstractWindow() {

@@ -1,4 +1,4 @@
-package ui.views;
+package view.ui;
 
 import java.awt.EventQueue;
 
@@ -16,8 +16,8 @@ import java.awt.Color;
 
 import dao.PlayerDAO;
 import model.Player;
-import ui.components.CustomButton;
-import ui.components.CustomField;
+import view.components.CustomButton;
+import view.components.CustomField;
 
 import javax.swing.JTabbedPane;
 import java.awt.event.ActionListener;

@@ -1,4 +1,4 @@
-package ui.views;
+package view.ui;
 
 import static javax.swing.JOptionPane.YES_OPTION;
 
@@ -18,16 +18,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import ui.components.CustomButton;
-import ui.components.JPhotoRound;
-
 import javax.swing.SwingConstants;
 
 import interfaces.ClickListener;
 import model.Player;
-import ui.components.PuzzleBoard;
-import ui.components.Stopwatch;
+import view.components.CustomButton;
+import view.components.JPhotoRound;
+import view.components.PuzzleBoard;
+import view.components.Stopwatch;
 
 public class KernelFrame extends AbstractWindow {
 

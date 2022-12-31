@@ -1,4 +1,4 @@
-package ui.views;
+package view.ui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -22,10 +22,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import interfaces.ClickListener;
 import model.Player;
-import ui.components.CustomButton;
-import ui.components.CustomComboBox;
-import ui.components.CustomLabel;
 import util.TypeShuffle;
+import view.components.CustomButton;
+import view.components.CustomComboBox;
+import view.components.CustomLabel;
 
 public class PreGameFrame extends JPanel {
 

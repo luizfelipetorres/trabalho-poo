@@ -1,4 +1,4 @@
-package ui.components;
+package view.components;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -17,8 +17,8 @@ import javax.swing.border.LineBorder;
 
 import interfaces.ShuffleListener;
 import model.Puzzle;
-import ui.views.PuzzleFrame;
 import util.TypeShuffle;
+import view.ui.PuzzleFrame;
 
 public class PuzzleBoard extends Component {
 

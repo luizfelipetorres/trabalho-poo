@@ -1,4 +1,4 @@
-package ui.views;
+package view.ui;
 
 import java.awt.Color;
 import java.io.File;
@@ -9,9 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import model.Player;
-import ui.components.PuzzleBoard;
-import ui.components.Stopwatch;
 import util.TypeShuffle;
+import view.components.PuzzleBoard;
+import view.components.Stopwatch;
 
 public class PuzzleFrame extends JPanel {
 
