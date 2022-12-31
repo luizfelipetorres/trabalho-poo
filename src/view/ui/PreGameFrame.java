@@ -20,7 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import interfaces.ClickListener;
+import interfaces.PuzzleFrameListener;
 import model.Player;
 import util.TypeShuffle;
 import view.components.CustomButton;
@@ -34,9 +34,9 @@ public class PreGameFrame extends JPanel {
 	private File image;
 	private JLabel lbImage;
 	private JLabel lbImageDescription;
-	private ClickListener clickListener;
+	private PuzzleFrameListener clickListener;
 
-	public PreGameFrame(Player player, ClickListener listener) {
+	public PreGameFrame(Player player, PuzzleFrameListener listener) {
 		super();
 		this.player = player;
 		this.clickListener = listener;

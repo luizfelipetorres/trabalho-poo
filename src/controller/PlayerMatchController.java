@@ -41,7 +41,7 @@ public class PlayerMatchController {
 		PlayerMatchDAO.getInstance().remove(id);
 	}
 	
-	public RecordPlayerMatch recordPlayerMatchByPlayer(Integer idPlayer) {
+	public RecordPlayerMatch recordPlayerMatchByPlayer(Long idPlayer) {
 		return PlayerMatchDAO.getInstance().recordPlayerMatchByPlayer(idPlayer);
 	}
 

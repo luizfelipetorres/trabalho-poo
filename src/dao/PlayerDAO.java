@@ -37,7 +37,7 @@ public class PlayerDAO implements DAOListener<Player> {
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if (rs.next()) {
-				playerIntern.setPlayerId((rs.getInt("PLAYER_ID")));
+				playerIntern.setPlayerId((rs.getLong("PLAYER_ID")));
 				playerIntern.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
 				playerIntern.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
 				playerIntern.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
@@ -85,7 +85,7 @@ public class PlayerDAO implements DAOListener<Player> {
 			ps.setString(2, player.getPlayerEmail());
 			ps.setString(3, player.getPlayerPassword());
 			ps.setString(4, player.getPlayerUrlImage());
-			ps.setInt(5, player.getPlayerId());
+			ps.setLong(5, player.getPlayerId());
 			ps.execute();
 			ps.close();
 			connection.close();
@@ -111,7 +111,7 @@ public class PlayerDAO implements DAOListener<Player> {
 
 			while (rs.next()) {
 				Player player = new Player();
-				player.setPlayerId((rs.getInt("PLAYER_ID")));
+				player.setPlayerId((rs.getLong("PLAYER_ID")));
 				player.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
 				player.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
 				player.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
@@ -138,7 +138,7 @@ public class PlayerDAO implements DAOListener<Player> {
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if (rs.next()) {
-				player.setPlayerId((rs.getInt("PLAYER_ID")));
+				player.setPlayerId((rs.getLong("PLAYER_ID")));
 				player.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
 				player.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
 				player.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
@@ -166,7 +166,7 @@ public class PlayerDAO implements DAOListener<Player> {
 
 			while (rs.next()) {
 				Player player = new Player();
-				player.setPlayerId((rs.getInt("PLAYER_ID")));
+				player.setPlayerId((rs.getLong("PLAYER_ID")));
 				player.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
 				player.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
 				player.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));

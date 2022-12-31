@@ -20,7 +20,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import interfaces.ClickListener;
+import controller.PlayerController;
+import interfaces.PuzzleFrameListener;
+import interfaces.UserInformationListener;
 import model.Player;
 import view.components.CustomButton;
 import view.components.JPhotoRound;
@@ -32,7 +34,7 @@ public class KernelFrame extends AbstractWindow {
 	private JFrame frame;
 	private JDesktopPane desktopPane;
 	private PuzzleFrame puzzleFrame;
-	
+
 	public static void main(String[] args, Player player) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -54,6 +56,15 @@ public class KernelFrame extends AbstractWindow {
 
 	private void initialize(Player player) {
 
+		PuzzleFrameListener puzzleListener = (image, size, shuffle) -> {
+			puzzleFrame = new PuzzleFrame(player, image, size, shuffle);
+			showFrame(puzzleFrame);
+		};
+
+		UserInformationListener userListener = (playerUpdated) -> {
+			updateUserInformation(playerUpdated);
+		};
+
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
 		frame.setBounds(100, 100, 1300, 750);
@@ -68,30 +79,30 @@ public class KernelFrame extends AbstractWindow {
 
 		JLabel lbPhotoPersona = new JPhotoRound(player.getPlayerUrlImage(), 110);
 		lbPhotoPersona.setBounds(35, 10, 110, 110);
-		
+
 		JLabel lbUsername = new JLabel(player.getPlayerUsername());
 		lbUsername.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lbUsername.setForeground(new Color(255, 255, 255));
 		lbUsername.setHorizontalAlignment(SwingConstants.CENTER);
 		lbUsername.setBounds(10, 132, 160, 30);
-		
+
 		JLabel lbEmail = new JLabel(player.getPlayerEmail());
 		lbEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lbEmail.setForeground(new Color(255, 255, 255));
 		lbEmail.setHorizontalAlignment(SwingConstants.CENTER);
 		lbEmail.setBounds(10, 173, 160, 30);
-		
+
 		panelPersona.add(lbPhotoPersona);
-    	panelPersona.add(lbUsername);
+		panelPersona.add(lbUsername);
 		panelPersona.add(lbEmail);
 
-		JButton btnPlay = new CustomButton("", "img\\icons\\icon-control.png", new Color(255, 255, 255), new Color(0, 0, 128),
-				0, 63, 200, 48);
-		JButton btnConfig = new CustomButton("", "img\\icons\\icon-config.png", new Color(255, 255, 255), new Color(0, 0, 128),
-				0, 122, 200, 48);
-		JButton btnLogout = new CustomButton("", "img\\icons\\icon-logout.png", new Color(255, 255, 255), new Color(0, 0, 128),
-				0, 200, 200, 48);
-		
+		JButton btnPlay = new CustomButton("", "img\\icons\\icon-control.png", new Color(255, 255, 255),
+				new Color(0, 0, 128), 0, 63, 200, 48);
+		JButton btnConfig = new CustomButton("", "img\\icons\\icon-config.png", new Color(255, 255, 255),
+				new Color(0, 0, 128), 0, 122, 200, 48);
+		JButton btnLogout = new CustomButton("", "img\\icons\\icon-logout.png", new Color(255, 255, 255),
+				new Color(0, 0, 128), 0, 200, 200, 48);
+
 		JPanel panelLeftMenu = new JPanel();
 		panelLeftMenu.setBounds(0, 0, 70, 711);
 		panelLeftMenu.setBackground(new Color(60, 60, 60));
@@ -113,7 +124,7 @@ public class KernelFrame extends AbstractWindow {
 				btnConfig.setLocation(0, 122);
 			}
 		});
-		
+
 		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -137,37 +148,43 @@ public class KernelFrame extends AbstractWindow {
 		desktopPane = new JDesktopPane();
 		desktopPane.setBackground(new Color(255, 255, 255));
 		desktopPane.setBounds(200, 60, 1084, 651);
-		
+
 		btnPlay.setIcon(new ImageIcon("img\\icons\\icon-control.png"));
 		btnPlay.setText("JOGAR ");
-		
-		ClickListener listener = (image, size, shuffle) -> {
-			puzzleFrame = new PuzzleFrame(player, image, size, shuffle);
-			showFrame(puzzleFrame);
-		};
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Stopwatch watch = Stopwatch.getInstance();
-				
+
 				if (watch.getDuration() > 0) {
 					showFrame(PuzzleBoard.getInstance());
 					watch.pause();
 					String message = "Quer desistir da partida atual e iniciar uma nova?";
 					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
 						showFrame(puzzleFrame);
-						return;						
+						return;
 					}
 				}
-				showFrame(new PreGameFrame(player, listener));
+				showFrame(new PreGameFrame(player, puzzleListener));
 			}
 		});
 		btnPlay.addMouseListener(hoverEffect);
-		
+
 		btnConfig.setIcon(new ImageIcon("img\\icons\\icon-config.png"));
 		btnConfig.setText("AJUSTE");
 		btnConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				showFrame(new PlayerFrame(player));
+				Stopwatch watch = Stopwatch.getInstance();
+
+				if (watch.getDuration() > 0) {
+					showFrame(PuzzleBoard.getInstance());
+					watch.pause();
+					String message = "Quer desistir da partida atual e iniciar uma nova?";
+					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
+						showFrame(puzzleFrame);
+						return;
+					}
+				}
+				showFrame(new PlayerFrame(player, userListener));
 			}
 		});
 		btnConfig.addMouseListener(hoverEffect);
@@ -216,5 +233,11 @@ public class KernelFrame extends AbstractWindow {
 		desktopPane.add(frame);
 		frame.setVisible(true);
 	}
-	
+
+	private void updateUserInformation(Player player) {
+		Player playerSelected = PlayerController.getInstance().findById(player.getPlayerId());
+		KernelFrame.main(null, playerSelected);
+		frame.dispose();
+	}
+
 }

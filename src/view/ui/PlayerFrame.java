@@ -25,6 +25,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controller.PlayerController;
 import controller.PlayerMatchController;
+import interfaces.UserInformationListener;
 import model.Player;
 import util.RecordPlayerMatch;
 import view.components.CustomButton;
@@ -34,28 +35,43 @@ import view.components.JPhotoRound;
 public class PlayerFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	//private static PlayerFrame instance;
 	private Player player;
+	private UserInformationListener userListener;
 	private JPhotoRound photoPersona;
 	private RecordPlayerMatch recordPlayerMatch;
 	private File image;
-
-	public PlayerFrame(Player player) {
+	private CustomField fieldUsername;
+	private CustomField fieldEmail;
+	private CustomField currentPassword;
+	private CustomField newPassword;
+	private JRadioButton changePassword;
+	
+	public PlayerFrame(Player player, UserInformationListener userListener) {
 		super();
 		this.player = player;
+		this.userListener = userListener;
 		this.recordPlayerMatch = PlayerMatchController.getInstance().recordPlayerMatchByPlayer(player.getPlayerId());
 		this.image = null;
 		initialize();
 	}
+	
+	/*public static PlayerFrame getInstance(Player player){
+		if(instance == null) {
+			instance = new PlayerFrame(player);
+		}
+		return instance;
+	}*/
 
 	public void initialize() {
 		this.setBounds(0, 0, 1175, 670);
 		this.setBackground(new Color(255, 255, 255));
 		this.setLayout(null);
 
-		CustomField fieldUsername = new CustomField("Nome do usuário:", 300, 500, 50, false);
-		CustomField fieldEmail = new CustomField("E-mail:", 300, 500, 150, false);
-		CustomField currentPassword = new CustomField("Senha atual:", 300, 500, 300, true);
-		CustomField newPassword = new CustomField("Nova senha:", 300, 500, 400, true);
+		fieldUsername = new CustomField("Nome do usuário:", 300, 500, 50, false);
+		fieldEmail = new CustomField("E-mail:", 300, 500, 150, false);
+		currentPassword = new CustomField("Senha atual:", 300, 500, 300, true);
+		newPassword = new CustomField("Nova senha:", 300, 500, 400, true);
 
 		Component componentCurrentPassword = currentPassword.initialize();
 		componentCurrentPassword.setVisible(false);
@@ -214,7 +230,7 @@ public class PlayerFrame extends JPanel {
 		separatorPhotoPersona_1.setBounds(10, 499, 437, 7);
 		panelInformationPersona.add(separatorPhotoPersona_1);
 
-		JRadioButton changePassword = new JRadioButton("Alterar senha");
+		changePassword = new JRadioButton("Alterar senha");
 		changePassword.setBackground(Color.WHITE);
 		changePassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		changePassword.setBounds(680, 251, 120, 23);
@@ -240,48 +256,7 @@ public class PlayerFrame extends JPanel {
 		btnRegister.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String currentPasswordInt = Arrays.toString(currentPassword.getPassword());
-				String newPasswordInt = Arrays.toString(newPassword.getPassword());
-				String username = fieldUsername.getText();
-				String email = fieldEmail.getText();
-				String image = photoPersona.getPath();
-				boolean isValid = false;
-
-				if (changePassword.isSelected()) {
-
-					if (currentPassword.getPassword().length == 0 || newPassword.getPassword().length == 0
-							|| newPasswordInt.isBlank() || currentPasswordInt.isBlank() || username.isBlank()
-							|| email.isBlank()) {
-						JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.");
-					} else if (!currentPasswordInt.equals(newPasswordInt)) {
-						JOptionPane.showMessageDialog(null, "Senha inválida.");
-					} else {
-						player.setPlayerUrlImage(image);
-						player.setPlayerUsername(username);
-						player.setPlayerEmail(email);
-						player.setPlayerPassword(newPasswordInt);
-						isValid = true;
-					}
-				} else {
-
-					if (username.isBlank() || email.isBlank()) {
-						JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.");
-					} else {
-						player.setPlayerUrlImage(image);
-						player.setPlayerUsername(username);
-						player.setPlayerEmail(email);
-						isValid = true;
-					}
-				}
-
-				if (isValid) {
-					if (PlayerController.getInstance().update(player)) {
-						JOptionPane.showMessageDialog(null, "Informações foram atualizadas.");
-						setVisible(false);
-						// kernelFrame.updateUserInformation(player);
-					}
-				}
-
+				validateInformation();
 			}
 
 			@Override
@@ -311,6 +286,51 @@ public class PlayerFrame extends JPanel {
 				}
 			}
 		});
+	}
+	
+	private void validateInformation() {
+		
+		String currentPasswordInt = Arrays.toString(currentPassword.getPassword());
+		String newPasswordInt = Arrays.toString(newPassword.getPassword());
+		String username = fieldUsername.getText();
+		String email = fieldEmail.getText();
+		String image = photoPersona.getPath();
+		boolean isValid = false;
+
+		if (changePassword.isSelected()) {
+
+			if (currentPassword.getPassword().length == 0 || newPassword.getPassword().length == 0
+					|| newPasswordInt.isBlank() || currentPasswordInt.isBlank() || username.isBlank()
+					|| email.isBlank()) {
+				JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.", "Erro", JOptionPane.ERROR_MESSAGE);
+			} else if (!currentPasswordInt.equals(newPasswordInt)) {
+				JOptionPane.showMessageDialog(null, "Senha inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+			} else {
+				player.setPlayerUrlImage(image);
+				player.setPlayerUsername(username);
+				player.setPlayerEmail(email);
+				player.setPlayerPassword(newPasswordInt);
+				isValid = true;
+			}
+		} else {
+
+			if (username.isBlank() || email.isBlank()) {
+				JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.", "Erro", JOptionPane.ERROR_MESSAGE);
+			} else {
+				player.setPlayerUrlImage(image);
+				player.setPlayerUsername(username);
+				player.setPlayerEmail(email);
+				isValid = true;
+			}
+		}
+
+		if (isValid) {
+			if (PlayerController.getInstance().update(player)) {
+				String message = "As informações foram atualizadas. Agora, o sistema será reinicializado com as novas informações!";
+				JOptionPane.showMessageDialog(null, message, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+				userListener.onClick(player);
+			}
+		}
 	}
 
 	private void updatePhoto() {

@@ -49,6 +49,7 @@ public class JPhotoRound extends JLabel {
 
 	public void setPath(String path) {
 		this.path = path;
+		initComponent();
 	}
 
 	public String getPath() {

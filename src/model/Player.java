@@ -2,7 +2,7 @@ package model;
 
 public class Player {
 
-    private Integer playerId;
+    private Long playerId;
     private String playerUsername;
     private String playerEmail;
     private String playerPassword;
@@ -22,11 +22,11 @@ public class Player {
         this.playerPassword = playerPassword;
     }
 
-	public Integer getPlayerId() {
+	public Long getPlayerId() {
 		return playerId;
 	}
 
-	public void setPlayerId(Integer playerId) {
+	public void setPlayerId(Long playerId) {
 		this.playerId = playerId;
 	}
 

@@ -38,7 +38,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 			ps.setInt(1, playerMatch.getDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
 			ps.setBoolean(3, playerMatch.isCompleted());
-			ps.setInt(4, playerMatch.getPlayer().getPlayerId());
+			ps.setLong(4, playerMatch.getPlayer().getPlayerId());
 			ps.setLong(5, playerMatch.getMatch().getId());
 			ps.execute();
 
@@ -66,7 +66,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 			ps.setInt(1, playerMatch.getDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
 			ps.setBoolean(3, playerMatch.isCompleted());
-			ps.setInt(4, playerMatch.getPlayer().getPlayerId());
+			ps.setLong(4, playerMatch.getPlayer().getPlayerId());
 			ps.setLong(5, playerMatch.getMatch().getId());
 			ps.setLong(6, playerMatch.getId());
 			ps.execute();
@@ -145,7 +145,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 		}
 	}
 
-	public RecordPlayerMatch recordPlayerMatchByPlayer(Integer idPlayer) {
+	public RecordPlayerMatch recordPlayerMatchByPlayer(Long idPlayer) {
 		RecordPlayerMatch recordPlayerMatch = new RecordPlayerMatch();
 		
 		try {
