@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import dao.MatchDAO;
+import dao.PieceDAO;
 import dao.PlayerMatchDAO;
 import dao.PuzzleDAO;
 import interfaces.PuzzleBoardListener;
@@ -30,7 +31,7 @@ public class PuzzleFrame extends JPanel {
 	public PuzzleFrame(Player player, int size, File image, TypeShuffle typeShuffle) {
 		super();
 		this.player = player;
-		this.stopWatch = new Stopwatch();
+		this.stopWatch = new Stopwatch(puzzleBoardListener());
 		this.puzzleBoard = new PuzzleBoard(size, image, typeShuffle, puzzleBoardListener(), stopwatchListener());
 		this.initialize();
 	}
@@ -56,24 +57,20 @@ public class PuzzleFrame extends JPanel {
 		return new PuzzleBoardListener() {
 
 			@Override
-			public void persistence(Puzzle puzzle) {
-				PuzzleDAO.getInstance().save(puzzle);
-				Match match = new Match(puzzle);
-				MatchDAO.getInstance().save(match);
-				
-				PlayerMatch playerMatch = new PlayerMatch(
-						player,
-						match,
-						stopWatch.getDuration(),
-						true
-						);
-				PlayerMatchDAO.getInstance().save(playerMatch);
+			public void persist() {
+				persistenceData(puzzleBoard.getPuzzle(), true);
 				stopWatch.stop();
-				
 			}
-			
+
+			@Override
+			public void keep() {
+				persistenceData(puzzleBoard.getPuzzle(), false);
+				stopWatch.pause();
+			}
+
 		};
 	}
+	
 	public StopwatchListener stopwatchListener() {
 		
 		return new StopwatchListener() {
@@ -95,10 +92,28 @@ public class PuzzleFrame extends JPanel {
 
 			@Override
 			public Long getDuration() {
-				return stopWatch.getDuration();
-			} 
+				return stopWatch.getSeconds();
+			}
 			
 		};
+	}
+	
+	private void persistenceData(Puzzle puzzle, boolean isCompleted) {
+		
+		PuzzleDAO.getInstance().save(puzzle);
+		
+		Match match = new Match(puzzle);
+		MatchDAO.getInstance().save(match);
+		
+		PlayerMatch playerMatch = new PlayerMatch(
+				player,
+				match,
+				stopWatch.getSeconds(),
+				isCompleted
+				);
+		PlayerMatchDAO.getInstance().save(playerMatch);
+		
+		PieceDAO.getInstance().save(playerMatch.getId(), puzzle.getPieces());
 	}
 
 }

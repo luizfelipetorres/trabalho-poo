@@ -15,9 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
+import interfaces.PuzzleBoardListener;
+
 public class Stopwatch extends JPanel{
 
 	private static final long serialVersionUID = 1L;
+	private PuzzleBoardListener puzzleBoardListener;
 	private JLabel labelTime;
 	private JButton btnStart;
 	private JButton btnPause;
@@ -44,7 +47,8 @@ public class Stopwatch extends JPanel{
 		}
 	};
 
-	public Stopwatch() {
+	public Stopwatch(PuzzleBoardListener puzzleBoardListener) {
+		this.puzzleBoardListener = puzzleBoardListener;
 		this.isRunning = false;
 		this.isVisible = true;
 		this.duration = 0;
@@ -61,7 +65,7 @@ public class Stopwatch extends JPanel{
 		return duration / 10 % 100;
 	}
 
-	private long getSeconds() {
+	public long getSeconds() {
 		return duration / 1000 % 60;
 	}
 
@@ -79,10 +83,6 @@ public class Stopwatch extends JPanel{
 
 	public boolean isRunning() {
 		return isRunning;
-	}
-
-	public long getDuration() {
-		return duration;
 	}
 
 	public void initialize() {
@@ -120,7 +120,7 @@ public class Stopwatch extends JPanel{
 				470, 10, 70, 50);
 		btnPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				pause();
+				puzzleBoardListener.keep();
 			}
 		});
 		btnPause.addMouseListener(hoverEffect);

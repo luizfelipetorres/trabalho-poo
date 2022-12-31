@@ -92,8 +92,12 @@ public class PuzzleBoard extends JPanel {
 		button.configImg();
 		piece.configImg();
 		if (puzzle.completedPuzzle()) {
-			puzzleBoardListener.persistence(puzzle);
+			puzzleBoardListener.persist();
 			JOptionPane.showMessageDialog(null, "Parabéns, você ganhou!!!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 		}
+	}
+	
+	public Puzzle getPuzzle() {
+		return puzzle;
 	}
 }
