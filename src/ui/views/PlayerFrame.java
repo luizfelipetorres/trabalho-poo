@@ -28,6 +28,7 @@ import model.Player;
 import ui.components.CustomButton;
 import ui.components.CustomField;
 import ui.components.JLabelRound;
+import util.Format;
 import util.RecordPlayerMatch;
 
 public class PlayerFrame extends JPanel {
@@ -163,37 +164,37 @@ public class PlayerFrame extends JPanel {
 		textMatchNotComplete.setBounds(383, 454, 64, 26);
 		panelInformationPersona.add(textMatchNotComplete);
 
-		JLabel textTotalDuration = new JLabel(formatHours(recordPlayerMatch.getTotalDuration()));
+		JLabel textTotalDuration = new JLabel(Format.hours(recordPlayerMatch.getTotalDuration()));
 		textTotalDuration.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textTotalDuration.setBounds(167, 491, 202, 26);
 		panelInformationPersona.add(textTotalDuration);
 
-		JLabel textMaxduration = new JLabel(formatHours(recordPlayerMatch.getMaxDuration()));
+		JLabel textMaxduration = new JLabel(Format.hours(recordPlayerMatch.getMaxDuration()));
 		textMaxduration.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textMaxduration.setBounds(121, 512, 56, 26);
 		panelInformationPersona.add(textMaxduration);
 
-		JLabel textMinDuration = new JLabel(formatHours(recordPlayerMatch.getMinDuration()));
+		JLabel textMinDuration = new JLabel(Format.hours(recordPlayerMatch.getMinDuration()));
 		textMinDuration.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textMinDuration.setBounds(322, 512, 56, 26);
 		panelInformationPersona.add(textMinDuration);
 
-		JLabel textTotalPoints = new JLabel(formatNumber(recordPlayerMatch.getTotalPoints()));
+		JLabel textTotalPoints = new JLabel(Format.punctuation(recordPlayerMatch.getTotalPoints()));
 		textTotalPoints.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textTotalPoints.setBounds(121, 549, 82, 26);
 		panelInformationPersona.add(textTotalPoints);
 
-		JLabel textMaxPoints = new JLabel(formatNumber(recordPlayerMatch.getMaxPoints()));
+		JLabel textMaxPoints = new JLabel(Format.punctuation(recordPlayerMatch.getMaxPoints()));
 		textMaxPoints.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textMaxPoints.setBounds(121, 572, 72, 26);
 		panelInformationPersona.add(textMaxPoints);
 
-		JLabel textMenorPontis = new JLabel(formatNumber(recordPlayerMatch.getMinPoints()));
+		JLabel textMenorPontis = new JLabel(Format.punctuation(recordPlayerMatch.getMinPoints()));
 		textMenorPontis.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textMenorPontis.setBounds(336, 572, 56, 26);
 		panelInformationPersona.add(textMenorPontis);
 
-		JLabel textAvgPontuação = new JLabel(formatNumber(recordPlayerMatch.getAvgPoints()));
+		JLabel textAvgPontuação = new JLabel(Format.punctuation(recordPlayerMatch.getAvgPoints()));
 		textAvgPontuação.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textAvgPontuação.setBounds(332, 549, 115, 26);
 		panelInformationPersona.add(textAvgPontuação);
@@ -377,18 +378,5 @@ public class PlayerFrame extends JPanel {
 		}
 	}
 
-	private String formatHours(Long duration) {
-		Long seconds = duration;
-		Long hours = seconds / 3600;
-		seconds %= 3600;
-		Long minutes = seconds / 60;
-		seconds %= 60;
-		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-	}
-
-	private String formatNumber(double number) {
-		DecimalFormat df = new DecimalFormat(",##0.00");
-		return df.format(number);
-	}
 }
 

@@ -34,7 +34,7 @@ public class PlayerMatchDAO implements PlayerMatchDAOListener {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "INSERT INTO PLAYER_MATCH(PLAYER_MATCH_DURATION, PLAYER_MATCH_POINTS, PLAYER_MATCH_COMPLETE, PLAYER_ID, MATCH_ID) VALUES (?,?,?,?,?)";
 			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, playerMatch.getDuration());
+			ps.setLong(1, playerMatch.getDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
 			ps.setBoolean(3, playerMatch.isComplete());
 			ps.setInt(4, playerMatch.getPlayer().getPlayerId());
@@ -62,7 +62,7 @@ public class PlayerMatchDAO implements PlayerMatchDAOListener {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "UPDATE PLAYER_MATCH SET PLAYER_MATCH_DURATION = ?, PLAYER_MATCH_POINTS = ?, PLAYER_MATCH_COMPLETE = ?,PLAYER_ID = ?, MATCH_ID=? WHERE PLAYER_MATCH_ID = ?;";
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setInt(1, playerMatch.getDuration());
+			ps.setLong(1, playerMatch.getDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
 			ps.setBoolean(3, playerMatch.isComplete());
 			ps.setInt(4, playerMatch.getPlayer().getPlayerId());
@@ -90,7 +90,7 @@ public class PlayerMatchDAO implements PlayerMatchDAOListener {
 				Match match = MatchDAO.getInstance().findById(rs.getLong("MATCH_ID"));
 				Player player = PlayerDAO.getInstance().findById(rs.getInt("PLAYER_ID"));
 				PlayerMatch playerMatch = new PlayerMatch(rs.getLong("PLAYER_MATCH_ID"), player, match,
-						rs.getInt("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
+						rs.getLong("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
 						rs.getBoolean("PLAYER_MATCH_COMPLETE"));
 				rs.close();
 				connection.close();
@@ -117,7 +117,7 @@ public class PlayerMatchDAO implements PlayerMatchDAOListener {
 				Match match = MatchDAO.getInstance().findById(rs.getLong("MATCH_ID"));
 				Player player = PlayerDAO.getInstance().findById(rs.getInt("PLAYER_ID"));
 				PlayerMatch playerMatch = new PlayerMatch(rs.getLong("PLAYER_MATCH_ID"), player, match,
-						rs.getInt("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
+						rs.getLong("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
 						rs.getBoolean("PLAYER_MATCH_COMPLETE"));
 				listPlayerMatch.add(playerMatch);
 			}
@@ -191,5 +191,80 @@ public class PlayerMatchDAO implements PlayerMatchDAOListener {
 			e.printStackTrace();
 		}
 		return recordPlayerMatch;
+	}
+	
+	@Override
+	public int totalElement(boolean isComplete) {
+		int count = 0;
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT COUNT(*) FROM PLAYER_MATCH WHERE PLAYER_MATCH_COMPLETE = " + isComplete;
+			Statement stmt;
+			stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+			rs.close();
+			connection.close();
+			return count;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	@Override
+	public List<PlayerMatch> findAll(int page,int limit , boolean isComplete) {
+		ArrayList<PlayerMatch> listPlayerMatch = new ArrayList<PlayerMatch>();
+
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT *FROM PLAYER_MATCH WHERE PLAYER_MATCH_COMPLETE = "+ isComplete +" ORDER BY PLAYER_MATCH_DURATION ASC, PLAYER_MATCH_POINTS DESC LIMIT " +  limit + " OFFSET " + (page - 1)*limit;
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				Match match = MatchDAO.getInstance().findById(rs.getLong("MATCH_ID"));
+				Player player = PlayerDAO.getInstance().findById(rs.getInt("PLAYER_ID"));
+				PlayerMatch playerMatch = new PlayerMatch(rs.getLong("PLAYER_MATCH_ID"), player, match,
+						rs.getLong("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
+						rs.getBoolean("PLAYER_MATCH_COMPLETE"));
+				listPlayerMatch.add(playerMatch);
+			}
+			rs.close();
+			connection.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listPlayerMatch;
+	}
+
+	@Override
+	public List<PlayerMatch> findByMatchID(Long matchId, int limit, boolean isComplete) {
+		ArrayList<PlayerMatch> listPlayerMatch = new ArrayList<PlayerMatch>();
+
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT *FROM PLAYER_MATCH WHERE PLAYER_MATCH_COMPLETE = " + isComplete +" AND MATCH_ID = " + matchId + " ORDER BY PLAYER_MATCH_DURATION ASC, PLAYER_MATCH_POINTS DESC LIMIT " +  limit;
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				Match match = MatchDAO.getInstance().findById(rs.getLong("MATCH_ID"));
+				Player player = PlayerDAO.getInstance().findById(rs.getInt("PLAYER_ID"));
+				PlayerMatch playerMatch = new PlayerMatch(rs.getLong("PLAYER_MATCH_ID"), player, match,
+						rs.getLong("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
+						rs.getBoolean("PLAYER_MATCH_COMPLETE"));
+				listPlayerMatch.add(playerMatch);
+			}
+			rs.close();
+			connection.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listPlayerMatch;
 	}
 }
