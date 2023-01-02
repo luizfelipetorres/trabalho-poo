@@ -87,7 +87,7 @@ public class PreGameFrame extends JPanel {
 		CustomButton buttonChooseImg = new CustomButton("Escolha uma imagem", null, 10, 225, 270, 40);
 		buttonChooseImg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ImageManager imageManager = new ImageManager("img\\players\\");				
+				ImageManager imageManager = new ImageManager("img\\puzzle\\");				
 				lbImage.setPath(imageManager.getAbsolutePath());
 				lbImageDescription.setText(concatImageName());
 			}

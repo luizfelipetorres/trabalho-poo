@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class ImageManager {
@@ -19,9 +20,12 @@ public class ImageManager {
 
 	public ImageManager(String directorySource) {
 		this.image = this.chooseImage();
-		if (this.image != null) {
+		if (this.image != null && !image.getAbsolutePath().contains(directorySource)) {
 			this.absolutePath = directorySource + image.getName();
 			this.replace(absolutePath);
+		}else{
+			String message = "A imagem não foi atualizada. Porque o diretório da imagem selecionada coincide com o diretório destino!";
+			JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE);
 		}
 
 	}
@@ -41,7 +45,6 @@ public class ImageManager {
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "png");
 		fileChooser.setFileFilter(filter);
 		boolean choosed = fileChooser.showOpenDialog(fileChooser) == JFileChooser.APPROVE_OPTION;
-		System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
 		return choosed ? fileChooser.getSelectedFile() : null;
 	}
 
