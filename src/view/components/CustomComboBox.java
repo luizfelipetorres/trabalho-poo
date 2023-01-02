@@ -53,6 +53,7 @@ public class CustomComboBox<T> extends JPanel {
 		this.setLayout(null);
 		this.setBorder(null);
 		this.setBounds(x, y, width, 75);
+		this.setBackground(new Color(255, 255, 255));
 		
 		JLabel label = new CustomLabel(title, 0, 0, width, 30);
 		

@@ -1,7 +1,6 @@
 package view.ui;
 
 import java.awt.Color;
-import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -28,11 +27,11 @@ public class PuzzleFrame extends JPanel {
 	private PuzzleBoard puzzleBoard;
 	private Stopwatch stopWatch;
 	
-	public PuzzleFrame(Player player, int size, File image, TypeShuffle typeShuffle) {
+	public PuzzleFrame(Player player, int size, String urlImage, TypeShuffle typeShuffle) {
 		super();
 		this.player = player;
 		this.stopWatch = new Stopwatch(puzzleBoardListener());
-		this.puzzleBoard = new PuzzleBoard(size, image, typeShuffle, puzzleBoardListener(), stopwatchListener());
+		this.puzzleBoard = new PuzzleBoard(size, urlImage, typeShuffle, puzzleBoardListener(), stopwatchListener());
 		this.initialize();
 	}
 
@@ -43,7 +42,7 @@ public class PuzzleFrame extends JPanel {
 		this.setLayout(null);
 
 		JLabel lbBgmain = new JLabel("");
-		lbBgmain.setIcon(new ImageIcon("img\\bg-main.jpg"));
+		lbBgmain.setIcon(new ImageIcon("img\\bgs\\bg-main.jpg"));
 		lbBgmain.setBounds(645, 0, 430, 640);
 		this.add(lbBgmain);
 

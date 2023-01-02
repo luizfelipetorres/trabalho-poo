@@ -2,42 +2,34 @@ package view.ui;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import interfaces.PuzzleFrameListener;
+import util.ImageManager;
 import util.TypeShuffle;
 import view.components.CustomButton;
 import view.components.CustomComboBox;
 import view.components.CustomLabel;
+import view.components.JPhotoRound;
 
 public class PreGameFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private File image;
-	private JLabel lbImage;
+	private JPhotoRound lbImage;
 	private JLabel lbImageDescription;
-	private PuzzleFrameListener clickListener;
+	private PuzzleFrameListener puzzleFrameListener;
 
-	public PreGameFrame(PuzzleFrameListener listener) {
+	public PreGameFrame(PuzzleFrameListener puzzleFrameListener) {
 		super();
-		this.clickListener = listener;
-		image = new File("img//naruto.jpg");
+		this.puzzleFrameListener = puzzleFrameListener;
 		initialize();
 	}
 
@@ -95,11 +87,15 @@ public class PreGameFrame extends JPanel {
 		CustomButton buttonChooseImg = new CustomButton("Escolha uma imagem", null, 10, 225, 270, 40);
 		buttonChooseImg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				image = chooseImage();
-				showChoosedImage();
+				ImageManager imageManager = new ImageManager("img\\players\\");				
+				lbImage.setPath(imageManager.getAbsolutePath());
+				lbImageDescription.setText(concatImageName());
 			}
 		});
 		buttonChooseImg.addMouseListener(hoverEffect);
+		
+		lbImage = new JPhotoRound("img\\puzzle\\default.jpg", 480);
+		lbImage.setBounds(10, 50, 480, 480);
 		
 		JPanel containerImage = new JPanel();
 		containerImage.setLayout(null);
@@ -109,9 +105,8 @@ public class PreGameFrame extends JPanel {
 		
 		lbImageDescription = new JLabel("Imagem escolhida: ");
 		lbImageDescription.setFont(new Font("Tahoma", Font.BOLD, 15));
-		lbImageDescription.setBounds(10, 0, 270, 30);
-		
-		lbImage = new JLabel("");
+		lbImageDescription.setBounds(10, 0, 400, 30);
+		lbImageDescription.setText(concatImageName());
 
 		containerImage.add(lbImageDescription);
 		containerImage.add(lbImage);
@@ -121,7 +116,7 @@ public class PreGameFrame extends JPanel {
 		buttonInit.addActionListener((e) -> {
 			int selectedSize = optionsSize.get(cbSize.getSelectedItem());
 			TypeShuffle selectedShuffle = optionsShuffle.get(cbShuffle.getSelectedItem());
-			clickListener.onClick(image, selectedSize, selectedShuffle); 
+			puzzleFrameListener.onClick(lbImage.getPath(), selectedSize, selectedShuffle); 
 		});
 
 		this.add(labelTitle);
@@ -131,35 +126,10 @@ public class PreGameFrame extends JPanel {
 		this.add(containerImage);
 		this.add(buttonInit);
 
-		showChoosedImage();
-
 	}
 
 	private String concatImageName() {
-		return String.format("Imagem escolhida: %s", this.image.getName().toString());
+		return String.format("Imagem escolhida: %s", lbImage.getPath());
 	}
 
-	private File chooseImage() {
-		JFileChooser fileChooser = new JFileChooser(image);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "png");
-		fileChooser.setFileFilter(filter);
-		boolean choosed = fileChooser.showOpenDialog(fileChooser) == JFileChooser.APPROVE_OPTION;
-		return choosed ? fileChooser.getSelectedFile() : image;
-	}
-
-	private void showChoosedImage() {
-		lbImageDescription.setText(concatImageName());
-		try {
-			BufferedImage resized = ImageIO.read(image);
-			Image newImage = resized.getScaledInstance(480, 400, 1);
-			lbImage.setIcon(new ImageIcon(newImage));
-			lbImage.setBounds(10, 50, 480, newImage.getHeight(lbImage));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-	}
-
-	public File getImage() {
-		return image;
-	}
 }

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +26,11 @@ public class PuzzleBoard extends JPanel {
 	private List<PieceButton> buttons;
 	private Puzzle puzzle;
 
-	public PuzzleBoard(int size, File image, TypeShuffle typeShuffle, PuzzleBoardListener puzzleBoardListener, StopwatchListener stopwatchListener) {
+	public PuzzleBoard(int size, String urlImage, TypeShuffle typeShuffle, PuzzleBoardListener puzzleBoardListener, StopwatchListener stopwatchListener) {
 		this.puzzleBoardListener = puzzleBoardListener;
 		this.stopwatchListener = stopwatchListener;
 		this.buttons = new ArrayList<PieceButton>();
-		this.puzzle = new Puzzle(size, size, image, typeShuffle);
+		this.puzzle = new Puzzle(size, size, urlImage, typeShuffle);
 		this.initialize();
 	}
 

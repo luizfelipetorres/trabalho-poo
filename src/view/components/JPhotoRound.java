@@ -21,10 +21,10 @@ public class JPhotoRound extends JLabel {
 		this.path = path;
 		this.size = size;
 		this.borderRound = new BorderRound();
-		initComponent();
+		initialize();
 	}
 
-	private void initComponent() {
+	private void initialize() {
 		this.setText("");
 		this.setIcon(new ImageIcon(imageResized(path)));
 		this.setHorizontalAlignment(SwingConstants.CENTER);
@@ -34,26 +34,30 @@ public class JPhotoRound extends JLabel {
 
 	private Image imageResized(String path) {
 
-		BufferedImage resized;
 		Image image = null;
 		
 		try {
-			resized = ImageIO.read(new File(path));
+			BufferedImage resized = ImageIO.read(new File(path));
 			image = resized.getScaledInstance(size, size, 1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+			
 		return image;
 	}
 
 	public void setPath(String path) {
-		this.path = path;
-		initComponent();
+		if(path != null) {
+			this.path = path;
+			initialize();
+		}
 	}
 
 	public String getPath() {
-		return path;
+		if(path != null) {
+			return path;
+		}
+		return "";
 	}
 
 }

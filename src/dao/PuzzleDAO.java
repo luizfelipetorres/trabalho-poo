@@ -1,6 +1,5 @@
 package dao;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +34,7 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setInt(1, puzzle.getSIZE());
 			ps.setString(2, puzzle.getTypeShuffle().toString());
-			ps.setString(3, puzzle.getFile().getPath());
+			ps.setString(3, puzzle.getUrlImage());
 			ps.execute();
 			id = ps.getGeneratedKeys();
 			
@@ -63,7 +62,7 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 		Puzzle puzzle = null;
 		int lines;
 		int columns;
-		String urlImagem;
+		String urlImage;
 		TypeShuffle typeShuffle;
 		
 		try {
@@ -77,10 +76,10 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 				lines =  rs.getInt("PUZZLE_LINES");
 				columns =  rs.getInt("PUZZLE_COLUMNS");
 				typeShuffle = TypeShuffle.valueOf(rs.getString("PUZZLE_TYPE_SHUFFLE"));
-				urlImagem = rs.getString("PUZZLE_URL_IMAGE");
+				urlImage = rs.getString("PUZZLE_URL_IMAGE");
 				rs.close();
 				connection.close();
-				puzzle =  new Puzzle(id,lines, columns, new File(urlImagem), typeShuffle);
+				puzzle =  new Puzzle(id,lines, columns, urlImage, typeShuffle);
 			}
 			
 		} catch (Exception e) {
@@ -99,7 +98,7 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setInt(1, puzzle.getSIZE());
 			ps.setString(2, puzzle.getTypeShuffle().toString());
-			ps.setString(3, puzzle.getFile().getPath());
+			ps.setString(3, puzzle.getUrlImage());
 			ps.setLong(4, puzzle.getId());
 			ps.execute();
 			ps.close();

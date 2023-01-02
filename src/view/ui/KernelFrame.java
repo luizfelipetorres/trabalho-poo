@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -53,13 +52,13 @@ public class KernelFrame extends AbstractWindow {
 		super();
 		initialize(player);
 		/* initializer fake puzzle - refactor code */
-		puzzleFrame = new PuzzleFrame(player, 2, new File("img\\naruto.jpg"), TypeShuffle.pairs);
+		puzzleFrame = new PuzzleFrame(player, 2, "img\\puzzle\\default.jpg", TypeShuffle.pairs);
 	}
 
 	private void initialize(Player player) {
 
-		PuzzleFrameListener puzzleListener = (image, size, shuffle) -> {
-			puzzleFrame = new PuzzleFrame(player, size, image, shuffle);
+		PuzzleFrameListener puzzleListener = (urlImage, size, shuffle) -> {
+			puzzleFrame = new PuzzleFrame(player, size, urlImage, shuffle);
 			showFrame(puzzleFrame);
 		};
 

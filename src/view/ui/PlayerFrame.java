@@ -5,27 +5,21 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controller.PlayerController;
 import controller.PlayerMatchController;
 import interfaces.UserInformationListener;
 import model.Player;
+import util.ImageManager;
 import util.RecordPlayerMatch;
 import view.components.CustomButton;
 import view.components.CustomField;
@@ -34,33 +28,23 @@ import view.components.JPhotoRound;
 public class PlayerFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	//private static PlayerFrame instance;
 	private Player player;
 	private UserInformationListener userListener;
 	private JPhotoRound photoPersona;
 	private RecordPlayerMatch recordPlayerMatch;
-	private File image;
 	private CustomField fieldUsername;
 	private CustomField fieldEmail;
 	private CustomField currentPassword;
 	private CustomField newPassword;
 	private JRadioButton changePassword;
-	
+
 	public PlayerFrame(Player player, UserInformationListener userListener) {
 		super();
 		this.player = player;
 		this.userListener = userListener;
 		this.recordPlayerMatch = PlayerMatchController.getInstance().recordPlayerMatchByPlayer(player.getPlayerId());
-		this.image = null;
 		initialize();
 	}
-	
-	/*public static PlayerFrame getInstance(Player player){
-		if(instance == null) {
-			instance = new PlayerFrame(player);
-		}
-		return instance;
-	}*/
 
 	public void initialize() {
 		this.setBounds(0, 0, 1175, 670);
@@ -284,9 +268,9 @@ public class PlayerFrame extends JPanel {
 			}
 		});
 	}
-	
+
 	private void validateInformation() {
-		
+
 		String currentPasswordInt = Arrays.toString(currentPassword.getPassword());
 		String newPasswordInt = Arrays.toString(newPassword.getPassword());
 		String username = fieldUsername.getText();
@@ -299,7 +283,8 @@ public class PlayerFrame extends JPanel {
 			if (currentPassword.getPassword().length == 0 || newPassword.getPassword().length == 0
 					|| newPasswordInt.isBlank() || currentPasswordInt.isBlank() || username.isBlank()
 					|| email.isBlank()) {
-				JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.", "Erro", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.", "Erro",
+						JOptionPane.ERROR_MESSAGE);
 			} else if (!currentPasswordInt.equals(newPasswordInt)) {
 				JOptionPane.showMessageDialog(null, "Senha inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
 			} else {
@@ -312,7 +297,8 @@ public class PlayerFrame extends JPanel {
 		} else {
 
 			if (username.isBlank() || email.isBlank()) {
-				JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.", "Erro", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Preencha todas as informações necessaria.", "Erro",
+						JOptionPane.ERROR_MESSAGE);
 			} else {
 				player.setPlayerUrlImage(image);
 				player.setPlayerUsername(username);
@@ -330,57 +316,14 @@ public class PlayerFrame extends JPanel {
 		}
 	}
 
-	private void updatePhoto() {
-		String destinationPath = "img\\users\\" + player.getPlayerUsername() + ".png";
-		image = this.chooseImage();
-		if (image != null) {
-			try {
-				this.copyFile(new File(image.getAbsolutePath()), new File(destinationPath));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			photoPersona.setPath(destinationPath);
-		}
+	private void updatePhoto() {	
+		ImageManager imageManager = new ImageManager("img\\players\\");
+		photoPersona.setPath(imageManager.getAbsolutePath());
 	}
 
 	private void removePhoto() {
-		String sourcePath = "img\\icons\\icon-persona.png";
-		String destinationPath = "img\\users\\" + player.getPlayerUsername() + ".png";
-		try {
-			this.copyFile(new File(sourcePath), new File(destinationPath));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		photoPersona.setPath(destinationPath);
-	}
-
-	private File chooseImage() {
-		JFileChooser fileChooser = new JFileChooser("img\\users");
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "png");
-		fileChooser.setFileFilter(filter);
-		boolean choosed = fileChooser.showOpenDialog(fileChooser) == JFileChooser.APPROVE_OPTION;
-		return choosed ? fileChooser.getSelectedFile() : image;
-	}
-
-	@SuppressWarnings("resource")
-	public void copyFile(File source, File destination) throws IOException {
-		if (destination.exists())
-			destination.delete();
-
-		FileChannel sourceChannel = null;
-		FileChannel destinationChannel = null;
-
-		try {
-			sourceChannel = new FileInputStream(source).getChannel();
-			destinationChannel = new FileOutputStream(destination).getChannel();
-			sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel);
-		} finally {
-			if (sourceChannel != null && sourceChannel.isOpen())
-				sourceChannel.close();
-			if (destinationChannel != null && destinationChannel.isOpen())
-				destinationChannel.close();
-		}
-
+		String path = "img\\icons\\icon-persona.png";
+		photoPersona.setPath(path);
 	}
 
 	private String formatHours(Long duration) {

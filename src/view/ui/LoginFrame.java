@@ -149,7 +149,7 @@ public class LoginFrame extends AbstractWindow {
 		containerRegister.add(btnRegister);
 
 		JLabel lbBG = new JLabel("");
-		lbBG.setIcon(new ImageIcon("img\\bg-login.jpg"));
+		lbBG.setIcon(new ImageIcon("img\\bgs\\bg-login.jpg"));
 		lbBG.setBounds(0, 0, 494, 567);
 		frame.getContentPane().add(lbBG);
 	}

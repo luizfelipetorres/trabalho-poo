@@ -21,24 +21,24 @@ public class Puzzle {
 	private final int COLUMNS;
 	private final List<Piece> pieces;
 	private final TypeShuffle typeShuffle;
-	private File file;
+	private String urlImage;
 
-	public Puzzle(int lines, int columns, File file, TypeShuffle typeShuffle) {
+	public Puzzle(int lines, int columns, String urlImage, TypeShuffle typeShuffle) {
 		this.LINES = lines;
 		this.COLUMNS = columns;
 		this.typeShuffle = typeShuffle;
 		this.pieces = new ArrayList<Piece>();
-		this.file = file;
+		this.urlImage = urlImage;
 		initialize();
 	}
 	
-	public Puzzle(Long id, int lines, int columns, File file, TypeShuffle typeShuffle) {
+	public Puzzle(Long id, int lines, int columns, String urlImage, TypeShuffle typeShuffle) {
 		this.id = id;
 		this.LINES = lines;
 		this.COLUMNS = columns;
 		this.typeShuffle = typeShuffle;
 		this.pieces = new ArrayList<Piece>();
-		this.file = file;
+		this.urlImage = urlImage;
 		initialize();
 	}
 	
@@ -49,9 +49,9 @@ public class Puzzle {
 	}
 	
 	private void generatepieces() {
-		BufferedImage imagem;
+
 		try {
-			imagem = ImageIO.read(getFile());
+			BufferedImage imagem = ImageIO.read(new File(urlImage));
 			int w = imagem.getWidth() / this.getCOLUMNS();
 			int h = imagem.getHeight() / this.getLINES();
 			int index = 1;
@@ -160,17 +160,14 @@ public class Puzzle {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public File getFile() {
-		return file;
-	}
-
-	public void setFile(File file) {
-		this.file = file;
-	}
+	}                                                                                                                           
 
 	public TypeShuffle getTypeShuffle() {
 		return typeShuffle;
 	}
+
+	public String getUrlImage() {
+		return urlImage;
+	}
+	
 }
