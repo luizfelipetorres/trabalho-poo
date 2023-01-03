@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -214,15 +215,8 @@ public class KernelFrame extends AbstractWindow {
 		lbTitle.setBounds(10, 11, 1195, 33);
 		panelHeader.add(lbTitle);
 
-		panelLeftMenu.add(lbIconMenu);
-		panelLeftMenu.add(panelPersona);
-		panelLeftMenu.add(btnPlay);
-		panelLeftMenu.add(btnConfig);
-		panelLeftMenu.add(btnLogout);
-
-		frame.getContentPane().add(panelLeftMenu);
-		frame.getContentPane().add(desktopPane);
-		frame.getContentPane().add(panelHeader);
+		Arrays.asList(lbIconMenu, panelPersona, btnPlay, btnConfig, btnLogout).forEach(panelLeftMenu::add);
+		Arrays.asList(panelLeftMenu, desktopPane, panelHeader).forEach(frame.getContentPane()::add);
 	}
 
 	private void showFrame(Component frame) {

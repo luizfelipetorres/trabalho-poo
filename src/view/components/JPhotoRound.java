@@ -21,7 +21,7 @@ public class JPhotoRound extends JLabel {
 		this.path = path;
 		this.size = size;
 		this.borderRound = new BorderRound();
-		initialize();
+		this.initialize();
 	}
 
 	private void initialize() {
@@ -54,10 +54,7 @@ public class JPhotoRound extends JLabel {
 	}
 
 	public String getPath() {
-		if(path != null) {
-			return path;
-		}
-		return "";
+		return (path != null) ? path : "";
 	}
 
 }

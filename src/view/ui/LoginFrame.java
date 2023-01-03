@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.SwingConstants;
 
 import controller.PlayerController;
@@ -23,9 +25,14 @@ import javax.swing.JTabbedPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
+
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginFrame extends AbstractWindow {
@@ -139,18 +146,21 @@ public class LoginFrame extends AbstractWindow {
 		});
 		btnRegister.addMouseListener(hoverEffect);
 		
-		containerLogin.add(fieldLoginUsername);
-		containerLogin.add(fieldLoginPassword);
-		containerLogin.add(btnLogin);
-		
-		containerRegister.add(fieldRegisterUsername);
-		containerRegister.add(fieldRegisterEmail);
-		containerRegister.add(fieldRegisterPassword);
-		containerRegister.add(btnRegister);
+		Arrays.asList(fieldLoginUsername, fieldLoginPassword, btnLogin).forEach(containerLogin::add);
+		Arrays.asList(fieldRegisterUsername, fieldRegisterEmail, fieldRegisterPassword, btnRegister).forEach(containerRegister::add);
 
 		JLabel lbBG = new JLabel("");
-		lbBG.setIcon(new ImageIcon("img\\bgs\\bg-login.jpg"));
-		lbBG.setBounds(0, 0, 494, 567);
-		frame.getContentPane().add(lbBG);
+		BufferedImage resized;
+		try {		
+			resized = ImageIO.read(new File("img\\bgs\\bg-login.jpg"));
+			Image image = resized.getScaledInstance(494, 567, 1);	
+			lbBG.setIcon(new ImageIcon(image));
+			lbBG.setHorizontalAlignment(SwingConstants.CENTER);
+			lbBG.setBounds(0, 0, 494, 567);
+			frame.getContentPane().add(lbBG);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 	}
 }

@@ -17,7 +17,8 @@ public class MatchDAO implements DAOListener<Match> {
 
 	private static MatchDAO instance;
 
-	private MatchDAO() {}
+	private MatchDAO() {
+	}
 
 	public static MatchDAO getInstance() {
 		if (instance == null) {
@@ -26,18 +27,17 @@ public class MatchDAO implements DAOListener<Match> {
 		return instance;
 	}
 
-	
 	@Override
 	public boolean save(Match match) {
 		ResultSet id;
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "INSERT INTO MATCH(PUZZLE_ID) VALUES (?)";
-			PreparedStatement ps = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setLong(1, match.getPuzzle().getId());
 			ps.execute();
 			id = ps.getGeneratedKeys();
-			if(id.next()) {
+			if (id.next()) {
 				match.setId(id.getLong(1));
 			}
 			ps.close();
@@ -46,7 +46,7 @@ public class MatchDAO implements DAOListener<Match> {
 		} catch (SQLException e) {
 			System.err.println(e);
 		}
-		
+
 		return false;
 	}
 
@@ -75,23 +75,22 @@ public class MatchDAO implements DAOListener<Match> {
 			String sql = "SELECT * FROM MATCH WHERE MATCH_ID = " + id;
 			Statement stmt = (Statement) connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
-		
+
 			if (rs.next()) {
 				Puzzle puzzle = PuzzleDAO.getInstance().findById(rs.getLong("PUZZLE_ID"));
 				return new Match(rs.getLong("MATCH_ID"), puzzle);
 			}
-			
+
 		} catch (SQLException e) {
 			System.err.println(e);
 		}
-		
+
 		return null;
 	}
 
-	
 	@Override
 	public void remove(Long id) {
-		
+
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			Statement stmt = connection.createStatement();
@@ -115,7 +114,7 @@ public class MatchDAO implements DAOListener<Match> {
 
 			while (rs.next()) {
 				Puzzle puzzle = PuzzleDAO.getInstance().findById(rs.getLong("PUZZLE_ID"));
-				listMatches.add( new Match(rs.getLong("MATCH_ID"), puzzle));
+				listMatches.add(new Match(rs.getLong("MATCH_ID"), puzzle));
 			}
 			rs.close();
 			connection.close();

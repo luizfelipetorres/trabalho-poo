@@ -7,13 +7,14 @@ import java.util.Optional;
 import javax.swing.ImageIcon;
 
 public class Piece {
+
 	private final int LINE;
 	private final int COLUMN;
 	
 	private int index;
 	private ImageIcon img;
 	private boolean isEmpty;
-	public List<Piece> neighbors;
+	private List<Piece> neighbors;
 	
 	public Piece(int index, int line, int column, boolean isEmpty) {
 		this.index = index;
@@ -23,7 +24,7 @@ public class Piece {
 		this.neighbors = new ArrayList<Piece>();
 	}
 	
-	void addNeighbor(Piece neighbor) {
+	public void addNeighbor(Piece neighbor) {
 		boolean different =  this.getLINE() != neighbor.getLINE() && this.getCOLUMN() != neighbor.getCOLUMN();
 		
 		int deltaLine = Math.abs(this.getLINE() - neighbor.getLINE());

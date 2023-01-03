@@ -16,7 +16,7 @@ public class PieceButton extends JButton {
 		this.piece = piece;
 		this.width = width;
 		this.height = height;
-		configImg();
+		this.configImg();
 	}
 	
 	public void configImg() {

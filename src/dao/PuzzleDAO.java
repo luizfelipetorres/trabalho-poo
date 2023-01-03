@@ -13,10 +13,11 @@ import model.Puzzle;
 import util.TypeShuffle;
 
 public class PuzzleDAO implements DAOListener<Puzzle> {
-	
+
 	private static PuzzleDAO instance;
 
-	private PuzzleDAO() {}
+	private PuzzleDAO() {
+	}
 
 	public static PuzzleDAO getInstance() {
 		if (instance == null) {
@@ -37,8 +38,8 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 			ps.setString(3, puzzle.getUrlImage());
 			ps.execute();
 			id = ps.getGeneratedKeys();
-			
-			if(id.next()) {
+
+			if (id.next()) {
 				puzzle.setId(id.getLong(1));
 			}
 			ps.close();
@@ -47,16 +48,16 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 		} catch (SQLException e) {
 			System.err.println(e);
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public List<Puzzle> findAll() {
 		/* implements logic */
 		return null;
 	}
-	
+
 	@Override
 	public Puzzle findById(Long id) {
 		Puzzle puzzle = null;
@@ -64,32 +65,30 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 		int columns;
 		String urlImage;
 		TypeShuffle typeShuffle;
-		
+
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "SELECT * FROM PUZZLE WHERE PUZZLE_ID = " + id;
 			Statement stmt = (Statement) connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
-			
 
 			if (rs.next()) {
-				lines =  rs.getInt("PUZZLE_LINES");
-				columns =  rs.getInt("PUZZLE_COLUMNS");
+				lines = rs.getInt("PUZZLE_LINES");
+				columns = rs.getInt("PUZZLE_COLUMNS");
 				typeShuffle = TypeShuffle.valueOf(rs.getString("PUZZLE_TYPE_SHUFFLE"));
 				urlImage = rs.getString("PUZZLE_URL_IMAGE");
 				rs.close();
 				connection.close();
-				puzzle =  new Puzzle(id,lines, columns, urlImage, typeShuffle);
+				puzzle = new Puzzle(id, lines, columns, urlImage, typeShuffle);
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return puzzle;
 	}
 
-	
 	@Override
 	public boolean update(Puzzle puzzle) {
 		try {
@@ -109,7 +108,7 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void remove(Long id) {
 		try {
@@ -122,5 +121,5 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 			e.printStackTrace();
 		}
 	}
-	
+
 }

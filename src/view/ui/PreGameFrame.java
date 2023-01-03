@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +35,6 @@ public class PreGameFrame extends JPanel {
 	}
 
 	private void initialize() {
-
 		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -84,15 +84,15 @@ public class PreGameFrame extends JPanel {
 				10, 135, 
 				270);
 
-		CustomButton buttonChooseImg = new CustomButton("Escolha uma imagem", null, 10, 225, 270, 40);
-		buttonChooseImg.addActionListener(new ActionListener() {
+		CustomButton buttonChooseImage = new CustomButton("Escolha uma imagem...", null, 10, 225, 270, 40);
+		buttonChooseImage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ImageManager imageManager = new ImageManager("img\\puzzle\\");				
 				lbImage.setPath(imageManager.getAbsolutePath());
 				lbImageDescription.setText(concatImageName());
 			}
 		});
-		buttonChooseImg.addMouseListener(hoverEffect);
+		buttonChooseImage.addMouseListener(hoverEffect);
 		
 		lbImage = new JPhotoRound("img\\puzzle\\default.jpg", 480);
 		lbImage.setBounds(10, 50, 480, 480);
@@ -108,9 +108,6 @@ public class PreGameFrame extends JPanel {
 		lbImageDescription.setBounds(10, 0, 400, 30);
 		lbImageDescription.setText(concatImageName());
 
-		containerImage.add(lbImageDescription);
-		containerImage.add(lbImage);
-
 		CustomButton buttonInit = new CustomButton("JOGAR", "img\\icons\\icon-control.png", 10, 589, 270, 50);
 		buttonInit.addMouseListener(hoverEffect);
 		buttonInit.addActionListener((e) -> {
@@ -119,12 +116,8 @@ public class PreGameFrame extends JPanel {
 			puzzleFrameListener.onClick(lbImage.getPath(), selectedSize, selectedShuffle); 
 		});
 
-		this.add(labelTitle);
-		this.add(cbSize);
-		this.add(cbShuffle);
-		this.add(buttonChooseImg);
-		this.add(containerImage);
-		this.add(buttonInit);
+		Arrays.asList(lbImageDescription, lbImage).forEach(containerImage::add);
+		Arrays.asList(labelTitle, cbSize, cbShuffle, buttonChooseImage, containerImage, buttonInit).forEach(this::add);
 
 	}
 

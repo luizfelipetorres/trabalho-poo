@@ -16,10 +16,11 @@ import model.PlayerMatch;
 import util.RecordPlayerMatch;
 
 public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
-	
+
 	private static PlayerMatchDAO instance;
 
-	private PlayerMatchDAO() {}
+	private PlayerMatchDAO() {
+	}
 
 	public static PlayerMatchDAO getInstance() {
 		if (instance == null) {
@@ -27,7 +28,6 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 		}
 		return instance;
 	}
-
 
 	public boolean save(PlayerMatch playerMatch) {
 		ResultSet id;
@@ -147,7 +147,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 
 	public RecordPlayerMatch recordPlayerMatchByPlayer(Long idPlayer) {
 		RecordPlayerMatch recordPlayerMatch = new RecordPlayerMatch();
-		
+
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "SELECT  COUNT(PLAYER_MATCH_COMPLETE) AS TOTAL_MATCH, "
@@ -159,13 +159,13 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 					+ "MAX(PLAYER_MATCH_DURATION) AS MAX_DURATION, "
 					+ "MIN(PLAYER_MATCH_DURATION) AS MIN_DURATION "
 					+ "FROM PLAYER_MATCH "
-					+ "WHERE player_id = " +idPlayer + " AND player_match_complete = TRUE";
-			
+					+ "WHERE player_id = " + idPlayer + " AND player_match_complete = TRUE";
+
 			Statement stmt = (Statement) connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
-			if(rs.next()) {
-				recordPlayerMatch.setTotalMatchCompleta(rs.getInt("TOTAL_MATCH"));
+			if (rs.next()) {
+				recordPlayerMatch.setTotalMatchCompleted(rs.getInt("TOTAL_MATCH"));
 				recordPlayerMatch.setTotalPoints(rs.getLong("TOTAL_DE_POINTS"));
 				recordPlayerMatch.setMaxPoints(rs.getInt("MAX_POINTS"));
 				recordPlayerMatch.setMinPoints(rs.getInt("MIN_POINTS"));
@@ -174,17 +174,17 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 				recordPlayerMatch.setMaxDuration(rs.getLong("MAX_DURATION"));
 				recordPlayerMatch.setMinDuration(rs.getLong("MIN_DURATION"));
 			}
-			
+
 			sql = "SELECT COUNT(player_match_complete) AS TOTAL_MATCH "
-				+ "FROM PLAYER_MATCH "
-				+ "WHERE player_id = " +idPlayer + " AND player_match_complete = FALSE";
-			
+					+ "FROM PLAYER_MATCH "
+					+ "WHERE player_id = " + idPlayer + " AND player_match_complete = FALSE";
+
 			rs = stmt.executeQuery(sql);
-			
-			if(rs.next()) {
-				recordPlayerMatch.setTotalMatchNotCompleta(rs.getInt("TOTAL_MATCH"));
+
+			if (rs.next()) {
+				recordPlayerMatch.setTotalMatchNotCompleted(rs.getInt("TOTAL_MATCH"));
 			}
-					
+
 			rs.close();
 			connection.close();
 

@@ -34,8 +34,7 @@ public class PuzzleBoard extends JPanel {
 		this.initialize();
 	}
 
-	private void initialize() {
-		
+	private void initialize() {	
 		this.setBorder(new LineBorder(new Color(0, 0, 128)));
 		this.setBounds(10, 80, 630, 560);
 		this.setLayout(new GridLayout(puzzle.getLINES(), puzzle.getCOLUMNS()));
@@ -44,7 +43,7 @@ public class PuzzleBoard extends JPanel {
 		int height = this.getHeight() / puzzle.getCOLUMNS();
 		puzzle.getPieces().forEach(e -> buttons.add(new PieceButton(e, width, height)));
 
-		ShuffleListener listener = new ShuffleListener() {
+		ShuffleListener shuffleListener = new ShuffleListener() {
 			@Override
 			public void updateButtons() {
 				buttons.forEach(button -> button.configImg());
@@ -52,7 +51,7 @@ public class PuzzleBoard extends JPanel {
 		};
 
 		Thread shuffle = new Thread(() -> {
-			puzzle.shuffleTable(listener);
+			puzzle.shuffleTable(shuffleListener);
 		});
 
 		shuffle.start();

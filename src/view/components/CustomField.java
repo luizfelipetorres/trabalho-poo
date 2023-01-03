@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,7 +12,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
 
 public class CustomField extends JPanel {
 
@@ -23,7 +23,7 @@ public class CustomField extends JPanel {
 	private int x;
 	private int y;
 	private boolean isFieldPassword;
-	
+
 	public CustomField(String title, int width, int x, int y, boolean isFieldPassword) {
 		this.title = title;
 		this.width = width;
@@ -32,9 +32,9 @@ public class CustomField extends JPanel {
 		this.isFieldPassword = isFieldPassword;
 		this.initialize();
 	}
-	
+
 	public void initialize() {
-		
+
 		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -51,12 +51,12 @@ public class CustomField extends JPanel {
 
 		this.setLayout(null);
 		this.setBorder(null);
-		this.setBackground(new Color(255, 255, 255));
 		this.setBounds(x, y, width, 75);
-		
+		this.setBackground(new Color(255, 255, 255));
+
 		JLabel label = new CustomLabel(title, 0, 0, width, 30);
-		
-		if(!isFieldPassword) {
+
+		if (!isFieldPassword) {
 			fieldCommon = new JTextField();
 			fieldCommon.setBounds(0, 30, width, 40);
 			fieldCommon.setHorizontalAlignment(SwingConstants.CENTER);
@@ -66,7 +66,7 @@ public class CustomField extends JPanel {
 			fieldCommon.setBorder(null);
 			fieldCommon.setBackground(new Color(255, 255, 255));
 			this.add(fieldCommon);
-		}else{
+		} else {
 			fieldPassword = new JPasswordField();
 			fieldPassword.setBounds(0, 30, width, 40);
 			fieldPassword.setHorizontalAlignment(SwingConstants.CENTER);
@@ -76,26 +76,24 @@ public class CustomField extends JPanel {
 			fieldPassword.setBackground(new Color(255, 255, 255));
 			this.add(fieldPassword);
 		}
-		
+
 		JSeparator separator = new JSeparator();
 		separator.setBounds(0, 70, width, 2);
 		separator.setForeground(new Color(0, 0, 128));
 		separator.setBackground(new Color(0, 0, 128));
 		separator.addMouseListener(hoverEffect);
-		
-		this.add(label);
-		this.add(separator);
-		
+
+		Arrays.asList(label, separator).forEach(this::add);
 	}
-	
+
 	public String getText() {
 		return fieldCommon.getText();
 	}
-	
+
 	public void setText(String text) {
 		fieldCommon.setText(text);
 	}
-	
+
 	public char[] getPassword() {
 		return fieldPassword.getPassword();
 	}

@@ -6,7 +6,6 @@ import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-
 public class CustomButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
@@ -17,8 +16,9 @@ public class CustomButton extends JButton {
 	private int y;
 	private int width;
 	private int height;
-	
-	public CustomButton(String title, String iconPath, Color colorForeground, Color colorBackground, int x, int y, int width, int height) {
+
+	public CustomButton(String title, String iconPath, Color colorForeground, Color colorBackground, int x, int y,
+			int width, int height) {
 		super(title);
 		this.iconPath = iconPath;
 		this.colorForeground = colorForeground;
@@ -27,14 +27,13 @@ public class CustomButton extends JButton {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		initialize();
+		this.initialize();
 	}
-
 
 	public CustomButton(String title, String iconPath, int x, int y, int width, int height) {
 		this(title, iconPath, new Color(255, 255, 255), new Color(0, 0, 128), x, y, width, height);
 	}
-	
+
 	private void initialize() {
 		this.setFocusable(false);
 		this.setIconTextGap(iconPath != null ? 70 : 0);

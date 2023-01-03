@@ -6,7 +6,7 @@ import dao.MatchDAO;
 import interfaces.DAOListener;
 import model.Match;
 
-public class MatchController implements DAOListener<Match>{
+public class MatchController implements DAOListener<Match> {
 
 	private static MatchController instance;
 
@@ -19,24 +19,14 @@ public class MatchController implements DAOListener<Match>{
 		}
 		return instance;
 	}
-	
+
 	@Override
 	public boolean save(Match match) {
-		/*if (puzzle.getId() == null) {
-			puzzle = PuzzleDAO.getInstance().save(puzzle);
-		}*/
 		return MatchDAO.getInstance().save(match);
 	}
 
 	@Override
 	public boolean update(Match match) {
-
-		/*if (puzzle.getId() == null) {
-			puzzle = PuzzleDAO.getInstance().save(puzzle);
-		} else {
-			PuzzleDAO.getInstance().update(puzzle);
-		}*/
-
 		return MatchDAO.getInstance().update(match);
 	}
 

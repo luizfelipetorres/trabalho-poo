@@ -16,6 +16,7 @@ import interfaces.ShuffleListener;
 import util.TypeShuffle;
 
 public class Puzzle {
+
 	private Long id;
 	private final int LINES;
 	private final int COLUMNS;
@@ -29,7 +30,7 @@ public class Puzzle {
 		this.typeShuffle = typeShuffle;
 		this.pieces = new ArrayList<Piece>();
 		this.urlImage = urlImage;
-		initialize();
+		this.initialize();
 	}
 	
 	public Puzzle(Long id, int lines, int columns, String urlImage, TypeShuffle typeShuffle) {
@@ -39,7 +40,7 @@ public class Puzzle {
 		this.typeShuffle = typeShuffle;
 		this.pieces = new ArrayList<Piece>();
 		this.urlImage = urlImage;
-		initialize();
+		this.initialize();
 	}
 	
 	private void initialize() {
@@ -79,7 +80,7 @@ public class Puzzle {
 		pieces.stream().filter(e -> e.getIndex() == this.getSIZE()).findFirst().get().setEmpty(true);
 	}
 
-	public void shuffleTable(ShuffleListener listener) {
+	public void shuffleTable(ShuffleListener shuffleListener) {
 		try {
 			Thread.sleep(1000);
 			int animationTime = 2000;
@@ -102,7 +103,7 @@ public class Puzzle {
 					if (!swaps.contains(current)) {
 						swaps.add(current);
 						pieceOrigin.exchange(pieceDestiny);
-						listener.updateButtons();
+						shuffleListener.updateButtons();
 						Thread.sleep(animationTime);
 					}
 				}

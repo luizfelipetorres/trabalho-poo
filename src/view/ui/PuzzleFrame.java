@@ -1,10 +1,17 @@
 package view.ui;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import dao.MatchDAO;
 import dao.PieceDAO;
@@ -36,23 +43,27 @@ public class PuzzleFrame extends JPanel {
 	}
 
 	public void initialize() {
-
 		this.setBounds(0, 0, 1175, 670);
 		this.setBackground(new Color(255, 255, 255));
 		this.setLayout(null);
 
-		JLabel lbBgmain = new JLabel("");
-		lbBgmain.setIcon(new ImageIcon("img\\bgs\\bg-main.jpg"));
-		lbBgmain.setBounds(645, 0, 430, 640);
-		this.add(lbBgmain);
-
-		this.add(puzzleBoard);
-		this.add(stopWatch);
-
+		JLabel lbBG = new JLabel("");
+		BufferedImage resized;
+		try {
+			resized = ImageIO.read(new File("img\\bgs\\bg-main.jpg"));
+			Image image = resized.getScaledInstance(730, 640, 1);	
+			lbBG.setIcon(new ImageIcon(image));
+			lbBG.setHorizontalAlignment(SwingConstants.CENTER);
+			lbBG.setBounds(645, 0, 430, 640);
+			this.add(lbBG);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		Arrays.asList(puzzleBoard, stopWatch).forEach(this::add);
 	}
 	
 	public PuzzleBoardListener puzzleBoardListener() {
-		
 		return new PuzzleBoardListener() {
 
 			@Override

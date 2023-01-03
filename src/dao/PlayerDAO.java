@@ -25,14 +25,15 @@ public class PlayerDAO implements DAOListener<Player> {
 		}
 		return instance;
 	}
-	
+
 	public Player authenticate(Player player) {
-		
+
 		Player playerIntern = new Player();
 
 		try {
 			Connection connection = ConnectionFactory.getConnection();
-			String sql = "SELECT * FROM PLAYER AS P WHERE P.PLAYER_USERNAME = '" + player.getPlayerUsername() + "' AND P.PLAYER_PASSWORD = '" + player.getPlayerPassword() + "'";
+			String sql = "SELECT * FROM PLAYER AS P WHERE P.PLAYER_USERNAME = '" + player.getPlayerUsername()
+					+ "' AND P.PLAYER_PASSWORD = '" + player.getPlayerPassword() + "'";
 			Statement stmt = (Statement) connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
@@ -51,9 +52,9 @@ public class PlayerDAO implements DAOListener<Player> {
 			e.printStackTrace();
 		}
 		return null;
-		
+
 	}
- 
+
 	@Override
 	public boolean save(Player player) {
 		try {
@@ -75,7 +76,7 @@ public class PlayerDAO implements DAOListener<Player> {
 	}
 
 	@Override
-	public boolean update(Player player){
+	public boolean update(Player player) {
 
 		try {
 			Connection connection = ConnectionFactory.getConnection();
@@ -96,8 +97,7 @@ public class PlayerDAO implements DAOListener<Player> {
 		}
 
 	}
-	
-	
+
 	@Override
 	public List<Player> findAll() {
 
@@ -147,7 +147,7 @@ public class PlayerDAO implements DAOListener<Player> {
 				connection.close();
 				return player;
 			}
-			
+
 		} catch (SQLException e) {
 			System.err.println(e);
 		}
@@ -155,9 +155,9 @@ public class PlayerDAO implements DAOListener<Player> {
 	}
 
 	public List<Player> findByName(String playerName) {
-		
+
 		ArrayList<Player> listPlayers = new ArrayList<Player>();
-		
+
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "SELECT * FROM PLAYER WHERE PLAYER_ID LIKE " + "'%" + playerName + "%'";

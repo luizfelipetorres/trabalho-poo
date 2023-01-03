@@ -77,16 +77,11 @@ public class Stopwatch extends JPanel{
 		return duration / 1000 / 60 / 60 % 24;
 	}
 
-	public long getTimeInSeconds() {
-		return duration / 1000;
-	}
-
 	public boolean isRunning() {
 		return isRunning;
 	}
 
-	public void initialize() {
-		
+	public void initialize() {	
 		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -100,8 +95,8 @@ public class Stopwatch extends JPanel{
 		};
 		
 		this.setLayout(null);
-		this.setBorder(new LineBorder(new Color(0, 0, 128)));
 		this.setBounds(10, 0, 630, 70);
+		this.setBorder(new LineBorder(new Color(0, 0, 128)));
 
 		labelTime = new JLabel("00:00:00:00");
 		labelTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
