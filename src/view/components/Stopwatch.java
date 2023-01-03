@@ -1,7 +1,6 @@
-package ui.components;
+package view.components;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,11 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
-import ui.views.PuzzleFrame;
+import interfaces.PuzzleBoardListener;
 
-public class Stopwatch {
+public class Stopwatch extends JPanel{
 
-	private static Stopwatch instance;
+	private static final long serialVersionUID = 1L;
+	private PuzzleBoardListener puzzleBoardListener;
 	private JLabel labelTime;
 	private JButton btnStart;
 	private JButton btnPause;
@@ -40,10 +40,6 @@ public class Stopwatch {
 
 	};
 
-	private String getStringTimer() {
-		return String.format("%02d:%02d:%02d:%02d", getHours(), getMinutes(), getSeconds(), getHundredthSeconds());
-	}
-
 	private ActionListener onPause = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -51,37 +47,25 @@ public class Stopwatch {
 		}
 	};
 
-	public void reset() {
-		if (duration == 0)
-			return;
-		
-		isRunning = false;
-		isVisible = true;
-		duration = 0;
-		timer.removeActionListener(onPause);
-		timer.removeActionListener(taskPerformer);
-	}
-
-	private Stopwatch() {
+	public Stopwatch(PuzzleBoardListener puzzleBoardListener) {
+		this.puzzleBoardListener = puzzleBoardListener;
 		this.isRunning = false;
 		this.isVisible = true;
 		this.duration = 0;
 		this.timer = new Timer(10, null);
 		this.labelTime = new JLabel(getStringTimer());
+		this.initialize();
 	}
-
-	public static Stopwatch getInstance() {
-		if (instance == null) {
-			instance = new Stopwatch();
-		}
-		return instance;
+	
+	private String getStringTimer() {
+		return String.format("%02d:%02d:%02d:%02d", getHours(), getMinutes(), getSeconds(), getHundredthSeconds());
 	}
 
 	private long getHundredthSeconds() {
 		return duration / 10 % 100;
 	}
 
-	private long getSeconds() {
+	public long getSeconds() {
 		return duration / 1000 % 60;
 	}
 
@@ -93,25 +77,26 @@ public class Stopwatch {
 		return duration / 1000 / 60 / 60 % 24;
 	}
 
-	public long getTimeInSeconds() {
-		return duration / 1000;
-	}
-
 	public boolean isRunning() {
 		return isRunning;
 	}
 
-	public long getDuration() {
-		return duration;
-	}
+	public void initialize() {	
+		MouseAdapter hoverEffect = new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				e.getComponent().setBackground(new Color(249, 13, 72));
+			}
 
-	public Component initialize(PuzzleFrame puzzleInternalFrame) {
-		reset();
-		JPanel panelStopWatch = new JPanel();
-		panelStopWatch.setLayout(null);
-		panelStopWatch.setBorder(new LineBorder(new Color(0, 0, 128)));
-		panelStopWatch.setBounds(10, 0, 630, 70);
-		puzzleInternalFrame.add(panelStopWatch);
+			@Override
+			public void mouseExited(MouseEvent e) {
+				e.getComponent().setBackground(new Color(0, 0, 128));
+			}
+		};
+		
+		this.setLayout(null);
+		this.setBounds(10, 0, 630, 70);
+		this.setBorder(new LineBorder(new Color(0, 0, 128)));
 
 		labelTime = new JLabel("00:00:00:00");
 		labelTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
@@ -121,63 +106,35 @@ public class Stopwatch {
 				390, 10, 70, 50);
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Stopwatch.getInstance().start();
+				start();
 			}
 		});
-		btnStart.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnStart.setBackground(new Color(249, 13, 72));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnStart.setBackground(new Color(0, 0, 128));
-			}
-		});
+		btnStart.addMouseListener(hoverEffect);
+		
 		btnPause = new CustomButton("", "img\\icons\\icon-pause.png", new Color(255, 255, 255), new Color(0, 0, 128),
 				470, 10, 70, 50);
 		btnPause.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Stopwatch.getInstance().pause();
+				puzzleBoardListener.keep();
 			}
 		});
-		btnPause.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnPause.setBackground(new Color(249, 13, 72));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnPause.setBackground(new Color(0, 0, 128));
-			}
-		});
+		btnPause.addMouseListener(hoverEffect);
+		
 		btnStop = new CustomButton("", "img\\icons\\icon-stop.png", new Color(255, 255, 255), new Color(0, 0, 128), 550,
 				10, 70, 50);
 		btnStop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Stopwatch.getInstance().stop();
+				stop();
 			}
 		});
-		btnStop.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnStop.setBackground(new Color(249, 13, 72));
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				btnStop.setBackground(new Color(0, 0, 128));
-			}
-		});
+		btnStop.addMouseListener(hoverEffect);
 
 		btnStop.setEnabled(false);
 		btnStart.setEnabled(true);
 		btnPause.setEnabled(false);
 
-		Arrays.asList(labelTime, btnStart, btnPause, btnStop).forEach(panelStopWatch::add);
-		return panelStopWatch;
+		Arrays.asList(labelTime, btnStart, btnPause, btnStop).forEach(this::add);
+		
 	}
 
 	private void start() {
@@ -190,8 +147,7 @@ public class Stopwatch {
 	}
 
 	public void pause() {
-		if (isRunning)
-			switchTimer();
+		switchTimer();
 		btnPause.setEnabled(false);
 		btnStart.setEnabled(true);
 		btnStop.setEnabled(true);
@@ -201,7 +157,7 @@ public class Stopwatch {
 		if (timer.isRunning()) {
 			timer.stop();
 			Arrays.asList(onPause, taskPerformer).forEach(timer::removeActionListener);
-			this.duration = 0;
+			duration = 0;
 			isRunning = false;
 			btnStop.setEnabled(false);
 			btnStart.setEnabled(true);

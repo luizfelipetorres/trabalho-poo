@@ -1,8 +1,8 @@
 package util;
 
 public class RecordPlayerMatch {
-	private int totalMatchNotCompleta;
-	private int totalMatchCompleta;
+	private int totalMatchNotCompleted;
+	private int totalMatchCompleted;
 	private long totalPoints;
 	private int maxPoints;
 	private int minPoints;
@@ -12,20 +12,19 @@ public class RecordPlayerMatch {
 	private long minDuration;
 	
 	public int getTotalMatch() {
-		return totalMatchNotCompleta +totalMatchCompleta ;
+		return totalMatchNotCompleted + totalMatchCompleted ;
 	}
-	public int getTotalMatchNotCompleta() {
-		return totalMatchNotCompleta;
+	public int getTotalMatchNotCompleted() {
+		return totalMatchNotCompleted;
 	}
-	public void setTotalMatchNotCompleta(int totalMatchNotCompleta) {
-		this.totalMatchNotCompleta = totalMatchNotCompleta;
+	public void setTotalMatchNotCompleted(int totalMatchNotCompleted) {
+		this.totalMatchNotCompleted = totalMatchNotCompleted;
 	}
-	public int getTotalMatchCompleta() {
-		return totalMatchCompleta;
+	public int getTotalMatchCompleted() {
+		return totalMatchCompleted;
 	}
-	public void setTotalMatchCompleta(int totalMatchCompleta) {
-		System.out.println(totalMatchCompleta);
-		this.totalMatchCompleta = totalMatchCompleta;
+	public void setTotalMatchCompleted(int totalMatchCompleted) {
+		this.totalMatchCompleted = totalMatchCompleted;
 	}
 	public long getTotalPoints() {
 		return totalPoints;

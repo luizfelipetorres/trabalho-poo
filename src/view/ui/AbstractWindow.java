@@ -1,10 +1,5 @@
-package ui.views;
-
-import javax.swing.JPanel;
-
+package view.ui;
 public abstract class AbstractWindow{
-
-	private static final long serialVersionUID = 1L;
 
 	public AbstractWindow() {
 		setTheme();
