@@ -1,17 +1,12 @@
 package model;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 public class Player {
 
-    private Integer playerId;
+    private Long playerId;
     private String playerUsername;
     private String playerEmail;
     private String playerPassword;
-    private File file;
+    private String playerUrlImage;
     
     public Player() {
     }
@@ -20,18 +15,25 @@ public class Player {
         this.playerUsername = playerUsername;
         this.playerPassword = playerPassword;
     }
-
+    
     public Player(String playerUsername, String playerEmail, String playerPassword) {
         this.playerUsername = playerUsername;
         this.playerEmail = playerEmail;
         this.playerPassword = playerPassword;
     }
 
-	public Integer getPlayerId() {
+    public Player(Long playerId, String playerUsername, String playerEmail, String playerPassword) {
+    	this.playerId = playerId;
+        this.playerUsername = playerUsername;
+        this.playerEmail = playerEmail;
+        this.playerPassword = playerPassword;
+    }
+
+	public Long getPlayerId() {
 		return playerId;
 	}
 
-	public void setPlayerId(Integer playerId) {
+	public void setPlayerId(Long playerId) {
 		this.playerId = playerId;
 	}
 
@@ -59,11 +61,12 @@ public class Player {
 		this.playerPassword = playerPassword;
 	}
 
-	public File getFile() {
-		return file;
+	public String getPlayerUrlImage() {
+		return playerUrlImage;
 	}
 
-	public void setFile(File file) {
-		this.file = file;
+	public void setPlayerUrlImage(String playerUrlImAge) {
+		this.playerUrlImage = playerUrlImAge;
 	}
+
 }

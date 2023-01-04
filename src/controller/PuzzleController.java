@@ -2,7 +2,7 @@ package controller;
 
 import java.util.Optional;
 
-import dao.PuzzlerDAO;
+import dao.PuzzleDAO;
 import model.Puzzle;
 
 public class PuzzleController {
@@ -19,19 +19,19 @@ public class PuzzleController {
 		return instance;
 	}
 
-	public Puzzle save(Puzzle puzzle) {
-		return PuzzlerDAO.getInstance().save(puzzle);
+	public boolean save(Puzzle puzzle) {
+		return PuzzleDAO.getInstance().save(puzzle);
+	}
+	
+	public boolean update(Puzzle puzzle) {
+		return PuzzleDAO.getInstance().update(puzzle);
 	}
 
 	public Optional<Puzzle> findById(Long id) {
-		return Optional.of(PuzzlerDAO.getInstance().findById(id));
-	}
-
-	public void update(Puzzle puzzle) {
-		PuzzlerDAO.getInstance().update(puzzle);
+		return Optional.of(PuzzleDAO.getInstance().findById(id));
 	}
 
 	public void remove(Long id) {
-		PuzzlerDAO.getInstance().remove(id);
+		PuzzleDAO.getInstance().remove(id);
 	}
 }

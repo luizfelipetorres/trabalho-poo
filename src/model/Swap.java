@@ -3,6 +3,7 @@ package model;
 import java.util.Objects;
 
 public class Swap {
+	
 	private int origin;
 	private int target;
 

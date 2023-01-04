@@ -21,12 +21,12 @@ public class PlayerMatchController {
 		return instance;
 	}
 
-	public PlayerMatch save(PlayerMatch playerMatch) {
+	public boolean save(PlayerMatch playerMatch) {
 		return PlayerMatchDAO.getInstance().save(playerMatch);
 	}
 
-	public void update(PlayerMatch playerMatch) {
-		PlayerMatchDAO.getInstance().update(playerMatch);
+	public boolean update(PlayerMatch playerMatch) {
+		return PlayerMatchDAO.getInstance().update(playerMatch);
 	}
 
 	public Optional<PlayerMatch> findById(Long id) {
@@ -53,7 +53,7 @@ public class PlayerMatchController {
 		return PlayerMatchDAO.getInstance().findByMatchID(matchId,limit, isComplete);
 	}
 
-	public RecordPlayerMatch recordPlayerMatchByPlayer(Integer idPlayer) {
+	public RecordPlayerMatch recordPlayerMatchByPlayer(Long idPlayer) {
 		return PlayerMatchDAO.getInstance().recordPlayerMatchByPlayer(idPlayer);
 	}
 

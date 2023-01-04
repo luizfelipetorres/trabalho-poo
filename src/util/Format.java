@@ -29,20 +29,20 @@ public class Format {
 	public static void classification(JLabel JLclassification, int IntClassification) {
 		
 		if(IntClassification == 1) {
-			image(new File("img\\icons\\icon-firstPlace.png"),JLclassification); 
+			image("img\\icons\\icon-firstPlace.png",JLclassification); 
 		}else if(IntClassification == 2) {
-			image(new File("img\\icons\\icon-secondPlace.png"),JLclassification); 
+			image("img\\icons\\icon-secondPlace.png",JLclassification); 
 		}else if(IntClassification == 3) {
-			image(new File("img\\icons\\icon-thirdPlace.png"),JLclassification); 
+			image("img\\icons\\icon-thirdPlace.png",JLclassification); 
 		}else {
 			JLclassification.setText(String.valueOf(IntClassification));
 		}
 		
 	}
 	
-	public static void image(File file,JLabel Jlabel) {
+	public static void image(String path,JLabel Jlabel) {
 		try {
-			ImageIcon imgPersona = new ImageIcon(ImageIO.read(file));
+			ImageIcon imgPersona = new ImageIcon(ImageIO.read(new File(path)));
 			imgPersona.setImage(imgPersona.getImage().getScaledInstance(Jlabel.getWidth(), Jlabel.getHeight(), 100));
 			Jlabel.setIcon(imgPersona);	
 

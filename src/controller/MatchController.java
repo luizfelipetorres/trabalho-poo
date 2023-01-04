@@ -1,14 +1,12 @@
 package controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import dao.MatchDAO;
-import dao.PuzzlerDAO;
+import interfaces.DAOListener;
 import model.Match;
-import model.Puzzle;
 
-public class MatchController {
+public class MatchController implements DAOListener<Match> {
 
 	private static MatchController instance;
 
@@ -22,32 +20,27 @@ public class MatchController {
 		return instance;
 	}
 
-	public Match save(Puzzle puzzle) {
-		if (puzzle.getId() == null) {
-			puzzle = PuzzlerDAO.getInstance().save(puzzle);
-		}
-		return MatchDAO.getInstance().save(new Match(puzzle));
+	@Override
+	public boolean save(Match match) {
+		return MatchDAO.getInstance().save(match);
 	}
 
-	public void update(Long id, Puzzle puzzle) {
-
-		if (puzzle.getId() == null) {
-			puzzle = PuzzlerDAO.getInstance().save(puzzle);
-		} else {
-			PuzzlerDAO.getInstance().update(puzzle);
-		}
-
-		MatchDAO.getInstance().update(new Match(id, puzzle));
+	@Override
+	public boolean update(Match match) {
+		return MatchDAO.getInstance().update(match);
 	}
 
-	public Optional<Match> findById(Long id) {
-		return Optional.of(MatchDAO.getInstance().findById(id));
+	@Override
+	public Match findById(Long id) {
+		return MatchDAO.getInstance().findById(id);
 	}
 
+	@Override
 	public List<Match> findAll() {
 		return MatchDAO.getInstance().findAll();
 	}
 
+	@Override
 	public void remove(Long id) {
 		MatchDAO.getInstance().remove(id);
 	}

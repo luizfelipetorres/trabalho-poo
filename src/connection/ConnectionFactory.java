@@ -1,8 +1,5 @@
 package connection;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -73,7 +70,7 @@ public class ConnectionFactory {
 			return;
 
 		StringBuilder str = new StringBuilder();
-		char i;
+
 		try {
 			Scanner f = new Scanner(Paths.get("sql//puzzle.sql"));
 			while (f.hasNextLine()) {
