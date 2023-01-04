@@ -3,17 +3,17 @@ package view.ui;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
 import controller.PlayerMatchController;
 import model.PlayerMatch;
 import util.Format;
-import view.components.JPhotoRound;
+import view.components.DefaultRankinGeneralItem;
 import view.components.pagination.EventPagination;
 import view.components.pagination.Pagination;
 
@@ -22,19 +22,11 @@ public class RankinGereralFrame extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private Pagination pagination;
-	
-	private JPanel[] body;
-	private JLabel[] position;
-	private JLabel[] photoPersonal;
-	private JLabel[] name;
-	private JLabel[] ldMatchPlayer;
-	private JLabel[] punctuation;
-	private JLabel[] duration;
-	
+	private List<DefaultRankinGeneralItem> defaultRankinGenerals;
 	private final int limit = 5;
 	
 	public RankinGereralFrame () {
-		
+		this.defaultRankinGenerals = new ArrayList<>();
 		this.setLayout(null);
 		this.setBackground(new Color(255, 255, 255));
 		this.setBounds(0, 0, 1175, 670);
@@ -98,60 +90,14 @@ public class RankinGereralFrame extends JPanel {
 	}
 	
 	private void  startup(){
-		
-		body= new JPanel[limit];
-		position= new JLabel[limit];
-		photoPersonal= new JPhotoRound[limit];
-		name= new JLabel[limit];
-		ldMatchPlayer= new JLabel[limit];
-		punctuation= new JLabel[limit];
-		duration= new JLabel[limit];
-		
+
 		int vertexY = 106;
 
 		for (int i = 0; i < limit; i++) {
-			body[i] = new JPanel();
-			body[i].setBackground(Color.WHITE);
-			body[i].setBounds(10, vertexY, 899, 78);
-			body[i].setLayout(null);
-			body[i].setVisible(false);
+			defaultRankinGenerals.add(new DefaultRankinGeneralItem(10, vertexY,899, 78, this));
 			vertexY+=78;
-			add(body[i]);
-			
-			position[i] = new JLabel();
-			position[i].setFont(new Font("Tahoma", Font.BOLD, 25));
-			position[i].setHorizontalAlignment(SwingConstants.CENTER);
-			position[i].setBounds(23, 16, 40, 40);;
-			body[i].add(position[i]);
-			
-			photoPersonal[i] = new JLabel();
-			photoPersonal[i].setBounds(105, 7, 73, 62);
-			body[i].add(photoPersonal[i]);
-		
-			name[i] = new JLabel();
-			name[i].setBounds(195, 25, 347, 27);
-			body[i].add(name[i]);
-			
-			ldMatchPlayer[i] = new JLabel();
-			ldMatchPlayer[i].setHorizontalAlignment(SwingConstants.CENTER);
-			ldMatchPlayer[i].setBounds(557, 25, 104, 27);
-			body[i].add(ldMatchPlayer[i]);
-			
-			punctuation[i] = new JLabel();
-			punctuation[i].setHorizontalAlignment(SwingConstants.CENTER);
-			punctuation[i].setBounds(689, 25, 86, 27);
-			body[i].add(punctuation[i]);
-			
-			duration[i] = new JLabel();
-			duration[i].setHorizontalAlignment(SwingConstants.CENTER);
-			duration[i].setBounds(795, 25, 104, 27);
-			body[i].add(duration[i]);
-			
-			JSeparator separator= new JSeparator();
-			separator.setBounds(0, 73, 899, 5);
-			body[i].add(separator);
-			
 		}
+		
 		try {
 			loadData(1);
 		} catch (IOException e) {
@@ -170,31 +116,31 @@ public class RankinGereralFrame extends JPanel {
 		int classification = ((page-1) * limit ) +1;
 		
 		if(page >= 2) {
-			position[0].setIcon(null);
-			position[1].setIcon(null);
-			position[2].setIcon(null);
+			defaultRankinGenerals.get(0).getPosition().setIcon(null);
+			defaultRankinGenerals.get(1).getPosition().setIcon(null);
+			defaultRankinGenerals.get(2).getPosition().setIcon(null);
 		}else {
-			position[0].setText(null);
-			position[1].setText(null);
-			position[2].setText(null);
+			defaultRankinGenerals.get(0).getPosition().setText(null);
+			defaultRankinGenerals.get(1).getPosition().setText(null);
+			defaultRankinGenerals.get(2).getPosition().setText(null);
 		}
 		
 		for (int i = 0; i < limit; i++) {
-			body[i].setVisible(false);
+			defaultRankinGenerals.get(i).setVisible(false);
 		}
 		
-		for (int i = 0; i < limit; i++) {
+		for (int i = 0; i < playerMatchs.size(); i++) {
 			PlayerMatch playerMatch = playerMatchs.get(i);
 			
-			body[i].setVisible(true);
-			Format.image(playerMatch.getPlayer().getPlayerUrlImage(),photoPersonal[i]);
-			name[i].setText(playerMatch.getPlayer().getPlayerUsername());
-			ldMatchPlayer[i].setText(String.valueOf(playerMatch.getId()));
+			defaultRankinGenerals.get(i).setVisible(true);
+			Format.image(playerMatch.getPlayer().getPlayerUrlImage(),defaultRankinGenerals.get(i).getPhotoPersonal());
+			defaultRankinGenerals.get(i).setName(playerMatch.getPlayer().getPlayerUsername());
+			defaultRankinGenerals.get(i).setIdMatchPlayer(String.valueOf(playerMatch.getId()));
 			
-			Format.classification(position[i], classification);
+			Format.classification(defaultRankinGenerals.get(i).getPosition(), classification);
 			
-			punctuation[i].setText(Format.punctuation(playerMatch.getPlayerPoints()));
-			duration[i].setText(Format.hours(playerMatch.getMilliSecondsDuration()));
+			defaultRankinGenerals.get(i).setPunctuation(Format.punctuation(playerMatch.getPlayerPoints()));
+			defaultRankinGenerals.get(i).setDuration(Format.hours(playerMatch.getMilliSecondsDuration()));
 			
 			classification++;
 		}
