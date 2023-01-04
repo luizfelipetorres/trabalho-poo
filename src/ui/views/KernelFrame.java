@@ -42,6 +42,7 @@ public class KernelFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JButton btnPlay;
 	private JButton btnConfig;
+	private JButton btnRankinGereral;;
 	private JButton btnLogout;
 	private JLabelRound lbPhotoPersona;
 	private JLabel lbEmail;
@@ -86,6 +87,7 @@ public class KernelFrame extends JFrame {
 				panelPersona.setVisible(true);
 				btnPlay.setLocation(0, 300);
 				btnConfig.setLocation(0, 360);
+				btnRankinGereral.setLocation(0,420);
 			}
 
 			@Override
@@ -95,6 +97,7 @@ public class KernelFrame extends JFrame {
 				panelPersona.setVisible(false);
 				btnPlay.setLocation(0, 63);
 				btnConfig.setLocation(0, 122);
+				btnRankinGereral.setLocation(0,181);
 			}
 		};
 
@@ -129,6 +132,9 @@ public class KernelFrame extends JFrame {
 				0, 63, 200, 48);
 		btnConfig = new CustomButton("", "img\\icons\\icon-config.png", new Color(255, 255, 255), new Color(0, 0, 128),
 				0, 122, 200, 48);
+		btnRankinGereral = new CustomButton("", "img\\icons\\icon-ranking.png", new Color(255, 255, 255), new Color(0, 0, 128),
+				0, 181, 200, 48);
+		
 		btnLogout = new CustomButton("", "img\\icons\\icon-logout.png", new Color(255, 255, 255), new Color(0, 0, 128),
 				0, 200, 200, 48);
 
@@ -144,6 +150,7 @@ public class KernelFrame extends JFrame {
 				panelPersona.setVisible(true);
 				btnPlay.setLocation(0, 300);
 				btnConfig.setLocation(0, 360);
+				btnRankinGereral.setLocation(0,420);
 			}
 
 			@Override
@@ -152,6 +159,7 @@ public class KernelFrame extends JFrame {
 				panelPersona.setVisible(false);
 				btnPlay.setLocation(0, 63);
 				btnConfig.setLocation(0, 122);
+				btnRankinGereral.setLocation(0,181);
 			}
 		});
 
@@ -195,6 +203,15 @@ public class KernelFrame extends JFrame {
 				showFrame(new PlayerFrame(player, kernelFrame));
 			}
 		});
+		
+		btnRankinGereral.setIcon(new ImageIcon("img\\icons\\icon-ranking.png"));
+		btnRankinGereral.setText("RANKING");
+		btnRankinGereral.addMouseListener(mouseAdapter);
+		btnRankinGereral.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showFrame(new RankinGereralFrame());
+			}
+		});
 
 		btnLogout.setLocation(0, 650);
 		btnLogout.setIcon(new ImageIcon("img\\icons\\icon-logout.png"));
@@ -215,6 +232,7 @@ public class KernelFrame extends JFrame {
 		panelLeftMenu.add(panelPersona);
 		panelLeftMenu.add(btnPlay);
 		panelLeftMenu.add(btnConfig);
+		panelLeftMenu.add(btnRankinGereral);
 		panelLeftMenu.add(btnLogout);
 
 		JPanel panelHeader = new JPanel();
