@@ -118,7 +118,7 @@ public class PuzzleFrame extends JPanel {
 		PlayerMatch playerMatch = new PlayerMatch(
 				player,
 				match,
-				stopWatch.getSeconds(),
+				stopWatch.getMilliSeconds(),
 				isCompleted
 				);
 		PlayerMatchDAO.getInstance().save(playerMatch);

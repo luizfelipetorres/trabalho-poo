@@ -29,12 +29,12 @@ public class Stopwatch extends JPanel{
 	private boolean isRunning;
 	private boolean isVisible;
 	private long initialTime;
-	private long duration;
+	private long milliSeconds;
 	private ActionListener taskPerformer = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			long currentTime = new Date().getTime();
-			duration = currentTime - initialTime;
+			milliSeconds = currentTime - initialTime;
 			labelTime.setText(getStringTimer());
 		}
 
@@ -51,7 +51,7 @@ public class Stopwatch extends JPanel{
 		this.puzzleBoardListener = puzzleBoardListener;
 		this.isRunning = false;
 		this.isVisible = true;
-		this.duration = 0;
+		this.milliSeconds = 0;
 		this.timer = new Timer(10, null);
 		this.labelTime = new JLabel(getStringTimer());
 		this.initialize();
@@ -61,20 +61,24 @@ public class Stopwatch extends JPanel{
 		return String.format("%02d:%02d:%02d:%02d", getHours(), getMinutes(), getSeconds(), getHundredthSeconds());
 	}
 
+	public long getMilliSeconds() {
+		return milliSeconds;
+	}
+
 	private long getHundredthSeconds() {
-		return duration / 10 % 100;
+		return milliSeconds / 10 % 100;
 	}
 
 	public long getSeconds() {
-		return duration / 1000 % 60;
+		return milliSeconds / 1000 % 60;
 	}
 
 	private long getMinutes() {
-		return duration / 1000 / 60 % 60;
+		return milliSeconds / 1000 / 60 % 60;
 	}
 
 	private long getHours() {
-		return duration / 1000 / 60 / 60 % 24;
+		return milliSeconds / 1000 / 60 / 60 % 24;
 	}
 
 	public boolean isRunning() {
@@ -140,7 +144,7 @@ public class Stopwatch extends JPanel{
 	private void start() {
 		switchTimer();
 		long currentTime = new Date().getTime();
-		initialTime = currentTime - duration;
+		initialTime = currentTime - milliSeconds;
 		btnStart.setEnabled(false);
 		btnPause.setEnabled(true);
 		btnStop.setEnabled(true);
@@ -157,7 +161,7 @@ public class Stopwatch extends JPanel{
 		if (timer.isRunning()) {
 			timer.stop();
 			Arrays.asList(onPause, taskPerformer).forEach(timer::removeActionListener);
-			duration = 0;
+			milliSeconds = 0;
 			isRunning = false;
 			btnStop.setEnabled(false);
 			btnStart.setEnabled(true);

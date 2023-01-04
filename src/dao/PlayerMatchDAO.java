@@ -35,7 +35,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "INSERT INTO PLAYER_MATCH(PLAYER_MATCH_DURATION, PLAYER_MATCH_POINTS, PLAYER_MATCH_COMPLETE, PLAYER_ID, MATCH_ID) VALUES (?,?,?,?,?)";
 			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			ps.setLong(1, playerMatch.getDuration());
+			ps.setLong(1, playerMatch.getMilliSecondsDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
 			ps.setBoolean(3, playerMatch.isCompleted());
 			ps.setLong(4, playerMatch.getPlayer().getPlayerId());
@@ -63,7 +63,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "UPDATE PLAYER_MATCH SET PLAYER_MATCH_DURATION = ?, PLAYER_MATCH_POINTS = ?, PLAYER_MATCH_COMPLETE = ?,PLAYER_ID = ?, MATCH_ID=? WHERE PLAYER_MATCH_ID = ?;";
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setLong(1, playerMatch.getDuration());
+			ps.setLong(1, playerMatch.getMilliSecondsDuration());
 			ps.setDouble(2, playerMatch.getPlayerPoints());
 			ps.setBoolean(3, playerMatch.isCompleted());
 			ps.setLong(4, playerMatch.getPlayer().getPlayerId());

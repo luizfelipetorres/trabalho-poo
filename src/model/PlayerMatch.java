@@ -5,39 +5,42 @@ public class PlayerMatch {
 	private Long id;
 	private Player player;
 	private Match match;
-	private Long duration;
+	private Long durationSeconds;
+	private Long milliSecondsDuration;
 	private boolean isCompleted;
 	private double playerPoints;
 	
 
-	public PlayerMatch(Player player, Match match, Long duration, boolean isCompleted) {
+	public PlayerMatch(Player player, Match match, Long milliSecondsDuration, boolean isCompleted) {
 		super();
 		this.player = player;
 		this.match = match;
-		this.duration = duration;
+		this.milliSecondsDuration = milliSecondsDuration;
+		this.durationSeconds = getSeconds();
 		this.isCompleted = isCompleted;
-		this.playerPoints = calculetePoints(duration);
+		this.playerPoints = calculetePoints(durationSeconds);
 	}
 	
-	public PlayerMatch(Long id, Player player, Match match, Long duration, double playerPoints, boolean isCompleted) {
+	public PlayerMatch(Long id, Player player, Match match, Long milliSecondsDuration, double playerPoints, boolean isCompleted) {
 		super();
 		this.id = id;
 		this.player = player;
 		this.match = match;
-		this.duration = duration;
+		this.milliSecondsDuration = milliSecondsDuration;
+		this.durationSeconds = getSeconds();
 		this.playerPoints = playerPoints;
 		this.isCompleted = isCompleted;
 	}
 
-	public static float calculetePoints(Long duration) {
+	private static float calculetePoints(Long durationSeconds) {
 		int minute = 60;
 		float points = 0;
 		
-		if (duration < minute) {
+		if (durationSeconds < minute) {
 			points = 1_000;
-		} else if (duration < 10 * minute) {
+		} else if (durationSeconds < 10 * minute) {
 			points = 100;
-		} else if (duration < 100 * minute) {
+		} else if (durationSeconds < 100 * minute) {
 			points = 10;
 		}
 		return points;
@@ -67,12 +70,12 @@ public class PlayerMatch {
 		this.match = match;
 	}
 
-	public Long getDuration() {
-		return duration;
+	public Long getMilliSecondsDuration() {
+		return milliSecondsDuration;
 	}
 
-	public void setDuration(Long duration) {
-		this.duration = duration;
+	public void setMilliSecondsDuration(Long milliSecondsDuration) {
+		this.milliSecondsDuration = milliSecondsDuration;
 	}
 
 	public double getPlayerPoints() {
@@ -91,5 +94,8 @@ public class PlayerMatch {
 		this.isCompleted = isComplete;
 	}
 
-	
+	private long getSeconds() {
+		return milliSecondsDuration / 1000 % 60;
+	}
+
 }
