@@ -54,7 +54,7 @@ public class MatchDAO implements DAOListener<Match> {
 	public boolean update(Match match) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
-			String sql = "UPDATE MATCH SET PUZZLE_ID = ? WHERE PUZZLE_ID=?;";
+			String sql = "UPDATE MATCH SET PUZZLE_ID = ? WHERE MATCH_ID = ?";
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setLong(1, match.getPuzzle().getId());
 			ps.setLong(2, match.getId());
@@ -72,12 +72,12 @@ public class MatchDAO implements DAOListener<Match> {
 	public Match findById(Long id) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
-			String sql = "SELECT * FROM MATCH WHERE MATCH_ID = " + id;
+			String sql = "SELECT * FROM MATCH WHERE PUZZLE_ID = " + id;
 			Statement stmt = (Statement) connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if (rs.next()) {
-				Puzzle puzzle = PuzzleDAO.getInstance().findById(rs.getLong("PUZZLE_ID"));
+				Puzzle puzzle = PuzzleDAO.getInstance().findById(id);
 				return new Match(rs.getLong("MATCH_ID"), puzzle);
 			}
 
