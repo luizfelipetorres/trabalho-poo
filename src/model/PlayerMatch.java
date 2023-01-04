@@ -17,8 +17,7 @@ public class PlayerMatch {
 		this.match = match;
 		this.milliSecondsDuration = milliSecondsDuration;
 		this.durationSeconds = getSeconds();
-		this.isCompleted = isCompleted;
-		this.playerPoints = calculetePoints(durationSeconds);
+		this.playerPoints = PlayerMatch.calculetePoints(durationSeconds);
 	}
 	
 	public PlayerMatch(Long id, Player player, Match match, Long milliSecondsDuration, double playerPoints, boolean isCompleted) {

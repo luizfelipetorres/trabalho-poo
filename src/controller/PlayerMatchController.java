@@ -41,6 +41,18 @@ public class PlayerMatchController {
 		PlayerMatchDAO.getInstance().remove(id);
 	}
 	
+	public int totalPages(int limit, boolean isComplete) {
+		return (int) Math.ceil( PlayerMatchDAO.getInstance().totalElement( isComplete)/limit);
+	}
+	
+	public List<PlayerMatch> findAll(int page,int limit , boolean isComplete) {
+		return PlayerMatchDAO.getInstance().findAll(page, limit, isComplete);
+	}
+	
+	public List<PlayerMatch> findByMatchID(Long matchId , int limit,boolean isComplete){
+		return PlayerMatchDAO.getInstance().findByMatchID(matchId,limit, isComplete);
+	}
+
 	public RecordPlayerMatch recordPlayerMatchByPlayer(Long idPlayer) {
 		return PlayerMatchDAO.getInstance().recordPlayerMatchByPlayer(idPlayer);
 	}
