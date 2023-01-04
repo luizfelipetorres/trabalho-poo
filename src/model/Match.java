@@ -26,5 +26,9 @@ public class Match {
 	public Puzzle getPuzzle() {
 		return puzzle;
 	}
+
+	public void setPuzzle(Puzzle puzzle) {
+		this.puzzle = puzzle;
+	}
 	
 }

@@ -18,11 +18,14 @@ import util.TypeShuffle;
 public class Puzzle {
 
 	private Long id;
-	private final int LINES;
-	private final int COLUMNS;
-	private final List<Piece> pieces;
-	private final TypeShuffle typeShuffle;
+	private int LINES;
+	private int COLUMNS;
+	private List<Piece> pieces;
+	private TypeShuffle typeShuffle;
 	private String urlImage;
+
+	public Puzzle() {
+	}
 
 	public Puzzle(int lines, int columns, String urlImage, TypeShuffle typeShuffle) {
 		this.LINES = lines;
@@ -143,32 +146,47 @@ public class Puzzle {
 		return this.getLINES() * this.getCOLUMNS();
 	}
 
-	public int getLINES() {
-		return LINES;
-	}
-
-	public int getCOLUMNS() {
-		return COLUMNS;
-	}
-
-	public List<Piece> getPieces() {
-		return pieces;
-	}
-
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}                                                                                                                           
+	}
+
+	public int getLINES() {
+		return LINES;
+	}
+
+	public void setLINES(int lINES) {
+		LINES = lINES;
+	}
+
+	public int getCOLUMNS() {
+		return COLUMNS;
+	}
+
+	public void setCOLUMNS(int cOLUMNS) {
+		COLUMNS = cOLUMNS;
+	}
+
+	public List<Piece> getPieces() {
+		return pieces;
+	}
 
 	public TypeShuffle getTypeShuffle() {
 		return typeShuffle;
 	}
 
+	public void setTypeShuffle(TypeShuffle typeShuffle) {
+		this.typeShuffle = typeShuffle;
+	}
+
 	public String getUrlImage() {
 		return urlImage;
 	}
-	
+
+	public void setUrlImage(String urlImage) {
+		this.urlImage = urlImage;
+	}
 }

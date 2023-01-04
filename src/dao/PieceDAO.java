@@ -52,7 +52,7 @@ public class PieceDAO {
 	public boolean update(Long playerMatch, List<Piece> pieces) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
-			String sql = "UPDATE PIECE SET PIECE_CURRENT_POSITION=?, PIECE_EMPTY=? WHERE PLAYER_MATCH_ID=? AND PIECE_INDEX=?;";
+			String sql = "UPDATE PIECE SET PIECE_CURRENT_POSITION = ?, PIECE_EMPTY = ? WHERE PLAYER_MATCH_ID = ? AND PIECE_INDEX = ?";
 			PreparedStatement ps = connection.prepareStatement(sql);
 			int currentPosition = 0;
 

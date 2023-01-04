@@ -31,12 +31,14 @@ public class PuzzleFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private Player player;
-	private PuzzleBoard puzzleBoard;
+	private boolean wasExecuted;
 	private Stopwatch stopWatch;
+	private PuzzleBoard puzzleBoard;
 	
 	public PuzzleFrame(Player player, int size, String urlImage, TypeShuffle typeShuffle) {
 		super();
 		this.player = player;
+		this.wasExecuted = false;
 		this.stopWatch = new Stopwatch(puzzleBoardListener());
 		this.puzzleBoard = new PuzzleBoard(size, urlImage, typeShuffle, puzzleBoardListener(), stopwatchListener());
 		this.initialize();
@@ -109,21 +111,43 @@ public class PuzzleFrame extends JPanel {
 	}
 	
 	private void persistenceData(Puzzle puzzle, boolean isCompleted) {
-		
-		PuzzleDAO.getInstance().save(puzzle);
-		
-		Match match = new Match(puzzle);
-		MatchDAO.getInstance().save(match);
-		
-		PlayerMatch playerMatch = new PlayerMatch(
-				player,
-				match,
-				stopWatch.getMilliSeconds(),
-				isCompleted
-				);
-		PlayerMatchDAO.getInstance().save(playerMatch);
-		
-		PieceDAO.getInstance().save(playerMatch.getId(), puzzle.getPieces());
+
+		if(!wasExecuted){
+			
+			PuzzleDAO.getInstance().save(puzzle);
+
+			Match match = new Match(puzzle);
+
+			MatchDAO.getInstance().save(match);
+			
+			PlayerMatch playerMatch = new PlayerMatch(
+					player,
+					match,
+					stopWatch.getMilliSeconds(),
+					isCompleted
+					);
+			PlayerMatchDAO.getInstance().save(playerMatch);
+			
+			PieceDAO.getInstance().save(playerMatch.getId(), puzzle.getPieces());
+
+			wasExecuted = !wasExecuted;
+
+		}else{
+
+			PuzzleDAO.getInstance().update(puzzle);
+
+			Match match = MatchDAO.getInstance().findById(puzzle.getId());
+			match.setPuzzle(puzzle);
+
+			PlayerMatch playerMatch = PlayerMatchDAO.getInstance().findById(player.getPlayerId(), match.getId());
+			playerMatch.setMilliSecondsDuration(stopWatch.getMilliSeconds());
+			playerMatch.setCompleted(isCompleted);
+
+			PlayerMatchDAO.getInstance().update(playerMatch);
+			
+			PieceDAO.getInstance().update(playerMatch.getId(), puzzle.getPieces());
+
+		}	
 	}
 
 }
