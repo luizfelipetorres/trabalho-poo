@@ -35,14 +35,12 @@ public class JPhotoRound extends JLabel {
 	private Image imageResized(String path) {
 
 		Image image = null;
-		
 		try {
 			BufferedImage resized = ImageIO.read(new File(path));
 			image = resized.getScaledInstance(size, size, 1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-			
 		return image;
 	}
 
@@ -56,5 +54,6 @@ public class JPhotoRound extends JLabel {
 	public String getPath() {
 		return (path != null) ? path : "";
 	}
+	
 
 }

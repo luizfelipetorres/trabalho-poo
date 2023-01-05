@@ -13,7 +13,8 @@ public class Format {
 	private Format() {}
 	
 	public static String hours(Long duration) {
-		Long seconds = duration;
+		
+		Long seconds = duration / 1000;
 		Long hours = seconds / 3600;
 		seconds %= 3600;
 		Long minutes = seconds / 60;

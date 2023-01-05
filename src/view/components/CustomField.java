@@ -23,6 +23,7 @@ public class CustomField extends JPanel {
 	private int x;
 	private int y;
 	private boolean isFieldPassword;
+	private JSeparator separator;
 
 	public CustomField(String title, int width, int x, int y, boolean isFieldPassword) {
 		this.title = title;
@@ -38,16 +39,17 @@ public class CustomField extends JPanel {
 		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				e.getComponent().setForeground(new Color(249, 13, 72));
-				e.getComponent().setBackground(new Color(249, 13, 72));
+				separator.setForeground(new Color(249, 13, 72));
+				separator.setBackground(new Color(249, 13, 72));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				e.getComponent().setForeground(new Color(0, 0, 128));
-				e.getComponent().setBackground(new Color(0, 0, 128));
+				separator.setForeground(new Color(0, 0, 128));
+				separator.setBackground(new Color(0, 0, 128));
 			}
 		};
+
 
 		this.setLayout(null);
 		this.setBorder(null);
@@ -65,6 +67,7 @@ public class CustomField extends JPanel {
 			fieldCommon.setColumns(10);
 			fieldCommon.setBorder(null);
 			fieldCommon.setBackground(new Color(255, 255, 255));
+			fieldCommon.addMouseListener(hoverEffect);
 			this.add(fieldCommon);
 		} else {
 			fieldPassword = new JPasswordField();
@@ -74,10 +77,11 @@ public class CustomField extends JPanel {
 			fieldPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
 			fieldPassword.setBorder(null);
 			fieldPassword.setBackground(new Color(255, 255, 255));
+			fieldPassword.addMouseListener(hoverEffect);
 			this.add(fieldPassword);
 		}
 
-		JSeparator separator = new JSeparator();
+		separator = new JSeparator();
 		separator.setBounds(0, 70, width, 2);
 		separator.setForeground(new Color(0, 0, 128));
 		separator.setBackground(new Color(0, 0, 128));
