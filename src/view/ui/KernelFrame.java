@@ -53,13 +53,13 @@ public class KernelFrame extends AbstractWindow {
 		super();
 		initialize(player);
 		/* initializer fake puzzle - refactor code */
-		puzzleFrame = new PuzzleFrame(player, 2, "img\\puzzle\\default.jpg", TypeShuffle.pairs);
+		puzzleFrame = new PuzzleFrame(player, 2, "img\\puzzle\\default.jpg", TypeShuffle.pairs, 0);
 	}
 
 	private void initialize(Player player) {
 
-		PuzzleFrameListener puzzleListener = (urlImage, size, shuffle) -> {
-			puzzleFrame = new PuzzleFrame(player, size, urlImage, shuffle);
+		PuzzleFrameListener puzzleListener = (urlImage, size, shuffle, currentTime) -> {
+			puzzleFrame = new PuzzleFrame(player, size, urlImage, shuffle, currentTime);
 			showFrame(puzzleFrame);
 		};
 

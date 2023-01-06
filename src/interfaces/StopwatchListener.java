@@ -5,4 +5,5 @@ public interface StopwatchListener {
 	void stop();
 	boolean isRunning();
 	Long getDuration();
+	long setMilliSeconds();
 }

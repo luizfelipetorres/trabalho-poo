@@ -24,13 +24,16 @@ import javax.swing.SwingConstants;
 import dao.PlayerMatchDAO;
 import interfaces.HoverEffect;
 import interfaces.PuzzleFrameListener;
+import model.Match;
 import model.PlayerMatch;
+import model.Puzzle;
 import util.ImageManager;
 import util.TypeShuffle;
 import view.components.CustomButton;
 import view.components.CustomComboBox;
 import view.components.CustomLabel;
 import view.components.JPhotoRound;
+import view.components.Stopwatch;
 
 public class PreGameFrame extends JPanel {
 
@@ -72,7 +75,7 @@ public class PreGameFrame extends JPanel {
 		JLabel labelBackground = new JLabel(new ImageIcon("img//bgs//bg-login.jpg"));
 		BufferedImage resized;
 		try {
-			resized = ImageIO.read(new File("img\\bgs\\bg-main.jpg"));
+			resized = ImageIO.read(new File("img\\bgs\\bg-login.jpg"));
 			Image image = resized.getScaledInstance(panelRight.getWidth(), panelRight.getHeight(), 1);
 			labelBackground.setIcon(new ImageIcon(image));
 			labelBackground.setHorizontalAlignment(SwingConstants.CENTER);
@@ -200,12 +203,32 @@ public class PreGameFrame extends JPanel {
 				nextBottom(containerImage), panelLeft.getWidth(), 50);
 		buttonInit.addMouseListener(hoverEffect);
 		buttonInit.addActionListener((e) -> {
-			int selectedSize = optionsSize.get(cbSize.getSelectedItem());
-			TypeShuffle selectedShuffle = optionsShuffle.get(cbShuffle.getSelectedItem());
-			puzzleFrameListener.onClick(lbImage.getPath(), selectedSize, selectedShuffle);
+			int selectedSize;
+			TypeShuffle selectedShuffle;
+			boolean isNewGame = true;
+			long currentTime = 0;
+			
+			if (!optionsType.get(cbType.getSelectedItem()).equals(0)) {
+				Puzzle puzzle = ranking.getSelectedPuzzle();
+				PlayerMatch match = ranking.getSelectedPlayerMatch();
+				selectedSize = puzzle.getSize();
+				selectedShuffle = puzzle.getTypeShuffle();
+				currentTime = match.getMilliSecondsDuration();
+				isNewGame = false;
+			
+			}else {
+				selectedSize = optionsSize.get(cbSize.getSelectedItem());
+				selectedShuffle = optionsShuffle.get(cbShuffle.getSelectedItem());
+			}
+			
+			puzzleFrameListener.onClick(lbImage.getPath(), selectedSize, selectedShuffle, currentTime);
 		});
 
-		ranking = new RankingSpecificFrame(playerMatch, 5, 0, 0, panelRight.getWidth(), panelRight.getHeight() / 4 * 3);
+		ranking = new RankingSpecificFrame(playerMatch, 5, 0, 0, panelRight.getWidth(), panelRight.getHeight() / 4 * 3,
+				url -> {
+					ImageManager imageManager = new ImageManager(url, false);
+					lbImage.setPath(imageManager.getAbsolutePath());
+				});
 
 		Arrays.asList(lbImage).forEach(containerImage::add);
 		Arrays.asList(labelTitle, cbType, cbSize, cbShuffle, buttonChooseImage, containerImage, buttonInit)
@@ -220,8 +243,7 @@ public class PreGameFrame extends JPanel {
 	}
 
 	protected void selectImage() {
-		ImageManager imageManager = new ImageManager("img\\puzzle\\");
+		ImageManager imageManager = new ImageManager("img\\puzzle\\", false);
 		lbImage.setPath(imageManager.getAbsolutePath());
-
 	}
 }

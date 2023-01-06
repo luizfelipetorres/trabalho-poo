@@ -8,8 +8,8 @@ import javax.swing.ImageIcon;
 
 public class Piece {
 
-	private final int LINE;
-	private final int COLUMN;
+	private int LINE;
+	private int COLUMN;
 	
 	private int index;
 	private ImageIcon img;
@@ -24,6 +24,25 @@ public class Piece {
 		this.neighbors = new ArrayList<Piece>();
 	}
 	
+	public Piece() {
+	}
+
+	public List<Piece> getNeighbors() {
+		return neighbors;
+	}
+
+	public void setNeighbors(List<Piece> neighbors) {
+		this.neighbors = neighbors;
+	}
+
+	public void setLINE(int lINE) {
+		LINE = lINE;
+	}
+
+	public void setCOLUMN(int cOLUMN) {
+		COLUMN = cOLUMN;
+	}
+
 	public void addNeighbor(Piece neighbor) {
 		boolean different =  this.getLINE() != neighbor.getLINE() && this.getCOLUMN() != neighbor.getCOLUMN();
 		

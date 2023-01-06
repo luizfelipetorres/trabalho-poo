@@ -37,7 +37,6 @@ public class Stopwatch extends JPanel{
 			milliSeconds = currentTime - initialTime;
 			labelTime.setText(getStringTimer());
 		}
-
 	};
 
 	private ActionListener onPause = new ActionListener() {
@@ -53,6 +52,16 @@ public class Stopwatch extends JPanel{
 		this.isVisible = true;
 		this.milliSeconds = 0;
 		this.timer = new Timer(10, null);
+		this.labelTime = new JLabel(getStringTimer());
+		this.initialize();
+	}
+	
+	public Stopwatch(PuzzleBoardListener puzzleBoardListener, long milliSeconds) {
+		this.puzzleBoardListener = puzzleBoardListener;
+		this.isRunning = false;
+		this.isVisible = true;
+		this.milliSeconds = milliSeconds;
+		this.timer = new Timer(10, onPause);
 		this.labelTime = new JLabel(getStringTimer());
 		this.initialize();
 	}
@@ -102,7 +111,6 @@ public class Stopwatch extends JPanel{
 		this.setBounds(10, 0, 630, 70);
 		this.setBorder(new LineBorder(new Color(0, 0, 128)));
 
-		labelTime = new JLabel("00:00:00:00");
 		labelTime.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		labelTime.setBounds(10, 10, 200, 50);
 

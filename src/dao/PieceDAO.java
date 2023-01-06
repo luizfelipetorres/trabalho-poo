@@ -5,10 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import connection.ConnectionFactory;
+import interfaces.DAOListener;
+import model.Match;
 import model.Piece;
+import model.Puzzle;
+import util.TypeShuffle;
 
 public class PieceDAO {
 
@@ -99,5 +104,38 @@ public class PieceDAO {
 	private Piece pieceIndice(List<Piece> pieces, int index) {
 		return pieces.stream().filter(e -> e.getIndex() == index).findFirst().get();
 	}
+
+	private List<Piece> findByPlayerMatchId(Long playerMatchId){
+		List<Piece> response = new ArrayList<>();
+//
+//		try {
+//			Connection connection = ConnectionFactory.getConnection();
+//			String sql = "SELECT * FROM PIECE WHERE PLAYER_MATCH_ID = " + playerMatchId;
+//			Statement stmt = (Statement) connection.createStatement();
+//			ResultSet rs = stmt.executeQuery(sql);
+//
+//			if (rs.next()) {
+//				Piece piece = new Piece();
+//				
+//				piece.set
+//				
+//				puzzle.setLINES(rs.getInt("PUZZLE_SIZE")/2);
+//				puzzle.setCOLUMNS(rs.getInt("PUZZLE_SIZE")/2);
+//				puzzle.setSize(rs.getInt("PUZZLE_SIZE"));
+//				puzzle.setTypeShuffle(TypeShuffle.valueOf(rs.getString("PUZZLE_TYPE_SHUFFLE")));
+//				puzzle.setUrlImage(rs.getString("PUZZLE_URL_IMAGE"));
+//				rs.close();
+//				connection.close();
+//				return puzzle;
+//			}
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+
+		return response;
+	}
+
+	
 
 }

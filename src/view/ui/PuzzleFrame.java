@@ -34,12 +34,14 @@ public class PuzzleFrame extends JPanel {
 	private boolean wasExecuted;
 	private Stopwatch stopWatch;
 	private PuzzleBoard puzzleBoard;
+	private long currentTime;
 	
-	public PuzzleFrame(Player player, int size, String urlImage, TypeShuffle typeShuffle) {
+	public PuzzleFrame(Player player, int size, String urlImage, TypeShuffle typeShuffle, long currentTime) {
 		super();
 		this.player = player;
+		this.currentTime = currentTime;
 		this.wasExecuted = false;
-		this.stopWatch = new Stopwatch(puzzleBoardListener());
+		this.stopWatch = new Stopwatch(puzzleBoardListener(), currentTime);
 		this.puzzleBoard = new PuzzleBoard(size, urlImage, typeShuffle, puzzleBoardListener(), stopwatchListener());
 		this.initialize();
 	}
@@ -105,6 +107,12 @@ public class PuzzleFrame extends JPanel {
 			@Override
 			public Long getDuration() {
 				return stopWatch.getSeconds();
+			}
+
+			@Override
+			public long setMilliSeconds() {
+				// TODO Auto-generated method stub
+				return currentTime;
 			}
 			
 		};

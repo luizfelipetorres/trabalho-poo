@@ -296,7 +296,7 @@ public class PlayerFrame extends JPanel {
 	}
 
 	private void updatePhoto() {
-		ImageManager imageManager = new ImageManager("img\\players\\");
+		ImageManager imageManager = new ImageManager("img\\players\\", false);
 		photoPersona.setPath(imageManager.getAbsolutePath());
 	}
 
