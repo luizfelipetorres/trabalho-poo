@@ -35,21 +35,24 @@ public class PuzzleFrame extends JPanel {
 	private Stopwatch stopWatch;
 	private PuzzleBoard puzzleBoard;
 	private long currentTime;
+	private boolean isNewGame;
 	
-	public PuzzleFrame(Player player, int size, String urlImage, TypeShuffle typeShuffle, long currentTime) {
+	public PuzzleFrame(Player player, int size, String urlImage, TypeShuffle typeShuffle, long currentTime, boolean isNewGame) {
 		super();
 		this.player = player;
 		this.currentTime = currentTime;
+		this.isNewGame = isNewGame;
 		this.wasExecuted = false;
 		this.stopWatch = new Stopwatch(puzzleBoardListener(), currentTime);
 		this.puzzleBoard = new PuzzleBoard(size, urlImage, typeShuffle, puzzleBoardListener(), stopwatchListener());
 		this.initialize();
 	}
 	
-	public PuzzleFrame(Player player, Puzzle puzzle, long currentTime) {
+	public PuzzleFrame(Player player, Puzzle puzzle, long currentTime, boolean isNewGame) {
 		super();
 		this.player = player;
 		this.currentTime = currentTime;
+		this.isNewGame = isNewGame;
 		this.wasExecuted = false;
 		this.stopWatch = new Stopwatch(puzzleBoardListener(), currentTime);
 		this.puzzleBoard = new PuzzleBoard(puzzle, puzzleBoardListener(), stopwatchListener());
@@ -121,7 +124,6 @@ public class PuzzleFrame extends JPanel {
 
 			@Override
 			public long setMilliSeconds() {
-				// TODO Auto-generated method stub
 				return currentTime;
 			}
 			
@@ -130,7 +132,7 @@ public class PuzzleFrame extends JPanel {
 	
 	private void persistenceData(Puzzle puzzle, boolean isCompleted) {
 
-		if(!wasExecuted){
+		if(!wasExecuted && isNewGame){
 			
 			PuzzleDAO.getInstance().save(puzzle);
 
@@ -153,8 +155,8 @@ public class PuzzleFrame extends JPanel {
 		}else{
 
 			PuzzleDAO.getInstance().update(puzzle);
-
-			Match match = MatchDAO.getInstance().findById(puzzle.getId());
+			
+			Match match = MatchDAO.getInstance().findByPuzzleId(puzzle.getId());
 			match.setPuzzle(puzzle);
 
 			PlayerMatch playerMatch = PlayerMatchDAO.getInstance().findById(player.getPlayerId(), match.getId());

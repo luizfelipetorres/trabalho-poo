@@ -72,6 +72,27 @@ public class MatchDAO implements DAOListener<Match> {
 	public Match findById(Long id) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM MATCH WHERE MATCH_ID = " + id;
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			if (rs.next()) {
+				Long indexPuzzle = rs.getLong("PUZZLE_ID");
+				Puzzle puzzle = PuzzleDAO.getInstance().findById(indexPuzzle);
+				puzzle.setId(indexPuzzle);
+				return new Match(rs.getLong("MATCH_ID"), puzzle);
+			}
+
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+
+		return null;
+	}
+
+	public Match findByPuzzleId(Long id) {
+		try {
+			Connection connection = ConnectionFactory.getConnection();
 			String sql = "SELECT * FROM MATCH WHERE PUZZLE_ID = " + id;
 			Statement stmt = (Statement) connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);

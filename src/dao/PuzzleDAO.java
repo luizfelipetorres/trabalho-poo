@@ -70,6 +70,7 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if (rs.next()) {
+				puzzle.setId(rs.getLong("PUZZLE_ID"));
 				puzzle.setLINES(rs.getInt("PUZZLE_SIZE"));
 				puzzle.setCOLUMNS(rs.getInt("PUZZLE_SIZE"));
 				puzzle.setSize(rs.getInt("PUZZLE_SIZE"));

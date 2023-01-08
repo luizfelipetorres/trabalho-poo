@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -79,16 +78,7 @@ public class Puzzle {
 	}
 	
 	public void initializeFromBd(List<Piece> pieces) {
-		generatepieces();
-		
-		pieces.sort((p1, p2) -> Integer.compare(p1.getIndex(), p2.getIndex()));
-		pieces.forEach(p -> {
-			Piece generated = this.getPieces().get(p.getIndex() - 1);
-			p.setImg(generated.getImg());
-			p.setCOLUMN(generated.getCOLUMN());
-			p.setLINE(generated.getLINE());
-		});
-		setPieces(pieces);
+		generatepieces(pieces);
 		associateNeighbors();
 		addEmpty();
 	}
@@ -110,6 +100,27 @@ public class Puzzle {
 					index++;
 				}
 			}
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+	}
+
+	private void generatepieces(List<Piece> listPieces) {
+
+		try {
+			BufferedImage imagem = ImageIO.read(new File(urlImage));
+			int w = imagem.getWidth() / this.getCOLUMNS();
+			int h = imagem.getHeight() / this.getLINES();
+			int index = 0;
+
+			for (int l = 0; l < this.getLINES(); l++) {
+				for (int c = 0; c < this.getCOLUMNS(); c++) {
+					listPieces.get(index).setImg(new ImageIcon(imagem.getSubimage(c * w, l * h, w, h)));
+					pieces.add(listPieces.get(index));
+					index++;
+				}
+			}
+			
 		} catch (IOException e) {
 			System.err.println(e);
 		}

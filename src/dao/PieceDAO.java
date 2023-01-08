@@ -9,11 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import connection.ConnectionFactory;
-import interfaces.DAOListener;
-import model.Match;
 import model.Piece;
-import model.Puzzle;
-import util.TypeShuffle;
 
 public class PieceDAO {
 

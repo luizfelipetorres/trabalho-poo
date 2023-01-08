@@ -24,7 +24,6 @@ import javax.swing.SwingConstants;
 import dao.PlayerMatchDAO;
 import interfaces.HoverEffect;
 import interfaces.PuzzleFrameListener;
-import model.Match;
 import model.PlayerMatch;
 import model.Puzzle;
 import util.ImageManager;
@@ -33,7 +32,6 @@ import view.components.CustomButton;
 import view.components.CustomComboBox;
 import view.components.CustomLabel;
 import view.components.JPhotoRound;
-import view.components.Stopwatch;
 
 public class PreGameFrame extends JPanel {
 
@@ -195,14 +193,12 @@ public class PreGameFrame extends JPanel {
 	private void initGame() {
 		int selectedSize;
 		TypeShuffle selectedShuffle;
-		boolean isNewGame = true;
+		boolean isNewGame;
 		long currentTime = 0;
 		Puzzle puzzle;
 		if (isExistingGame()) {
 			puzzle = ranking.getSelectedPuzzle();
 			PlayerMatch match = ranking.getSelectedPlayerMatch();
-			selectedSize = puzzle.getSize();
-			selectedShuffle = puzzle.getTypeShuffle();
 			currentTime = match.getMilliSecondsDuration();
 			isNewGame = false;
 		
@@ -210,9 +206,10 @@ public class PreGameFrame extends JPanel {
 			selectedSize = optionsSize.get(cbSize.getSelectedItem());
 			selectedShuffle = optionsShuffle.get(cbShuffle.getSelectedItem());
 			puzzle = new Puzzle(selectedSize, selectedSize, lbImage.getPath(), selectedShuffle);
+			isNewGame = true;
 		}
-		
-		puzzleFrameListener.onClick(puzzle, currentTime);
+		System.out.println(isNewGame);
+		puzzleFrameListener.onClick(puzzle, currentTime, isNewGame);
 	}
 
 	private boolean isExistingGame() {
