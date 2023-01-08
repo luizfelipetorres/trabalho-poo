@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -20,10 +21,20 @@ public class Puzzle {
 	private Long id;
 	private int LINES;
 	private int COLUMNS;
-	private List<Piece> pieces;
+	private List<Piece> pieces = new ArrayList<>();
 	private TypeShuffle typeShuffle;
 	private String urlImage;
 	private int size;
+	private boolean isFromBd = false;
+	
+
+	public boolean isFromBd() {
+		return isFromBd;
+	}
+
+	public void setFromBd(boolean isFromBd) {
+		this.isFromBd = isFromBd;
+	}
 
 	public int getSize() {
 		return size;
@@ -39,6 +50,16 @@ public class Puzzle {
 	public Puzzle(int lines, int columns, String urlImage, TypeShuffle typeShuffle) {
 		this(0L, lines, columns, urlImage, typeShuffle);
 	}
+	
+	public Puzzle(int lines, int columns, String urlImage, TypeShuffle typeShuffle, List<Piece> pieces) {
+		this.size = lines;
+		this.LINES = lines;
+		this.COLUMNS = columns;
+		this.typeShuffle = typeShuffle;
+		this.pieces = pieces;
+		this.urlImage = urlImage;
+		initialize();
+	}
 
 	public Puzzle(Long id, int lines, int columns, String urlImage, TypeShuffle typeShuffle) {
 		this.id = id;
@@ -46,16 +67,32 @@ public class Puzzle {
 		this.LINES = lines;
 		this.COLUMNS = columns;
 		this.typeShuffle = typeShuffle;
-		this.pieces = new ArrayList<Piece>();
+		this.pieces = new ArrayList<>();
 		this.urlImage = urlImage;
 		initialize();
 	}
 
-	private void initialize() {
+	public void initialize() {
 		generatepieces();
 		associateNeighbors();
 		addEmpty();
 	}
+	
+	public void initializeFromBd(List<Piece> pieces) {
+		generatepieces();
+		
+		pieces.sort((p1, p2) -> Integer.compare(p1.getIndex(), p2.getIndex()));
+		pieces.forEach(p -> {
+			Piece generated = this.getPieces().get(p.getIndex() - 1);
+			p.setImg(generated.getImg());
+			p.setCOLUMN(generated.getCOLUMN());
+			p.setLINE(generated.getLINE());
+		});
+		setPieces(pieces);
+		associateNeighbors();
+		addEmpty();
+	}
+
 
 	private void generatepieces() {
 
@@ -67,7 +104,7 @@ public class Puzzle {
 
 			for (int l = 0; l < this.getLINES(); l++) {
 				for (int c = 0; c < this.getCOLUMNS(); c++) {
-					Piece piece = new Piece(index, l, c, false);
+					Piece piece = new Piece(index, l, c, false, index);
 					piece.setImg(new ImageIcon(imagem.getSubimage(c * w, l * h, w, h)));
 					pieces.add(piece);
 					index++;
@@ -78,7 +115,7 @@ public class Puzzle {
 		}
 	}
 
-	private void associateNeighbors() {
+	public void associateNeighbors() {
 		pieces.forEach(m -> {
 			pieces.forEach(s -> s.addNeighbor(m));
 		});
@@ -148,7 +185,7 @@ public class Puzzle {
 	}
 
 	public int getTotalSize() {
-		return size * size;
+		return getCOLUMNS() * getLINES();
 	}
 
 	public Long getId() {
@@ -177,6 +214,10 @@ public class Puzzle {
 
 	public List<Piece> getPieces() {
 		return pieces;
+	}
+
+	public void setPieces(List<Piece> pieces) {
+		this.pieces = pieces;
 	}
 
 	public TypeShuffle getTypeShuffle() {

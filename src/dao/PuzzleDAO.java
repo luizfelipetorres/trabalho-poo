@@ -70,11 +70,12 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if (rs.next()) {
-				puzzle.setLINES(rs.getInt("PUZZLE_SIZE")/2);
-				puzzle.setCOLUMNS(rs.getInt("PUZZLE_SIZE")/2);
+				puzzle.setLINES(rs.getInt("PUZZLE_SIZE"));
+				puzzle.setCOLUMNS(rs.getInt("PUZZLE_SIZE"));
 				puzzle.setSize(rs.getInt("PUZZLE_SIZE"));
 				puzzle.setTypeShuffle(TypeShuffle.valueOf(rs.getString("PUZZLE_TYPE_SHUFFLE")));
 				puzzle.setUrlImage(rs.getString("PUZZLE_URL_IMAGE"));
+				puzzle.setFromBd(true);
 				rs.close();
 				connection.close();
 				return puzzle;

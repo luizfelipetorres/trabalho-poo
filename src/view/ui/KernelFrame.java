@@ -58,8 +58,8 @@ public class KernelFrame extends AbstractWindow {
 
 	private void initialize(Player player) {
 
-		PuzzleFrameListener puzzleListener = (urlImage, size, shuffle, currentTime) -> {
-			puzzleFrame = new PuzzleFrame(player, size, urlImage, shuffle, currentTime);
+		PuzzleFrameListener puzzleListener = (puzzle, currentTime) -> {
+			puzzleFrame = new PuzzleFrame(player, puzzle, currentTime);
 			showFrame(puzzleFrame);
 		};
 

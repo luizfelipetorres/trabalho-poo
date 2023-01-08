@@ -31,9 +31,9 @@ public class PieceDAO {
 
 	public boolean save(Long playerMatch, List<Piece> pieces) {
 		Connection connection = ConnectionFactory.getConnection();
-		String sql = "INSERT INTO PIECE(PLAYER_MATCH_ID, PIECE_INDEX, PIECE_CURRENT_POSITION, PIECE_EMPTY) VALUES (?,?,?,?)";
+		String sql = "INSERT INTO PIECE(PLAYER_MATCH_ID, PIECE_INDEX, PIECE_CURRENT_POSITION, PIECE_COLUMN, PIECE_LINE, PIECE_EMPTY) VALUES (?,?,?,?,?,?)";
 		PreparedStatement ps;
-		int currentPosition = 0;
+		int currentPosition = 1;
 
 		try {
 			ps = connection.prepareStatement(sql);
@@ -41,7 +41,9 @@ public class PieceDAO {
 				ps.setLong(1, playerMatch);
 				ps.setInt(2, piece.getIndex());
 				ps.setInt(3, currentPosition++);
-				ps.setBoolean(4, piece.isEmpty());
+				ps.setInt(4, piece.getCOLUMN());
+				ps.setInt(5, piece.getLINE());
+				ps.setBoolean(6, piece.isEmpty());
 				ps.execute();
 			}
 
@@ -59,7 +61,7 @@ public class PieceDAO {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "UPDATE PIECE SET PIECE_CURRENT_POSITION = ?, PIECE_EMPTY = ? WHERE PLAYER_MATCH_ID = ? AND PIECE_INDEX = ?";
 			PreparedStatement ps = connection.prepareStatement(sql);
-			int currentPosition = 0;
+			int currentPosition = 1;
 
 			for (Piece piece : pieces) {
 				ps.setInt(1, currentPosition++);
@@ -105,33 +107,32 @@ public class PieceDAO {
 		return pieces.stream().filter(e -> e.getIndex() == index).findFirst().get();
 	}
 
-	private List<Piece> findByPlayerMatchId(Long playerMatchId){
+	public List<Piece> findByPlayerMatchId(Long playerMatchId){
 		List<Piece> response = new ArrayList<>();
-//
-//		try {
-//			Connection connection = ConnectionFactory.getConnection();
-//			String sql = "SELECT * FROM PIECE WHERE PLAYER_MATCH_ID = " + playerMatchId;
-//			Statement stmt = (Statement) connection.createStatement();
-//			ResultSet rs = stmt.executeQuery(sql);
-//
-//			if (rs.next()) {
-//				Piece piece = new Piece();
-//				
-//				piece.set
-//				
-//				puzzle.setLINES(rs.getInt("PUZZLE_SIZE")/2);
-//				puzzle.setCOLUMNS(rs.getInt("PUZZLE_SIZE")/2);
-//				puzzle.setSize(rs.getInt("PUZZLE_SIZE"));
-//				puzzle.setTypeShuffle(TypeShuffle.valueOf(rs.getString("PUZZLE_TYPE_SHUFFLE")));
-//				puzzle.setUrlImage(rs.getString("PUZZLE_URL_IMAGE"));
-//				rs.close();
-//				connection.close();
-//				return puzzle;
-//			}
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM PIECE WHERE PLAYER_MATCH_ID = " + playerMatchId + " ORDER BY PIECE_INDEX";
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				Piece piece = new Piece();
+				
+				piece.setIndex(rs.getInt("PIECE_INDEX"));
+				piece.setCurrentPosition(rs.getInt("PIECE_CURRENT_POSITION"));
+				piece.setCOLUMN(rs.getInt("PIECE_COLUMN"));
+				piece.setLINE(rs.getInt("PIECE_LINE"));
+				piece.setEmpty(rs.getBoolean("PIECE_EMPTY"));
+				response.add(piece);
+			}
+			rs.close();
+			connection.close();
+			return response;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return response;
 	}

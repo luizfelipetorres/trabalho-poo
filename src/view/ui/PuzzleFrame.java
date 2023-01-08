@@ -45,6 +45,16 @@ public class PuzzleFrame extends JPanel {
 		this.puzzleBoard = new PuzzleBoard(size, urlImage, typeShuffle, puzzleBoardListener(), stopwatchListener());
 		this.initialize();
 	}
+	
+	public PuzzleFrame(Player player, Puzzle puzzle, long currentTime) {
+		super();
+		this.player = player;
+		this.currentTime = currentTime;
+		this.wasExecuted = false;
+		this.stopWatch = new Stopwatch(puzzleBoardListener(), currentTime);
+		this.puzzleBoard = new PuzzleBoard(puzzle, puzzleBoardListener(), stopwatchListener());
+		this.initialize();
+	}
 
 	public void initialize() {
 		this.setBounds(0, 0, 1175, 670);

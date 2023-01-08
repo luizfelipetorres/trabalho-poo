@@ -1,38 +1,18 @@
 package interfaces;
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class HoverEffect implements MouseListener{
+public class HoverEffect extends MouseAdapter{
 	private Color backgroundEntered;
 	private Color backgroundExited;
 	
-	
-	
-
 	public HoverEffect(Color backgroundEntered, Color backgroundExited) {
 		super();
 		this.backgroundEntered = backgroundEntered;
 		this.backgroundExited = backgroundExited;
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -60,6 +40,4 @@ public class HoverEffect implements MouseListener{
 	public void setBackgroundExited(Color backgroundExited) {
 		this.backgroundExited = backgroundExited;
 	}
-
-	
 }

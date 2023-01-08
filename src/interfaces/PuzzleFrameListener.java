@@ -1,7 +1,8 @@
 package interfaces;
 
+import model.Puzzle;
 import util.TypeShuffle;
 
 public interface PuzzleFrameListener {
-	void onClick(String urlImage, int size, TypeShuffle typeShuffle, long currentTime);
+	void onClick(Puzzle puzzle, long currentTime);
 }

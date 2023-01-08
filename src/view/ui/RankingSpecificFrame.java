@@ -3,9 +3,6 @@ package view.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Arrays;
@@ -16,15 +13,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.plaf.DimensionUIResource;
 
-import controller.PlayerMatchController;
 import dao.MatchDAO;
+import dao.PieceDAO;
 import dao.PuzzleDAO;
 import interfaces.HoverEffect;
 import interfaces.RankingListener;
 import model.Match;
+import model.Piece;
 import model.PlayerMatch;
 import model.Puzzle;
 import util.Format;
@@ -108,17 +105,10 @@ public class RankingSpecificFrame extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				super.mouseClicked(e);
-				List<Component> components = Arrays.asList(e.getComponent().getParent().getComponents());
-				components.stream().filter(c -> !c.equals(e.getComponent()))
-						.forEach(c -> c.setBackground(backgroundColor));
-				e.getComponent().setBackground(Color.WHITE);
-				int index = components.indexOf(e.getComponent());
-				selectedPlayerMatch = playerMatch.get(index);
-				selectedMatch = MatchDAO.getInstance().findById(selectedPlayerMatch.getId());
-				selectedPuzzle = PuzzleDAO.getInstance().findById(selectedMatch.getId());
-				selectedUrlImage = selectedPuzzle.getUrlImage();
-				listener.changeImage(selectedUrlImage);
+				configureItemClick(backgroundColor, e);
 			}
+
+
 		};
 		this.setBackground(backgroundColor);
 		this.setBounds(x, y, width, height);
@@ -227,4 +217,18 @@ public class RankingSpecificFrame extends JPanel {
 		initialize();
 	}
 
+	private void configureItemClick(Color backgroundColor, MouseEvent e) {
+		List<Component> components = Arrays.asList(e.getComponent().getParent().getComponents());
+		components.stream().filter(c -> !c.equals(e.getComponent()))
+				.forEach(c -> c.setBackground(backgroundColor));
+		e.getComponent().setBackground(Color.WHITE);
+		int index = components.indexOf(e.getComponent());
+		selectedPlayerMatch = playerMatch.get(index);
+		selectedMatch = MatchDAO.getInstance().findById(selectedPlayerMatch.getId());
+		selectedPuzzle = PuzzleDAO.getInstance().findById(selectedMatch.getId());
+		List<Piece> pieces = PieceDAO.getInstance().findByPlayerMatchId(selectedPlayerMatch.getId());
+		selectedPuzzle.initializeFromBd(pieces);
+		selectedUrlImage = selectedPuzzle.getUrlImage();
+		listener.changeImage(selectedUrlImage);
+	}
 }
