@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import dao.PieceDAO;
 import interfaces.ShuffleListener;
 import util.TypeShuffle;
 
@@ -77,9 +78,11 @@ public class Puzzle {
 		addEmpty();
 	}
 	
-	public void initializeFromBd(List<Piece> pieces) {
-		generatepieces(pieces);
+	public void initializeFromBd(Long idPlayerMatch) {
+		generatepieces();
 		associateNeighbors();
+		PieceDAO.getInstance().configPiece(idPlayerMatch, pieces);
+		pieces.forEach(e->System.out.println(e.getIndex() + " " + e.getLINE() + " " + e.getCOLUMN() ) );
 		addEmpty();
 	}
 

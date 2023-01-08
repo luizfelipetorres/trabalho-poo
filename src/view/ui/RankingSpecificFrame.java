@@ -226,8 +226,7 @@ public class RankingSpecificFrame extends JPanel {
 		selectedPlayerMatch = playerMatch.get(index);
 		selectedMatch = MatchDAO.getInstance().findById(selectedPlayerMatch.getId());
 		selectedPuzzle = PuzzleDAO.getInstance().findById(selectedMatch.getPuzzle().getId());
-		List<Piece> pieces = PieceDAO.getInstance().findByPlayerMatchId(selectedPlayerMatch.getId());
-		selectedPuzzle.initializeFromBd(pieces);
+		selectedPuzzle.initializeFromBd(selectedPlayerMatch.getId());
 		selectedUrlImage = selectedPuzzle.getUrlImage();
 		listener.changeImage(selectedUrlImage);
 	}
