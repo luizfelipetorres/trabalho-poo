@@ -16,7 +16,6 @@ import controller.PlayerController;
 
 import java.awt.Color;
 
-import dao.PlayerDAO;
 import model.Player;
 import view.components.CustomButton;
 import view.components.CustomField;
@@ -33,7 +32,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class LoginFrame extends AbstractWindow {
 
@@ -100,19 +98,15 @@ public class LoginFrame extends AbstractWindow {
 				Player player = new Player(fieldLoginUsername.getText(),
 						Arrays.toString(fieldLoginPassword.getPassword()));
 
-				try {
-					Player playerSelected = PlayerController.getInstance().authenticate(player);
+				Player playerSelected = PlayerController.getInstance().authenticate(player);
 
-					if (playerSelected.getPlayerId() != null) {
-						KernelFrame.main(null, playerSelected);
-						frame.dispose();
-					} else {
-						JOptionPane.showMessageDialog(null,
-								"Dados inválidos, por favor insira as credenciais novamente!", "Erro",
-								JOptionPane.ERROR_MESSAGE);
-					}
-				} catch (SQLException ex) {
-					JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				if (playerSelected.getPlayerId() != null) {
+					KernelFrame.main(null, playerSelected);
+					frame.dispose();
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Dados inválidos, por favor insira as credenciais novamente!", "Erro",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -142,7 +136,7 @@ public class LoginFrame extends AbstractWindow {
 				Player player = new Player(fieldRegisterUsername.getText(), fieldRegisterEmail.getText(),
 						Arrays.toString(fieldRegisterPassword.getPassword()));
 
-				if (PlayerDAO.getInstance().save(player)) {
+				if (PlayerController.getInstance().save(player)) {
 					JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!", "Sucesso",
 							JOptionPane.INFORMATION_MESSAGE);
 					tabbedPane.setSelectedIndex(0);
@@ -171,7 +165,7 @@ public class LoginFrame extends AbstractWindow {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 	}
 
 }

@@ -21,7 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import dao.PlayerMatchDAO;
+import controller.PlayerMatchController;
 import interfaces.HoverEffect;
 import interfaces.PuzzleFrameListener;
 import model.PlayerMatch;
@@ -52,7 +52,7 @@ public class PreGameFrame extends JPanel {
 
 	public PreGameFrame(PuzzleFrameListener puzzleFrameListener) {
 		super();
-		playerMatch = PlayerMatchDAO.getInstance().findAll();
+		playerMatch = PlayerMatchController.getInstance().findAll();
 		this.puzzleFrameListener = puzzleFrameListener;
 		optionsSize = new HashMap<String, Integer>() {
 			private static final long serialVersionUID = 1L;
@@ -176,7 +176,7 @@ public class PreGameFrame extends JPanel {
 		buttonInit.addMouseListener(hoverEffect);
 		buttonInit.addActionListener(e -> initGame());
 
-		ranking = new RankingSpecificFrame(playerMatch, 5, 0, 0, panelRight.getWidth(), panelRight.getHeight() / 4 * 3,
+		ranking = new RankingSpecificFrame(playerMatch, 0, 0, panelRight.getWidth(), panelRight.getHeight() / 4 * 3,
 				url -> {
 					ImageManager imageManager = new ImageManager(url, false);
 					lbImage.setPath(imageManager.getAbsolutePath());

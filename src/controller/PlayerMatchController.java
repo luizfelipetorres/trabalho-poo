@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import dao.PlayerMatchDAO;
 import model.PlayerMatch;
@@ -29,12 +28,12 @@ public class PlayerMatchController {
 		return PlayerMatchDAO.getInstance().update(playerMatch);
 	}
 
-	public Optional<PlayerMatch> findById(Long id) {
-		return Optional.of(PlayerMatchDAO.getInstance().findById(id));
-	}
-
 	public List<PlayerMatch> findAll() {
 		return PlayerMatchDAO.getInstance().findAll();
+	}
+
+	public PlayerMatch findById(Long playerId, Long matchId) {
+		return PlayerMatchDAO.getInstance().findById(playerId, matchId);
 	}
 
 	public void remove(Long id) {

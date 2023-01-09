@@ -56,9 +56,8 @@ public class PuzzleBoard extends JPanel {
 		
 		piecesSorted.forEach(e -> buttons.add(new PieceButton(e, width, height)));
 		
-		puzzle.getPieces().forEach(p -> p.setIndex(p.getCurrentPosition()));
+		//puzzle.getPieces().forEach(p -> p.setIndex(p.getCurrentPosition()));
 		
-
 		ShuffleListener shuffleListener = new ShuffleListener() {
 			@Override
 			public void updateButtons() {

@@ -13,10 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import dao.MatchDAO;
-import dao.PieceDAO;
-import dao.PlayerMatchDAO;
-import dao.PuzzleDAO;
+import controller.MatchController;
+import controller.PieceController;
+import controller.PlayerMatchController;
+import controller.PuzzleController;
 import interfaces.PuzzleBoardListener;
 import interfaces.StopwatchListener;
 import model.Match;
@@ -134,11 +134,11 @@ public class PuzzleFrame extends JPanel {
 
 		if(!wasExecuted && isNewGame){
 			
-			PuzzleDAO.getInstance().save(puzzle);
+			PuzzleController.getInstance().save(puzzle);
 
 			Match match = new Match(puzzle);
 
-			MatchDAO.getInstance().save(match);
+			MatchController.getInstance().save(match);
 			
 			PlayerMatch playerMatch = new PlayerMatch(
 					player,
@@ -146,26 +146,26 @@ public class PuzzleFrame extends JPanel {
 					stopWatch.getMilliSeconds(),
 					isCompleted
 					);
-			PlayerMatchDAO.getInstance().save(playerMatch);
+			PlayerMatchController.getInstance().save(playerMatch);
 			
-			PieceDAO.getInstance().save(playerMatch.getId(), puzzle.getPieces());
+			PieceController.getInstance().save(playerMatch.getId(), puzzle.getPieces());
 
 			wasExecuted = !wasExecuted;
 
 		}else{
 
-			PuzzleDAO.getInstance().update(puzzle);
+			PuzzleController.getInstance().update(puzzle);
 			
-			Match match = MatchDAO.getInstance().findByPuzzleId(puzzle.getId());
+			Match match = MatchController.getInstance().findByPuzzleId(puzzle.getId());
 			match.setPuzzle(puzzle);
 
-			PlayerMatch playerMatch = PlayerMatchDAO.getInstance().findById(player.getPlayerId(), match.getId());
+			PlayerMatch playerMatch = PlayerMatchController.getInstance().findById(player.getPlayerId(), match.getId());
 			playerMatch.setMilliSecondsDuration(stopWatch.getMilliSeconds());
 			playerMatch.setCompleted(isCompleted);
 
-			PlayerMatchDAO.getInstance().update(playerMatch);
+			PlayerMatchController.getInstance().update(playerMatch);
 			
-			PieceDAO.getInstance().update(playerMatch.getId(), puzzle.getPieces());
+			PieceController.getInstance().update(playerMatch.getId(), puzzle.getPieces());
 
 		}	
 	}

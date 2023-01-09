@@ -31,6 +31,10 @@ public class MatchController {
 		return MatchDAO.getInstance().findById(id);
 	}
 
+	public Match findByPuzzleId(Long id) {
+		return MatchDAO.getInstance().findByPuzzleId(id);
+	}
+
 	public List<Match> findAll() {
 		return MatchDAO.getInstance().findAll();
 	}

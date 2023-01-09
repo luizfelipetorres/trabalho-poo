@@ -12,7 +12,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import dao.PieceDAO;
+import controller.PieceController;
 import interfaces.ShuffleListener;
 import util.TypeShuffle;
 
@@ -81,8 +81,7 @@ public class Puzzle {
 	public void initializeFromBd(Long idPlayerMatch) {
 		generatepieces();
 		associateNeighbors();
-		PieceDAO.getInstance().configPiece(idPlayerMatch, pieces);
-		pieces.forEach(e->System.out.println(e.getIndex() + " " + e.getLINE() + " " + e.getCOLUMN() ) );
+		PieceController.getInstance().configPiece(idPlayerMatch, pieces);
 		addEmpty();
 	}
 
@@ -103,27 +102,6 @@ public class Puzzle {
 					index++;
 				}
 			}
-		} catch (IOException e) {
-			System.err.println(e);
-		}
-	}
-
-	private void generatepieces(List<Piece> listPieces) {
-
-		try {
-			BufferedImage imagem = ImageIO.read(new File(urlImage));
-			int w = imagem.getWidth() / this.getCOLUMNS();
-			int h = imagem.getHeight() / this.getLINES();
-			int index = 0;
-
-			for (int l = 0; l < this.getLINES(); l++) {
-				for (int c = 0; c < this.getCOLUMNS(); c++) {
-					listPieces.get(index).setImg(new ImageIcon(imagem.getSubimage(c * w, l * h, w, h)));
-					pieces.add(listPieces.get(index));
-					index++;
-				}
-			}
-			
 		} catch (IOException e) {
 			System.err.println(e);
 		}

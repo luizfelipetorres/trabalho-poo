@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.Optional;
-
 import dao.PuzzleDAO;
 import model.Puzzle;
 
@@ -27,8 +25,8 @@ public class PuzzleController {
 		return PuzzleDAO.getInstance().update(puzzle);
 	}
 
-	public Optional<Puzzle> findById(Long id) {
-		return Optional.of(PuzzleDAO.getInstance().findById(id));
+	public Puzzle findById(Long id) {
+		return PuzzleDAO.getInstance().findById(id);
 	}
 
 	public void remove(Long id) {

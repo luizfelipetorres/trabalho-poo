@@ -15,13 +15,11 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.DimensionUIResource;
 
-import dao.MatchDAO;
-import dao.PieceDAO;
-import dao.PuzzleDAO;
+import controller.MatchController;
+import controller.PuzzleController;
 import interfaces.HoverEffect;
 import interfaces.RankingListener;
 import model.Match;
-import model.Piece;
 import model.PlayerMatch;
 import model.Puzzle;
 import util.Format;
@@ -29,10 +27,8 @@ import util.Format;
 public class RankingSpecificFrame extends JPanel {
 
 	private static final long serialVersionUID = -4017090534925567889L;
-	private int limit = 10;
 	private int width = 1000;
 	private int height = 600;
-	private Long idMatch;
 	private List<PlayerMatch> playerMatch;
 	private int x;
 	private int y;
@@ -68,11 +64,10 @@ public class RankingSpecificFrame extends JPanel {
 		this.selectedUrlImage = selectedUrlImage;
 	}
 
-	public RankingSpecificFrame(List<PlayerMatch> playerMatch, int limit, int x, int y, int width, int height,
+	public RankingSpecificFrame(List<PlayerMatch> playerMatch, int x, int y, int width, int height,
 			RankingListener listener) {
 		super();
 		this.playerMatch = playerMatch;
-		this.limit = limit;
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -224,8 +219,8 @@ public class RankingSpecificFrame extends JPanel {
 		e.getComponent().setBackground(Color.WHITE);
 		int index = components.indexOf(e.getComponent());
 		selectedPlayerMatch = playerMatch.get(index);
-		selectedMatch = MatchDAO.getInstance().findById(selectedPlayerMatch.getId());
-		selectedPuzzle = PuzzleDAO.getInstance().findById(selectedMatch.getPuzzle().getId());
+		selectedMatch = MatchController.getInstance().findById(selectedPlayerMatch.getId());
+		selectedPuzzle = PuzzleController.getInstance().findById(selectedMatch.getPuzzle().getId());
 		selectedPuzzle.initializeFromBd(selectedPlayerMatch.getId());
 		selectedUrlImage = selectedPuzzle.getUrlImage();
 		listener.changeImage(selectedUrlImage);

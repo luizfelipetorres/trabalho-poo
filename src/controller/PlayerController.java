@@ -1,6 +1,5 @@
 package controller;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import dao.PlayerDAO;
@@ -20,12 +19,12 @@ public class PlayerController {
 		return instance;
 	}
 
-	public Player authenticate(Player player) throws SQLException {
+	public Player authenticate(Player player) {
 		return PlayerDAO.getInstance().authenticate(player);
 	}
 
-	public void save(Player player) throws SQLException {
-		PlayerDAO.getInstance().save(player);
+	public boolean save(Player player) {
+		return PlayerDAO.getInstance().save(player);
 	}
 
 	public boolean update(Player player) {
@@ -40,7 +39,7 @@ public class PlayerController {
 		return PlayerDAO.getInstance().findById(id);
 	}
 
-	public List<Player> findByName(String name) throws Exception {
+	public List<Player> findByName(String name) {
 		return PlayerDAO.getInstance().findByName(name);
 	}
 
