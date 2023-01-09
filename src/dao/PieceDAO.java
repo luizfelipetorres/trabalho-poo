@@ -107,4 +107,18 @@ public class PieceDAO {
 		return pieces.stream().filter(e -> e.getIndex() == index).findFirst().get();
 	}
 
+	public void removeAll() {
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			Statement stmt = connection.createStatement();
+
+			String query = "DELETE FROM PIECE";
+
+			stmt.executeUpdate(query);
+
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+	}
+
 }

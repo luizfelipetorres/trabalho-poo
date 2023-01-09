@@ -32,6 +32,10 @@ public class PlayerMatchController {
 		return PlayerMatchDAO.getInstance().findAll();
 	}
 
+	public void removeAll() {
+		PlayerMatchDAO.getInstance().removeAll();
+	}
+
 	public PlayerMatch findById(Long playerId, Long matchId) {
 		return PlayerMatchDAO.getInstance().findById(playerId, matchId);
 	}

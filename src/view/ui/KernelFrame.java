@@ -159,9 +159,14 @@ public class KernelFrame extends AbstractWindow {
 				
 				if (puzzleFrame.stopwatchListener().getDuration() > 0) {
 					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
-					String message = "Deseja sair?";
-					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
-						showFrame(puzzleFrame);
+					String message = "Deseja realmente sair?";
+					Object[] options = { "Sim", "Não" };
+					int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+					System.out.println(response);
+					if (response == JOptionPane.YES_OPTION) {
+						showFrame(new PreGameFrame(puzzleListener, player));
+					}else{
 						return;
 					}
 				}
@@ -177,9 +182,13 @@ public class KernelFrame extends AbstractWindow {
 
 				if (puzzleFrame.stopwatchListener().getDuration() > 0) {
 					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
-					String message = "Quer desistir da partida atual e iniciar uma nova?";
-					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
-						showFrame(puzzleFrame);
+					String message = "Deseja realmente sair?";
+					Object[] options = { "Sim", "Não" };
+					int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+					if (response == JOptionPane.YES_OPTION) {
+						showFrame(new PlayerFrame(player, userListener));
+					}else{
 						return;
 					}
 				}

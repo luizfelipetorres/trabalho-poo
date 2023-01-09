@@ -15,8 +15,11 @@ import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import controller.MatchController;
+import controller.PieceController;
 import controller.PlayerController;
 import controller.PlayerMatchController;
+import controller.PuzzleController;
 import interfaces.UserInformationListener;
 import model.Player;
 import model.RecordPlayerMatch;
@@ -80,13 +83,25 @@ public class PlayerFrame extends JPanel {
 				btnRegister.setBackground(new Color(0, 0, 128));
 			}
 		});
-		
+
 		CustomButton btnReset = new CustomButton("Limpar histórico", "img\\icons\\icon-remove.png",
 				new Color(255, 255, 255), new Color(0, 0, 128), 800, 590, 250, 50);
 		btnReset.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//
+
+				String message = "Tem certeza que deseja fazer isso?\nIsso irá limpar todo histórico do jogo.";
+				Object[] options = { "Sim", "Não" };
+				int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+				if (response == JOptionPane.YES_OPTION) {
+					PieceController.getInstance().removeAll();
+					PlayerMatchController.getInstance().removeAll();
+					MatchController.getInstance().removeAll();
+					PuzzleController.getInstance().removeAll();
+				}
+
 			}
 
 			@Override
@@ -254,7 +269,7 @@ public class PlayerFrame extends JPanel {
 				int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-				if (response == 0) {
+				if (response == JOptionPane.YES_OPTION) {
 					updatePhoto();
 				} else {
 					removePhoto();

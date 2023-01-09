@@ -29,4 +29,8 @@ public class PuzzleController {
 		return PuzzleDAO.getInstance().findById(id);
 	}
 
+	public void removeAll(){
+		PuzzleDAO.getInstance().removeAll();
+	}
+
 }

@@ -25,6 +25,10 @@ public class MatchController {
 		return MatchDAO.getInstance().findById(id);
 	}
 
+	public void removeAll(){
+		MatchDAO.getInstance().removeAll();
+	}
+
 	public Match findByPuzzleId(Long id) {
 		return MatchDAO.getInstance().findByPuzzleId(id);
 	}
