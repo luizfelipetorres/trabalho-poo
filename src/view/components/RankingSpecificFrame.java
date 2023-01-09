@@ -39,6 +39,8 @@ public class RankingSpecificFrame extends JPanel {
 	private RankingListener listener;
 	private Puzzle selectedPuzzle;
 	private Match selectedMatch;
+	private Color backgroundRed;
+	private Color backgroundColor;
 
 	public RankingSpecificFrame(List<PlayerMatch> playerMatch, int x, int y, int width, int height,
 			RankingListener listener) {
@@ -53,10 +55,10 @@ public class RankingSpecificFrame extends JPanel {
 		this.panel = new JPanel();
 		this.initialize();
 	}
-	
+
 	public void initialize() {
-		Color backgroundColor = new Color(220, 220, 220);
-		Color backgroundRed = new Color(255, 67, 102);
+		backgroundColor = new Color(220, 220, 220);
+		backgroundRed = new Color(255, 67, 102);
 		MouseListener hoverEffect = new HoverEffect(Color.WHITE, backgroundColor) {
 
 			@Override
@@ -77,7 +79,7 @@ public class RankingSpecificFrame extends JPanel {
 				configureItemClick(backgroundColor, e);
 			}
 		};
-		
+
 		this.setBackground(backgroundColor);
 		this.setBounds(x, y, width, height);
 		this.setLayout(null);
@@ -102,11 +104,11 @@ public class RankingSpecificFrame extends JPanel {
 		headUsers.setHorizontalAlignment(SwingConstants.CENTER);
 		headUsers.setBounds(Width / 6, 0, Width / 6 * 2, headHeight);
 		head.add(headUsers);
-		
+
 		JLabel headMatches = new JLabel("Nº Partida");
 		headMatches.setFont(new Font("Tahoma", Font.BOLD, 11));
 		headMatches.setHorizontalAlignment(SwingConstants.CENTER);
-		headMatches.setBounds(Width / 6 *3, 0, Width / 6, headHeight);
+		headMatches.setBounds(Width / 6 * 3, 0, Width / 6, headHeight);
 		head.add(headMatches);
 
 		JLabel headPunctuation = new JLabel("Pontuação");
@@ -140,7 +142,7 @@ public class RankingSpecificFrame extends JPanel {
 		for (int i = 0; i < playerMatch.size(); i++) {
 			PlayerMatch current = playerMatch.get(i);
 			long qtd = playerMatch.stream().filter(pm -> pm.getMatch().getId() == current.getMatch().getId()).count();
-			
+
 			JPanel body = new JPanel();
 			body.setBounds(0, vertexY, (int) (width * 0.91), bodyHeught);
 			body.setLayout(null);
@@ -158,7 +160,7 @@ public class RankingSpecificFrame extends JPanel {
 			bodyUsers.setHorizontalAlignment(SwingConstants.CENTER);
 			bodyUsers.setBounds(Width / 6, 0, Width / 6 * 2, bodyHeught);
 			body.add(bodyUsers);
-			
+
 			JLabel bodyMatches = new JLabel(current.getMatch().getId().toString());
 			bodyMatches.setHorizontalAlignment(SwingConstants.CENTER);
 			bodyMatches.setBounds(Width / 6 * 3, 0, Width / 6, bodyHeught);
@@ -184,7 +186,6 @@ public class RankingSpecificFrame extends JPanel {
 		}
 	}
 
-	
 	public List<PlayerMatch> getPlayerMatch() {
 		return playerMatch;
 	}
@@ -201,27 +202,28 @@ public class RankingSpecificFrame extends JPanel {
 	}
 
 	private void configureItemClick(Color backgroundColor, MouseEvent e) {
-		
-		
+
 		List<Component> components = Arrays.asList(e.getComponent().getParent().getComponents());
-		components.stream().filter(c -> !c.equals(e.getComponent()))
-				.forEach(c -> c.setBackground(backgroundColor));
-		e.getComponent().setBackground(Color.WHITE);
 		int index = components.indexOf(e.getComponent());
 		selectedPlayerMatch = playerMatch.get(index);
 		long quantity = playerMatch.stream().filter(pm -> pm.getMatch().getId() == selectedPlayerMatch.getId()).count();
+
+		components.stream()
+				.filter(c -> !c.equals(e.getComponent()) && c.getBackground() != backgroundRed)
+				.forEach(c -> c.setBackground(backgroundColor));
+		e.getComponent().setBackground(Color.WHITE);
 		if (quantity >= 3) {
 			String message = "A partida selecionada atingiu o limite de 3 jogadores! Selecione outra";
 			JOptionPane.showMessageDialog(this, message, "Atenção", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
+
 		selectedMatch = MatchController.getInstance().findById(selectedPlayerMatch.getMatch().getId());
 		selectedPuzzle = PuzzleController.getInstance().findById(selectedMatch.getPuzzle().getId());
 		selectedPuzzle.initializeFromBd(selectedPlayerMatch.getId());
 		selectedUrlImage = selectedPuzzle.getUrlImage();
 		listener.changeImage(selectedUrlImage);
-		
+
 	}
 
 	public Puzzle getSelectedPuzzle() {
@@ -239,7 +241,6 @@ public class RankingSpecificFrame extends JPanel {
 	public void setSelectedMatch(Match selectedMatch) {
 		this.selectedMatch = selectedMatch;
 	}
-
 
 	public String getSelectedUrlImage() {
 		return selectedUrlImage;
