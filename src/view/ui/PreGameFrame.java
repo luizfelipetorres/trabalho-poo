@@ -18,6 +18,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -199,7 +200,13 @@ public class PreGameFrame extends JPanel {
 		boolean isNewGame;
 		long currentTime = 0;
 		Puzzle puzzle;
+		
+		
 		if (isExistingGame()) {
+			if (ranking.getSelectedMatch() == null) {
+				JOptionPane.showInternalMessageDialog(this, "Selecione uma partida para disputar!", "Atenção", JOptionPane.NO_OPTION);
+				return;
+			}
 			puzzle = ranking.getSelectedPuzzle();
 			PlayerMatch match = ranking.getSelectedPlayerMatch();
 			currentTime = match.getMilliSecondsDuration();
@@ -227,6 +234,7 @@ public class PreGameFrame extends JPanel {
 		ImageManager imageManager = new ImageManager("img\\puzzle\\", false);
 		lbImage.setPath(imageManager.getAbsolutePath());
 	}
+	
 	
 	private void configureGameOptions(JPanel panelRight, ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -256,6 +264,8 @@ public class PreGameFrame extends JPanel {
 				Arrays.asList(containerImage, lbImage).forEach(c -> c.removeMouseListener(hoverChooseImage));
 				containerImage.removeMouseListener(hoverChooseImage);
 			}
+		}else {
+			ranking.setSelectedMatch(null);
 		}
 	}
 }
