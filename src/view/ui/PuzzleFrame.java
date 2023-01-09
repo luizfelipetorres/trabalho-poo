@@ -139,7 +139,7 @@ public class PuzzleFrame extends JPanel {
 		if(!wasExecuted && typeGame == TypeGame.newGame){
 			PuzzleController.getInstance().save(puzzle);
 
-			Match match = new Match(puzzle);
+			match = new Match(puzzle);
 
 			MatchController.getInstance().save(match);
 			
@@ -175,8 +175,7 @@ public class PuzzleFrame extends JPanel {
 			PuzzleController.getInstance().update(puzzle);
 			
 			this.match.setPuzzle(puzzle);
-
-			PlayerMatch playerMatch = PlayerMatchController.getInstance().findById(player.getPlayerId(), this.match.getId());
+			PlayerMatch playerMatch = PlayerMatchController.getInstance().findById(player.getPlayerId(),match.getId());
 			playerMatch.setMilliSecondsDuration(stopWatch.getMilliSeconds());
 			playerMatch.setCompleted(isCompleted);
 
