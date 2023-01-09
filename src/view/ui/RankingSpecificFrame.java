@@ -121,28 +121,34 @@ public class RankingSpecificFrame extends JPanel {
 		JLabel headClassification = new JLabel("Classificação");
 		headClassification.setFont(new Font("Tahoma", Font.BOLD, 11));
 		headClassification.setHorizontalAlignment(SwingConstants.CENTER);
-		headClassification.setBounds(0, 0, Width / 5, headHeight);
+		headClassification.setBounds(0, 0, Width / 6, headHeight);
 		head.add(headClassification);
 
 		JLabel headUsers = new JLabel("Usuário");
 		headUsers.setFont(new Font("Tahoma", Font.BOLD, 11));
 		headUsers.setHorizontalAlignment(SwingConstants.CENTER);
-		headUsers.setBounds(Width / 5, 0, Width / 5 * 2, headHeight);
+		headUsers.setBounds(Width / 6, 0, Width / 6 * 2, headHeight);
 		head.add(headUsers);
+		
+		JLabel headMatches = new JLabel("Nº Partida");
+		headMatches.setFont(new Font("Tahoma", Font.BOLD, 11));
+		headMatches.setHorizontalAlignment(SwingConstants.CENTER);
+		headMatches.setBounds(Width / 6 *3, 0, Width / 6, headHeight);
+		head.add(headMatches);
 
 		JLabel headPunctuation = new JLabel("Pontuação");
 		headPunctuation.setFont(new Font("Tahoma", Font.BOLD, 11));
 		headPunctuation.setHorizontalAlignment(SwingConstants.CENTER);
-		headPunctuation.setBounds(Width / 5 * 3, 0, Width / 5, headHeight);
+		headPunctuation.setBounds(Width / 6 * 4, 0, Width / 6, headHeight);
 		head.add(headPunctuation);
 
 		JLabel headDuration = new JLabel("Duração");
 		headDuration.setFont(new Font("Tahoma", Font.BOLD, 11));
 		headDuration.setHorizontalAlignment(SwingConstants.CENTER);
-		headDuration.setBounds(Width / 5 * 4, 0, Width / 5, headHeight);
+		headDuration.setBounds(Width / 6 * 5, 0, Width / 6, headHeight);
 		head.add(headDuration);
 
-		Arrays.asList(head, headClassification, headUsers, headPunctuation, headDuration)
+		Arrays.asList(head, headClassification, headUsers, headPunctuation, headDuration, headMatches)
 				.forEach(e -> e.setBackground(backgroundColor));
 
 		panel.setLayout(null);
@@ -168,23 +174,28 @@ public class RankingSpecificFrame extends JPanel {
 
 			JLabel bodyClassification = new JLabel();
 			bodyClassification.setHorizontalAlignment(SwingConstants.CENTER);
-			bodyClassification.setBounds(0, 0, Width / 5, bodyHeught);
+			bodyClassification.setBounds(0, 0, Width / 6, bodyHeught);
 			Format.classification(bodyClassification, classification);
 			body.add(bodyClassification);
 
 			JLabel bodyUsers = new JLabel(playerMatch.get(i).getPlayer().getPlayerUsername());
 			bodyUsers.setHorizontalAlignment(SwingConstants.CENTER);
-			bodyUsers.setBounds(Width / 5, 0, Width / 5 * 2, bodyHeught);
+			bodyUsers.setBounds(Width / 6, 0, Width / 6 * 2, bodyHeught);
 			body.add(bodyUsers);
+			
+			JLabel bodyMatches = new JLabel(playerMatch.get(i).getMatch().getId().toString());
+			bodyMatches.setHorizontalAlignment(SwingConstants.CENTER);
+			bodyMatches.setBounds(Width / 6 * 3, 0, Width / 6, bodyHeught);
+			body.add(bodyMatches);
 
 			JLabel bodyPunctuation = new JLabel(Format.punctuation(playerMatch.get(i).getPlayerPoints()));
 			bodyPunctuation.setHorizontalAlignment(SwingConstants.CENTER);
-			bodyPunctuation.setBounds(Width / 5 * 3, 0, Width / 5, bodyHeught);
+			bodyPunctuation.setBounds(Width / 6 * 4, 0, Width / 6, bodyHeught);
 			body.add(bodyPunctuation);
 
 			JLabel bodyDuration = new JLabel(Format.hours(playerMatch.get(i).getMilliSecondsDuration()));
 			bodyDuration.setHorizontalAlignment(SwingConstants.CENTER);
-			bodyDuration.setBounds(Width / 5 * 4, 0, Width / 5, bodyHeught);
+			bodyDuration.setBounds(Width / 6 * 5, 0, Width / 6, bodyHeught);
 			body.add(bodyDuration);
 
 			JSeparator separator = new JSeparator();

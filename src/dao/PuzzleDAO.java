@@ -121,5 +121,4 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 			e.printStackTrace();
 		}
 	}
-
 }
