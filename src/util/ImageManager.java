@@ -30,8 +30,8 @@ public class ImageManager {
 			this.image = this.chooseImage();
 
 		} finally {
-			this.absolutePath = image.getAbsolutePath();
-			this.replace(absolutePath);
+			this.absolutePath = image.isDirectory() ? image.getAbsolutePath() : directorySource + image.getName();
+			this.replace(image.isDirectory() ? directorySource : absolutePath);
 
 		}
 
