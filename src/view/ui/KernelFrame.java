@@ -71,6 +71,7 @@ public class KernelFrame extends AbstractWindow {
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
 		frame.setBounds(100, 100, 1300, 750);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		frame.getContentPane().setLayout(null);
 
 		JPanel panelPersona = new JPanel();

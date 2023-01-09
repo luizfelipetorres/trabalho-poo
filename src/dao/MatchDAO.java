@@ -90,25 +90,6 @@ public class MatchDAO implements DAOListener<Match> {
 		return null;
 	}
 
-	public Match findByPuzzleId(Long id) {
-		try {
-			Connection connection = ConnectionFactory.getConnection();
-			String sql = "SELECT * FROM MATCH WHERE PUZZLE_ID = " + id;
-			Statement stmt = (Statement) connection.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-
-			if (rs.next()) {
-				Puzzle puzzle = PuzzleDAO.getInstance().findById(id);
-				return new Match(rs.getLong("MATCH_ID"), puzzle);
-			}
-
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
-
-		return null;
-	}
-
 	@Override
 	public List<Match> findAll() {
 		ArrayList<Match> listMatches = new ArrayList<Match>();
@@ -130,6 +111,39 @@ public class MatchDAO implements DAOListener<Match> {
 			System.err.println(e);
 		}
 		return listMatches;
+	}
+
+	@Override
+	public void removeAll() {
+
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			Statement stmt = connection.createStatement();
+
+			String query = "DELETE FROM MATCH";
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+	}
+
+	public Match findByPuzzleId(Long id) {
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM MATCH WHERE PUZZLE_ID = " + id;
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			if (rs.next()) {
+				Puzzle puzzle = PuzzleDAO.getInstance().findById(id);
+				return new Match(rs.getLong("MATCH_ID"), puzzle);
+			}
+
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+
+		return null;
 	}
 
 }

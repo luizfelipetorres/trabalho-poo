@@ -63,8 +63,7 @@ public class PlayerFrame extends JPanel {
 		fieldEmail.setText(player.getPlayerEmail());
 
 		CustomButton btnRegister = new CustomButton("Atualizar", "img\\icons\\icon-update.png",
-				new Color(255, 255, 255), new Color(0, 0, 128), 500, 600, 270, 50);
-		btnRegister.setBounds(500, 590, 300, 50);
+				new Color(255, 255, 255), new Color(0, 0, 128), 500, 590, 250, 50);
 		btnRegister.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -79,6 +78,25 @@ public class PlayerFrame extends JPanel {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnRegister.setBackground(new Color(0, 0, 128));
+			}
+		});
+		
+		CustomButton btnReset = new CustomButton("Limpar histórico", "img\\icons\\icon-remove.png",
+				new Color(255, 255, 255), new Color(0, 0, 128), 800, 590, 250, 50);
+		btnReset.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnReset.setBackground(new Color(249, 13, 72));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnReset.setBackground(new Color(0, 0, 128));
 			}
 		});
 
@@ -218,7 +236,7 @@ public class PlayerFrame extends JPanel {
 		});
 
 		Arrays.asList(fieldUsername, fieldEmail, currentPassword, newPassword,
-				btnRegister, panelInformationPersona, changePassword).forEach(this::add);
+				btnRegister, btnReset, panelInformationPersona, changePassword).forEach(this::add);
 
 		Arrays.asList(photoPersona, separatorPhotoPersona, lbTitleInformationPersona, titleTotalMatch,
 				titleMatchComplete, titleMatchNotComplete, titleTotalPoints, titleMaxPoints,

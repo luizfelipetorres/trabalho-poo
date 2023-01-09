@@ -59,14 +59,12 @@ public class RankingSpecificFrame extends JPanel {
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
 				if (selectedPlayerMatch == null)
 					super.mouseEntered(e);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
 				if (selectedPlayerMatch == null)
 					super.mouseExited(e);
 			}

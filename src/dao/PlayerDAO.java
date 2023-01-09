@@ -154,30 +154,18 @@ public class PlayerDAO implements DAOListener<Player> {
 		return null;
 	}
 
-	public List<Player> findByName(String playerName) {
-
-		ArrayList<Player> listPlayers = new ArrayList<Player>();
-
+	@Override
+	public void removeAll() {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
-			String sql = "SELECT * FROM PLAYER WHERE PLAYER_ID LIKE " + "'%" + playerName + "%'";
-			Statement stmt = (Statement) connection.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
+			Statement stmt = connection.createStatement();
 
-			while (rs.next()) {
-				Player player = new Player();
-				player.setPlayerId((rs.getLong("PLAYER_ID")));
-				player.setPlayerUsername(rs.getString("PLAYER_USERNAME"));
-				player.setPlayerEmail(rs.getString("PLAYER_EMAIL"));
-				player.setPlayerPassword(rs.getString("PLAYER_PASSWORD"));
-				listPlayers.add(player);
-			}
-			rs.close();
-			connection.close();
+			String query = "DELETE FROM PLAYER";
+
+			stmt.executeUpdate(query);
 
 		} catch (SQLException e) {
 			System.err.println(e);
 		}
-		return listPlayers;
 	}
 }
