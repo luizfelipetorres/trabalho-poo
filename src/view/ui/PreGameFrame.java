@@ -24,6 +24,7 @@ import javax.swing.SwingConstants;
 import controller.PlayerMatchController;
 import interfaces.HoverEffect;
 import interfaces.PuzzleFrameListener;
+import model.Player;
 import model.PlayerMatch;
 import model.Puzzle;
 import util.ImageManager;
@@ -38,6 +39,7 @@ public class PreGameFrame extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JPhotoRound lbImage;
 	private PuzzleFrameListener puzzleFrameListener;
+	private Player player;
 	private List<PlayerMatch> playerMatch;
 	private RankingSpecificFrame ranking;
 	private CustomComboBox<Object> cbType;
@@ -50,9 +52,10 @@ public class PreGameFrame extends JPanel {
 	private Map<String, TypeShuffle> optionsShuffle;
 	private Map<String, Integer> optionsType;
 
-	public PreGameFrame(PuzzleFrameListener puzzleFrameListener) {
+	public PreGameFrame(PuzzleFrameListener puzzleFrameListener, Player player) {
 		super();
-		playerMatch = PlayerMatchController.getInstance().findAll();
+		this.playerMatch = PlayerMatchController.getInstance().findAll();
+		this.player = player;
 		this.puzzleFrameListener = puzzleFrameListener;
 		optionsSize = new HashMap<String, Integer>() {
 			private static final long serialVersionUID = 1L;
@@ -237,7 +240,9 @@ public class PreGameFrame extends JPanel {
 
 			} else if (selected == 1) {
 				panelRight.setVisible(true);
-				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> !pm.isCompleted()).toList();
+				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> {
+					return !pm.isCompleted() && pm.getPlayer().getPlayerId() == player.getPlayerId();
+				}).toList();
 				ranking.setPlayerMatch(newList);
 				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(false));
 				Arrays.asList(containerImage, lbImage).forEach(c -> c.removeMouseListener(hoverChooseImage));

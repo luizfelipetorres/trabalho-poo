@@ -164,7 +164,7 @@ public class KernelFrame extends AbstractWindow {
 						return;
 					}
 				}
-				showFrame(new PreGameFrame(puzzleListener));
+				showFrame(new PreGameFrame(puzzleListener, player));
 			}
 		});
 		btnPlay.addMouseListener(hoverEffect);
