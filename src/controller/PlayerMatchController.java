@@ -4,7 +4,7 @@ import java.util.List;
 
 import dao.PlayerMatchDAO;
 import model.PlayerMatch;
-import util.RecordPlayerMatch;
+import model.RecordPlayerMatch;
 
 public class PlayerMatchController {
 
@@ -36,10 +36,6 @@ public class PlayerMatchController {
 		return PlayerMatchDAO.getInstance().findById(playerId, matchId);
 	}
 
-	public void remove(Long id) {
-		PlayerMatchDAO.getInstance().remove(id);
-	}
-	
 	public int totalPages(int limit, boolean isComplete) {
 		return (int) Math.ceil( PlayerMatchDAO.getInstance().totalElement( isComplete)/limit);
 	}
@@ -48,10 +44,6 @@ public class PlayerMatchController {
 		return PlayerMatchDAO.getInstance().findAll(page, limit, isComplete);
 	}
 	
-	public List<PlayerMatch> findByMatchID(Long matchId , int limit,boolean isComplete){
-		return PlayerMatchDAO.getInstance().findByMatchID(matchId,limit, isComplete);
-	}
-
 	public RecordPlayerMatch recordPlayerMatchByPlayer(Long idPlayer) {
 		return PlayerMatchDAO.getInstance().recordPlayerMatchByPlayer(idPlayer);
 	}

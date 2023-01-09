@@ -108,17 +108,4 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 		}
 		return false;
 	}
-
-	@Override
-	public void remove(Long id) {
-		try {
-			Connection connection = ConnectionFactory.getConnection();
-			Statement stmt = connection.createStatement();
-
-			String query = "DELETE FROM PUZZLE WHERE PUZZLE_ID = " + id;
-			stmt.executeUpdate(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 }

@@ -29,7 +29,4 @@ public class PuzzleController {
 		return PuzzleDAO.getInstance().findById(id);
 	}
 
-	public void remove(Long id) {
-		PuzzleDAO.getInstance().remove(id);
-	}
 }

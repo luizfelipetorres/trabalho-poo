@@ -13,7 +13,7 @@ import interfaces.DAOListener;
 import model.Match;
 import model.Player;
 import model.PlayerMatch;
-import util.RecordPlayerMatch;
+import model.RecordPlayerMatch;
 
 public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 
@@ -152,19 +152,6 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 			System.err.println(e);
 		}
 		return listPlayerMatch;
-	}
-
-	@Override
-	public void remove(Long id) {
-		try {
-			Connection connection = ConnectionFactory.getConnection();
-			Statement stmt = connection.createStatement();
-
-			String query = "DELETE FROM PLAYER_MATCH WHERE PLAYER_MATCH_ID = " + id;
-			stmt.executeUpdate(query);
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
 	}
 
 	public RecordPlayerMatch recordPlayerMatchByPlayer(Long idPlayer) {

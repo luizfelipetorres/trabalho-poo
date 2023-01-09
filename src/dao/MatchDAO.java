@@ -110,20 +110,6 @@ public class MatchDAO implements DAOListener<Match> {
 	}
 
 	@Override
-	public void remove(Long id) {
-
-		try {
-			Connection connection = ConnectionFactory.getConnection();
-			Statement stmt = connection.createStatement();
-
-			String query = "DELETE FROM MATCH WHERE MATCH_ID = " + id;
-			stmt.executeUpdate(query);
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
-	}
-
-	@Override
 	public List<Match> findAll() {
 		ArrayList<Match> listMatches = new ArrayList<Match>();
 

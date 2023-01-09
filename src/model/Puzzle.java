@@ -27,23 +27,6 @@ public class Puzzle {
 	private int size;
 	private boolean isFromBd = false;
 	
-
-	public boolean isFromBd() {
-		return isFromBd;
-	}
-
-	public void setFromBd(boolean isFromBd) {
-		this.isFromBd = isFromBd;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
-	}
-
 	public Puzzle() {
 	}
 
@@ -58,7 +41,7 @@ public class Puzzle {
 		this.typeShuffle = typeShuffle;
 		this.pieces = pieces;
 		this.urlImage = urlImage;
-		initialize();
+		this.initialize();
 	}
 
 	public Puzzle(Long id, int lines, int columns, String urlImage, TypeShuffle typeShuffle) {
@@ -69,7 +52,7 @@ public class Puzzle {
 		this.typeShuffle = typeShuffle;
 		this.pieces = new ArrayList<>();
 		this.urlImage = urlImage;
-		initialize();
+		this.initialize();
 	}
 
 	public void initialize() {
@@ -226,5 +209,21 @@ public class Puzzle {
 
 	public void setUrlImage(String urlImage) {
 		this.urlImage = urlImage;
+	}
+
+	public boolean isFromBd() {
+		return isFromBd;
+	}
+
+	public void setFromBd(boolean isFromBd) {
+		this.isFromBd = isFromBd;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 }

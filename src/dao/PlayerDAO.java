@@ -180,19 +180,4 @@ public class PlayerDAO implements DAOListener<Player> {
 		}
 		return listPlayers;
 	}
-
-	@Override
-	public void remove(Long integer) {
-		try {
-			Connection connection = ConnectionFactory.getConnection();
-			Statement stmt = connection.createStatement();
-
-			String query = "DELETE FROM PLAYER WHERE PLAYER_ID = " + integer;
-
-			stmt.executeUpdate(query);
-
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
-	}
 }

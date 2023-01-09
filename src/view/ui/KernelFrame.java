@@ -158,7 +158,7 @@ public class KernelFrame extends AbstractWindow {
 				
 				if (puzzleFrame.stopwatchListener().getDuration() > 0) {
 					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
-					String message = "Quer desistir da partida atual e iniciar uma nova?";
+					String message = "Deseja sair?";
 					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
 						showFrame(puzzleFrame);
 						return;

@@ -38,31 +38,6 @@ public class RankingSpecificFrame extends JPanel {
 	private RankingListener listener;
 	private Puzzle selectedPuzzle;
 	private Match selectedMatch;
-	
-	public Puzzle getSelectedPuzzle() {
-		return selectedPuzzle;
-	}
-
-	public void setSelectedPuzzle(Puzzle selectedPuzzle) {
-		this.selectedPuzzle = selectedPuzzle;
-	}
-
-	public Match getSelectedMatch() {
-		return selectedMatch;
-	}
-
-	public void setSelectedMatch(Match selectedMatch) {
-		this.selectedMatch = selectedMatch;
-	}
-
-
-	public String getSelectedUrlImage() {
-		return selectedUrlImage;
-	}
-
-	public void setSelectedUrlImage(String selectedUrlImage) {
-		this.selectedUrlImage = selectedUrlImage;
-	}
 
 	public RankingSpecificFrame(List<PlayerMatch> playerMatch, int x, int y, int width, int height,
 			RankingListener listener) {
@@ -73,11 +48,10 @@ public class RankingSpecificFrame extends JPanel {
 		this.width = width;
 		this.height = height;
 		this.listener = listener;
-		selectedPlayerMatch = null;
-		panel = new JPanel();
-		initialize();
+		this.selectedPlayerMatch = null;
+		this.panel = new JPanel();
+		this.initialize();
 	}
-
 	
 	public void initialize() {
 		Color backgroundColor = new Color(220, 220, 220);
@@ -235,5 +209,30 @@ public class RankingSpecificFrame extends JPanel {
 		selectedPuzzle.initializeFromBd(selectedPlayerMatch.getId());
 		selectedUrlImage = selectedPuzzle.getUrlImage();
 		listener.changeImage(selectedUrlImage);
+	}
+
+	public Puzzle getSelectedPuzzle() {
+		return selectedPuzzle;
+	}
+
+	public void setSelectedPuzzle(Puzzle selectedPuzzle) {
+		this.selectedPuzzle = selectedPuzzle;
+	}
+
+	public Match getSelectedMatch() {
+		return selectedMatch;
+	}
+
+	public void setSelectedMatch(Match selectedMatch) {
+		this.selectedMatch = selectedMatch;
+	}
+
+
+	public String getSelectedUrlImage() {
+		return selectedUrlImage;
+	}
+
+	public void setSelectedUrlImage(String selectedUrlImage) {
+		this.selectedUrlImage = selectedUrlImage;
 	}
 }
