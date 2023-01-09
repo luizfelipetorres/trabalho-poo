@@ -178,7 +178,7 @@ public class KernelFrame extends AbstractWindow {
 		btnConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (puzzleFrame.stopwatchListener().getDuration() > 0) {
+				if (puzzleFrame != null && puzzleFrame.stopwatchListener().getDuration() > 0) {
 					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
 					String message = "Deseja realmente sair?";
 					Object[] options = { "Sim", "Não" };
