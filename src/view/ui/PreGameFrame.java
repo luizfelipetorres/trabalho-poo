@@ -53,7 +53,7 @@ public class PreGameFrame extends JPanel {
 	private JPhotoRound lbImage;
 	private Map<String, TypeShuffle> optionsShuffle;
 	private Map<String, Integer> optionsSize;
-	private Map<String, Integer> optionsType;
+	private Map<String, TypeGame> optionsType;
 	private Player player;
 	private List<PlayerMatch> playerMatch;
 	private PuzzleFrameListener puzzleFrameListener;
@@ -85,12 +85,12 @@ public class PreGameFrame extends JPanel {
 			}
 		};
 
-		optionsType = new HashMap<String, Integer>() {
+		optionsType = new HashMap<String, TypeGame>() {
 			private static final long serialVersionUID = 1L;
 			{
-				put("Nova partida", 0);
-				put("Partida pausada", 1);
-				put("Partida multijogador", 2);
+				put("Nova partida", TypeGame.newGame);
+				put("Partida pausada", TypeGame.pausedGame);
+				put("Partida multijogador", TypeGame.multiplayerGame);
 			}
 		};
 		initialize();
@@ -99,16 +99,14 @@ public class PreGameFrame extends JPanel {
 
 	private void configureGameOptions(JPanel panelRight, ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
-			int selected = optionsType.get(e.getItem().toString());
-			if (selected == 0) {
-				typeGame = TypeGame.newGame;
+			typeGame = optionsType.get(e.getItem().toString());
+			if (typeGame == TypeGame.newGame) {
 				panelRight.setVisible(false);
 				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(true));
 				containerImage.addMouseListener(hoverChooseImage);
 				Arrays.asList(containerImage, lbImage).forEach(c -> c.addMouseListener(hoverChooseImage));
 
-			} else if (selected == 1) {
-				typeGame = TypeGame.pausedGame;
+			} else if (typeGame == TypeGame.pausedGame) {
 				panelRight.setVisible(true);
 				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> {
 					return !pm.isCompleted() && pm.getPlayer().getPlayerId() == player.getPlayerId();
@@ -120,7 +118,6 @@ public class PreGameFrame extends JPanel {
 				containerImage.removeMouseListener(hoverChooseImage);
 
 			} else {
-				typeGame = TypeGame.multiplayerGame;
 				panelRight.setVisible(true);
 				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> pm.isCompleted())
 				.sorted(Comparator.comparingLong(PlayerMatch::getMilliSecondsDuration))
@@ -255,7 +252,7 @@ public class PreGameFrame extends JPanel {
 
 		ranking = new RankingSpecificFrame(playerMatch, 0, 0, panelRight.getWidth(), panelRight.getHeight() / 4 * 3,
 				url -> {
-					ImageManager imageManager = new ImageManager(url, false);
+					ImageManager imageManager = new ImageManager(url);
 					lbImage.setPath(imageManager.getAbsolutePath());
 				});
 
@@ -268,7 +265,7 @@ public class PreGameFrame extends JPanel {
 	}
 
 	private boolean isExistingGame() {
-		return !optionsType.get(cbType.getSelectedItem()).equals(0);
+		return !optionsType.get(cbType.getSelectedItem()).equals(TypeGame.newGame);
 	}
 
 	private int nextBottom(Component c) {
@@ -276,7 +273,7 @@ public class PreGameFrame extends JPanel {
 	}
 
 	protected void selectImage() {
-		ImageManager imageManager = new ImageManager("img\\puzzle\\", false);
+		ImageManager imageManager = new ImageManager("img\\puzzle\\");
 		lbImage.setPath(imageManager.getAbsolutePath());
 	}
 }

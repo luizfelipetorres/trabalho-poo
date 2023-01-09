@@ -18,21 +18,21 @@ public class ImageManager {
 	public ImageManager() {
 	}
 
-	public ImageManager(String directorySource, boolean isFromBd) {
+	public ImageManager(String directorySource) {
 		this.directorySource = directorySource;
 
 		try {
 			this.image = new File(directorySource);
 			if (image.isDirectory())
 				throw new Exception("Foi passado um diretório. É necessário escolher uma imagem");
+			this.absolutePath = image.getAbsolutePath();			
 
 		} catch (Exception e) {
-			this.image = this.chooseImage();
+			this.image = this.chooseImage(directorySource);
+			this.absolutePath = directorySource + image.getName();
 
 		} finally {
-			this.absolutePath = image.isDirectory() ? image.getAbsolutePath() : directorySource + image.getName();
 			this.replace(image.isDirectory() ? directorySource : absolutePath);
-
 		}
 
 	}
@@ -48,8 +48,8 @@ public class ImageManager {
 
 	}
 
-	private File chooseImage() {
-		JFileChooser fileChooser = new JFileChooser("img//puzzle");
+	private File chooseImage(String directorySource) {
+		JFileChooser fileChooser = new JFileChooser(directorySource);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "png");
 		fileChooser.setFileFilter(filter);
 		boolean choosed = fileChooser.showOpenDialog(fileChooser) == JFileChooser.APPROVE_OPTION;
