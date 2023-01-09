@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.List;
-
 import dao.MatchDAO;
 import model.Match;
 
@@ -23,24 +21,16 @@ public class MatchController {
 		return MatchDAO.getInstance().save(match);
 	}
 
-	public boolean update(Match match) {
-		return MatchDAO.getInstance().update(match);
-	}
-
 	public Match findById(Long id) {
 		return MatchDAO.getInstance().findById(id);
 	}
 
+	public void removeAll(){
+		MatchDAO.getInstance().removeAll();
+	}
+
 	public Match findByPuzzleId(Long id) {
 		return MatchDAO.getInstance().findByPuzzleId(id);
-	}
-
-	public List<Match> findAll() {
-		return MatchDAO.getInstance().findAll();
-	}
-
-	public void remove(Long id) {
-		MatchDAO.getInstance().remove(id);
 	}
 
 }

@@ -53,12 +53,6 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 	}
 
 	@Override
-	public List<Puzzle> findAll() {
-		/* implements logic */
-		return null;
-	}
-
-	@Override
 	public Puzzle findById(Long id) {
 
 		Puzzle puzzle = new Puzzle();
@@ -90,6 +84,12 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 	}
 
 	@Override
+	public List<Puzzle> findAll() {
+		/* implements logic */
+		return null;
+	}
+
+	@Override
 	public boolean update(Puzzle puzzle) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
@@ -110,12 +110,12 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 	}
 
 	@Override
-	public void remove(Long id) {
+	public void removeAll() {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			Statement stmt = connection.createStatement();
 
-			String query = "DELETE FROM PUZZLE WHERE PUZZLE_ID = " + id;
+			String query = "DELETE FROM PUZZLE";
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();

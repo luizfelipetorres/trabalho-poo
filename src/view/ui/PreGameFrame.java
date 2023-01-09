@@ -2,6 +2,7 @@ package view.ui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -170,13 +171,13 @@ public class PreGameFrame extends JPanel {
 		JPanel panelRight = new JPanel();
 		panelRight.setLayout(null);
 		panelRight.setBackground(new Color(0, 0, 0, 0));
-		panelRight.setBounds(300, 0, 600, this.getHeight());
+		panelRight.setBounds(300, 0, 775, this.getHeight() - 35);
 		panelRight.setVisible(false);
 
-		JLabel labelBackground = new JLabel(new ImageIcon("img//bgs//bg-login.jpg"));
+		JLabel labelBackground = new JLabel();
 		BufferedImage resized;
 		try {
-			resized = ImageIO.read(new File("img\\bgs\\bg-login.jpg"));
+			resized = ImageIO.read(new File("img\\bgs\\bg-main.jpg"));
 			Image image = resized.getScaledInstance(panelRight.getWidth(), panelRight.getHeight(), 1);
 			labelBackground.setIcon(new ImageIcon(image));
 			labelBackground.setHorizontalAlignment(SwingConstants.CENTER);
@@ -219,6 +220,7 @@ public class PreGameFrame extends JPanel {
 		containerImage.setBackground(new Color(220, 220, 220));
 
 		lbImage = new JPhotoRound("img\\puzzle\\default.jpg", (int) (containerImage.getHeight() * 0.9));
+		lbImage.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		lbImage.setBounds((int) (containerImage.getWidth() * 0.05), (int) (containerImage.getHeight() * 0.05),
 				(int) (containerImage.getWidth() * 0.9), (int) (containerImage.getHeight() * 0.9));
 

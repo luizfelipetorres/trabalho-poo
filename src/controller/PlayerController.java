@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.List;
-
 import dao.PlayerDAO;
 import model.Player;
 
@@ -31,19 +29,8 @@ public class PlayerController {
 		return PlayerDAO.getInstance().update(player);
 	}
 
-	public List<Player> findAll() {
-		return PlayerDAO.getInstance().findAll();
-	}
-
 	public Player findById(Long id) {
 		return PlayerDAO.getInstance().findById(id);
 	}
 
-	public List<Player> findByName(String name) {
-		return PlayerDAO.getInstance().findByName(name);
-	}
-
-	public void remove(Long id) {
-		PlayerDAO.getInstance().remove(id);
-	}
 }

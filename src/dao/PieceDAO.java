@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 import connection.ConnectionFactory;
@@ -92,8 +91,8 @@ public class PieceDAO {
 			ResultSet rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
-				Piece currentPosition = pieces.get(rs.getInt("PIECE_CURRENT_POSITION"));//0
-				Piece pieceIndex = pieceIndice(pieces, rs.getInt("PIECE_INDEX"));//4
+				Piece currentPosition = pieces.get(rs.getInt("PIECE_CURRENT_POSITION"));
+				Piece pieceIndex = pieceIndice(pieces, rs.getInt("PIECE_INDEX"));
 				pieceIndex.exchange(currentPosition);
 			}
 
@@ -108,36 +107,18 @@ public class PieceDAO {
 		return pieces.stream().filter(e -> e.getIndex() == index).findFirst().get();
 	}
 
-	public List<Piece> findByPlayerMatchId(Long playerMatchId){
-		List<Piece> response = new ArrayList<>();
-
+	public void removeAll() {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
-			String sql = "SELECT * FROM PIECE WHERE PLAYER_MATCH_ID = " + playerMatchId + " ORDER BY PIECE_INDEX";
-			Statement stmt = (Statement) connection.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
+			Statement stmt = connection.createStatement();
 
-			while (rs.next()) {
-				Piece piece = new Piece();
-				
-				piece.setIndex(rs.getInt("PIECE_INDEX"));
-				piece.setCurrentPosition(rs.getInt("PIECE_CURRENT_POSITION"));
-				piece.setCOLUMN(rs.getInt("PIECE_COLUMN"));
-				piece.setLINE(rs.getInt("PIECE_LINE"));
-				piece.setEmpty(rs.getBoolean("PIECE_EMPTY"));
-				response.add(piece);
-			}
-			rs.close();
-			connection.close();
-			return response;
+			String query = "DELETE FROM PIECE";
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			stmt.executeUpdate(query);
+
+		} catch (SQLException e) {
+			System.err.println(e);
 		}
-
-		return response;
 	}
-
-	
 
 }

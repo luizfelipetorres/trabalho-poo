@@ -69,6 +69,7 @@ public class KernelFrame extends AbstractWindow {
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
 		frame.setBounds(100, 100, 1300, 750);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		frame.getContentPane().setLayout(null);
 
 		JPanel panelPersona = new JPanel();
@@ -156,9 +157,14 @@ public class KernelFrame extends AbstractWindow {
 				
 				if (puzzleFrame != null && puzzleFrame.stopwatchListener().getDuration() > 0) {
 					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
-					String message = "Quer desistir da partida atual e iniciar uma nova?";
-					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
-						showFrame(puzzleFrame);
+					String message = "Deseja realmente sair?";
+					Object[] options = { "Sim", "Não" };
+					int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+					System.out.println(response);
+					if (response == JOptionPane.YES_OPTION) {
+						showFrame(new PreGameFrame(puzzleListener, player));
+					}else{
 						return;
 					}
 				}
@@ -174,9 +180,13 @@ public class KernelFrame extends AbstractWindow {
 
 				if (puzzleFrame.stopwatchListener().getDuration() > 0) {
 					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
-					String message = "Quer desistir da partida atual e iniciar uma nova?";
-					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
-						showFrame(puzzleFrame);
+					String message = "Deseja realmente sair?";
+					Object[] options = { "Sim", "Não" };
+					int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+					if (response == JOptionPane.YES_OPTION) {
+						showFrame(new PlayerFrame(player, userListener));
+					}else{
 						return;
 					}
 				}
