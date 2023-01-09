@@ -1,7 +1,5 @@
 package view.ui;
 
-import static javax.swing.JOptionPane.YES_OPTION;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -25,7 +23,6 @@ import controller.PlayerController;
 import interfaces.PuzzleFrameListener;
 import interfaces.UserInformationListener;
 import model.Player;
-import util.enums.TypeShuffle;
 import view.components.CustomButton;
 import view.components.JPhotoRound;
 
@@ -161,7 +158,6 @@ public class KernelFrame extends AbstractWindow {
 					Object[] options = { "Sim", "Não" };
 					int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-					System.out.println(response);
 					if (response == JOptionPane.YES_OPTION) {
 						showFrame(new PreGameFrame(puzzleListener, player));
 					}else{

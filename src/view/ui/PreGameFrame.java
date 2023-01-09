@@ -12,9 +12,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -61,6 +63,7 @@ public class PreGameFrame extends JPanel {
 
 	public PreGameFrame(PuzzleFrameListener puzzleFrameListener, Player player) {
 		super();
+		this.typeGame = TypeGame.newGame;
 		this.playerMatch = PlayerMatchController.getInstance().findAll();
 		this.player = player;
 		this.puzzleFrameListener = puzzleFrameListener;
@@ -97,7 +100,6 @@ public class PreGameFrame extends JPanel {
 	private void configureGameOptions(JPanel panelRight, ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			int selected = optionsType.get(e.getItem().toString());
-
 			if (selected == 0) {
 				typeGame = TypeGame.newGame;
 				panelRight.setVisible(false);
@@ -110,7 +112,8 @@ public class PreGameFrame extends JPanel {
 				panelRight.setVisible(true);
 				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> {
 					return !pm.isCompleted() && pm.getPlayer().getPlayerId() == player.getPlayerId();
-				}).toList();
+				}).sorted(Comparator.comparingLong(PlayerMatch::getMilliSecondsDuration))
+				.collect(Collectors.toList());
 				ranking.setPlayerMatch(newList);
 				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(false));
 				Arrays.asList(containerImage, lbImage).forEach(c -> c.removeMouseListener(hoverChooseImage));
@@ -119,7 +122,9 @@ public class PreGameFrame extends JPanel {
 			} else {
 				typeGame = TypeGame.multiplayerGame;
 				panelRight.setVisible(true);
-				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> pm.isCompleted()).toList();
+				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> pm.isCompleted())
+				.sorted(Comparator.comparingLong(PlayerMatch::getMilliSecondsDuration))
+				.collect(Collectors.toList());
 				ranking.setPlayerMatch(newList);
 				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(false));
 				Arrays.asList(containerImage, lbImage).forEach(c -> c.removeMouseListener(hoverChooseImage));
@@ -154,7 +159,6 @@ public class PreGameFrame extends JPanel {
 			puzzle = new Puzzle(selectedSize, selectedSize, lbImage.getPath(), selectedShuffle);
 			match = new Match(puzzle);
 		}
-		System.out.println(typeGame);
 		puzzleFrameListener.onClick(puzzle, match, currentTime, typeGame);
 	}
 

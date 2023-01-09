@@ -136,9 +136,7 @@ public class PuzzleFrame extends JPanel {
 	}
 
 	private void persistenceData(Puzzle puzzle, boolean isCompleted) {
-
 		if(!wasExecuted && typeGame == TypeGame.newGame){
-			
 			PuzzleController.getInstance().save(puzzle);
 
 			Match match = new Match(puzzle);
@@ -159,8 +157,6 @@ public class PuzzleFrame extends JPanel {
 
 		}else if(!wasExecuted && typeGame == TypeGame.multiplayerGame) {
 			PuzzleController.getInstance().save(puzzle);
-
-			Match match = MatchController.getInstance().findById(this.match.getId());
 			
 			PlayerMatch playerMatch = new PlayerMatch(
 					player,
@@ -176,7 +172,6 @@ public class PuzzleFrame extends JPanel {
 			wasExecuted = !wasExecuted;
 
 		}else{
-
 			PuzzleController.getInstance().update(puzzle);
 			
 			this.match.setPuzzle(puzzle);
