@@ -25,33 +25,38 @@ import javax.swing.SwingConstants;
 import controller.PlayerMatchController;
 import interfaces.HoverEffect;
 import interfaces.PuzzleFrameListener;
+import model.Match;
 import model.Player;
 import model.PlayerMatch;
 import model.Puzzle;
 import util.ImageManager;
-import util.TypeShuffle;
+import util.enums.TypeGame;
+import util.enums.TypeShuffle;
 import view.components.CustomButton;
 import view.components.CustomComboBox;
 import view.components.CustomLabel;
 import view.components.JPhotoRound;
+import view.components.RankingSpecificFrame;
 
 public class PreGameFrame extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private CustomButton buttonChooseImage;
+	private CustomComboBox<Object> cbShuffle;
+	private CustomComboBox<Object> cbSize;
+	private CustomComboBox<Object> cbType;
+	private JPanel containerImage;
+	private MouseListener hoverChooseImage;
 	private JPhotoRound lbImage;
-	private PuzzleFrameListener puzzleFrameListener;
+	private Map<String, TypeShuffle> optionsShuffle;
+	private Map<String, Integer> optionsSize;
+	private Map<String, Integer> optionsType;
 	private Player player;
 	private List<PlayerMatch> playerMatch;
+	private PuzzleFrameListener puzzleFrameListener;
 	private RankingSpecificFrame ranking;
-	private CustomComboBox<Object> cbType;
-	private CustomComboBox<Object> cbSize;
-	private CustomComboBox<Object> cbShuffle;
-	private CustomButton buttonChooseImage;
-	private MouseListener hoverChooseImage;
-	private JPanel containerImage;
-	private Map<String, Integer> optionsSize;
-	private Map<String, TypeShuffle> optionsShuffle;
-	private Map<String, Integer> optionsType;
+
+	private TypeGame typeGame;
 
 	public PreGameFrame(PuzzleFrameListener puzzleFrameListener, Player player) {
 		super();
@@ -67,7 +72,7 @@ public class PreGameFrame extends JPanel {
 				put("5x5", 5);
 			}
 		};
-		
+
 		optionsShuffle = new HashMap<String, TypeShuffle>() {
 			private static final long serialVersionUID = 1L;
 			{
@@ -75,7 +80,7 @@ public class PreGameFrame extends JPanel {
 				put("Ímpar", TypeShuffle.odd);
 			}
 		};
-		
+
 		optionsType = new HashMap<String, Integer>() {
 			private static final long serialVersionUID = 1L;
 			{
@@ -83,10 +88,73 @@ public class PreGameFrame extends JPanel {
 				put("Partida pausada", 1);
 				put("Partida multijogador", 2);
 			}
-		};		
+		};
 		initialize();
-		
-	
+
+	}
+
+	private void configureGameOptions(JPanel panelRight, ItemEvent e) {
+		if (e.getStateChange() == ItemEvent.SELECTED) {
+			int selected = optionsType.get(e.getItem().toString());
+
+			if (selected == 0) {
+				typeGame = TypeGame.newGame;
+				panelRight.setVisible(false);
+				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(true));
+				containerImage.addMouseListener(hoverChooseImage);
+				Arrays.asList(containerImage, lbImage).forEach(c -> c.addMouseListener(hoverChooseImage));
+
+			} else if (selected == 1) {
+				typeGame = TypeGame.pausedGame;
+				panelRight.setVisible(true);
+				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> {
+					return !pm.isCompleted() && pm.getPlayer().getPlayerId() == player.getPlayerId();
+				}).toList();
+				ranking.setPlayerMatch(newList);
+				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(false));
+				Arrays.asList(containerImage, lbImage).forEach(c -> c.removeMouseListener(hoverChooseImage));
+				containerImage.removeMouseListener(hoverChooseImage);
+
+			} else {
+				typeGame = TypeGame.multiplayerGame;
+				panelRight.setVisible(true);
+				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> pm.isCompleted()).toList();
+				ranking.setPlayerMatch(newList);
+				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(false));
+				Arrays.asList(containerImage, lbImage).forEach(c -> c.removeMouseListener(hoverChooseImage));
+				containerImage.removeMouseListener(hoverChooseImage);
+			}
+		} else {
+			ranking.setSelectedMatch(null);
+		}
+	}
+
+	private void initGame() {
+		int selectedSize;
+		TypeShuffle selectedShuffle;
+		long currentTime = 0;
+		Puzzle puzzle;
+		Match match;
+
+		if (isExistingGame()) {
+			if (ranking.getSelectedMatch() == null) {
+				JOptionPane.showInternalMessageDialog(this, "Selecione uma partida para disputar!", "Atenção",
+						JOptionPane.NO_OPTION);
+				return;
+			}
+			puzzle = ranking.getSelectedPuzzle();
+			match = ranking.getSelectedMatch();
+			PlayerMatch playerMatch = ranking.getSelectedPlayerMatch();
+			currentTime = typeGame == TypeGame.pausedGame ? playerMatch.getMilliSecondsDuration() : 0;
+
+		} else {
+			selectedSize = optionsSize.get(cbSize.getSelectedItem());
+			selectedShuffle = optionsShuffle.get(cbShuffle.getSelectedItem());
+			puzzle = new Puzzle(selectedSize, selectedSize, lbImage.getPath(), selectedShuffle);
+			match = new Match(puzzle);
+		}
+		System.out.println(typeGame);
+		puzzleFrameListener.onClick(puzzle, match, currentTime, typeGame);
 	}
 
 	private void initialize() {
@@ -120,7 +188,6 @@ public class PreGameFrame extends JPanel {
 
 		MouseListener hoverEffect = new HoverEffect(new Color(249, 13, 72), new Color(0, 0, 128));
 
-
 		JLabel labelTitle = new CustomLabel("PRÉ-CONFIGURAÇÃO", 0, 0, panelLeft.getWidth(), 30);
 
 		ItemListener listener = new ItemListener() {
@@ -128,7 +195,7 @@ public class PreGameFrame extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				configureGameOptions(panelRight, e);
-			}			
+			}
 		};
 
 		cbType = new CustomComboBox<>("Selecione o tipo de partida:", optionsType.keySet().stream().sorted().toArray(),
@@ -158,6 +225,11 @@ public class PreGameFrame extends JPanel {
 		hoverChooseImage = new HoverEffect(new Color(249, 13, 72), new Color(220, 220, 220)) {
 
 			@Override
+			public void mouseClicked(MouseEvent e) {
+				selectImage();
+			}
+
+			@Override
 			public void mouseEntered(MouseEvent e) {
 				containerImage.setBackground(getBackgroundEntered());
 			}
@@ -165,11 +237,6 @@ public class PreGameFrame extends JPanel {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				containerImage.setBackground(getBackgroundExited());
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				selectImage();
 			};
 		};
 		containerImage.addMouseListener(hoverChooseImage);
@@ -194,34 +261,6 @@ public class PreGameFrame extends JPanel {
 
 	}
 
-	private void initGame() {
-		int selectedSize;
-		TypeShuffle selectedShuffle;
-		boolean isNewGame;
-		long currentTime = 0;
-		Puzzle puzzle;
-		
-		
-		if (isExistingGame()) {
-			if (ranking.getSelectedMatch() == null) {
-				JOptionPane.showInternalMessageDialog(this, "Selecione uma partida para disputar!", "Atenção", JOptionPane.NO_OPTION);
-				return;
-			}
-			puzzle = ranking.getSelectedPuzzle();
-			PlayerMatch match = ranking.getSelectedPlayerMatch();
-			currentTime = match.getMilliSecondsDuration();
-			isNewGame = false;
-		
-		}else {
-			selectedSize = optionsSize.get(cbSize.getSelectedItem());
-			selectedShuffle = optionsShuffle.get(cbShuffle.getSelectedItem());
-			puzzle = new Puzzle(selectedSize, selectedSize, lbImage.getPath(), selectedShuffle);
-			isNewGame = true;
-		}
-		System.out.println(isNewGame);
-		puzzleFrameListener.onClick(puzzle, currentTime, isNewGame);
-	}
-
 	private boolean isExistingGame() {
 		return !optionsType.get(cbType.getSelectedItem()).equals(0);
 	}
@@ -233,39 +272,5 @@ public class PreGameFrame extends JPanel {
 	protected void selectImage() {
 		ImageManager imageManager = new ImageManager("img\\puzzle\\", false);
 		lbImage.setPath(imageManager.getAbsolutePath());
-	}
-	
-	
-	private void configureGameOptions(JPanel panelRight, ItemEvent e) {
-		if (e.getStateChange() == ItemEvent.SELECTED) {
-			int selected = optionsType.get(e.getItem().toString());
-
-			if (selected == 0) {
-				panelRight.setVisible(false);
-				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(true));
-				containerImage.addMouseListener(hoverChooseImage);
-				Arrays.asList(containerImage, lbImage).forEach(c -> c.addMouseListener(hoverChooseImage));
-
-			} else if (selected == 1) {
-				panelRight.setVisible(true);
-				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> {
-					return !pm.isCompleted() && pm.getPlayer().getPlayerId() == player.getPlayerId();
-				}).toList();
-				ranking.setPlayerMatch(newList);
-				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(false));
-				Arrays.asList(containerImage, lbImage).forEach(c -> c.removeMouseListener(hoverChooseImage));
-				containerImage.removeMouseListener(hoverChooseImage);
-
-			} else {
-				panelRight.setVisible(true);
-				List<PlayerMatch> newList = playerMatch.stream().filter(pm -> pm.isCompleted()).toList();
-				ranking.setPlayerMatch(newList);
-				Arrays.asList(cbShuffle, cbSize, buttonChooseImage).forEach(cb -> cb.setVisible(false));
-				Arrays.asList(containerImage, lbImage).forEach(c -> c.removeMouseListener(hoverChooseImage));
-				containerImage.removeMouseListener(hoverChooseImage);
-			}
-		}else {
-			ranking.setSelectedMatch(null);
-		}
 	}
 }

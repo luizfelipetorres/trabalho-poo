@@ -17,7 +17,8 @@ import interfaces.ShuffleListener;
 import interfaces.StopwatchListener;
 import model.Piece;
 import model.Puzzle;
-import util.TypeShuffle;
+import util.enums.TypeGame;
+import util.enums.TypeShuffle;
 
 public class PuzzleBoard extends JPanel {
 
@@ -26,19 +27,22 @@ public class PuzzleBoard extends JPanel {
 	private StopwatchListener stopwatchListener;
 	private List<PieceButton> buttons;
 	private Puzzle puzzle;
+	private TypeGame typeGame;
 
 	public PuzzleBoard(int size, String urlImage, TypeShuffle typeShuffle, PuzzleBoardListener puzzleBoardListener,
-			StopwatchListener stopwatchListener) {
+			StopwatchListener stopwatchListener, TypeGame typeGame) {
 		this.puzzleBoardListener = puzzleBoardListener;
 		this.stopwatchListener = stopwatchListener;
+		this.typeGame = typeGame;
 		this.buttons = new ArrayList<PieceButton>();
 		this.puzzle = new Puzzle(size, size, urlImage, typeShuffle);
 		this.initialize();
 	}
 
-	public PuzzleBoard(Puzzle puzzle, PuzzleBoardListener puzzleBoardListener, StopwatchListener stopwatchListener) {
+	public PuzzleBoard(Puzzle puzzle, PuzzleBoardListener puzzleBoardListener, StopwatchListener stopwatchListener, TypeGame typeGame) {
 		this.puzzleBoardListener = puzzleBoardListener;
 		this.stopwatchListener = stopwatchListener;
+		this.typeGame = typeGame;
 		this.buttons = new ArrayList<PieceButton>();
 		this.puzzle = puzzle;
 		this.initialize();
@@ -65,7 +69,7 @@ public class PuzzleBoard extends JPanel {
 			}
 		};
 
-		if (!puzzle.isFromBd()) {
+		if (typeGame != TypeGame.pausedGame) {
 			Thread shuffle = new Thread(() -> {
 				puzzle.shuffleTable(shuffleListener);
 			});

@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 
 import controller.PieceController;
 import interfaces.ShuffleListener;
-import util.TypeShuffle;
+import util.enums.TypeShuffle;
 
 public class Puzzle {
 

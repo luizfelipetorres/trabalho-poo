@@ -10,7 +10,7 @@ import java.util.List;
 import connection.ConnectionFactory;
 import interfaces.DAOListener;
 import model.Puzzle;
-import util.TypeShuffle;
+import util.enums.TypeShuffle;
 
 public class PuzzleDAO implements DAOListener<Puzzle> {
 

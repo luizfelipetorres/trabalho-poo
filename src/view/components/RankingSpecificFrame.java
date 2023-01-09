@@ -1,4 +1,4 @@
-package view.ui;
+package view.components;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
@@ -81,6 +82,7 @@ public class RankingSpecificFrame extends JPanel {
 	
 	public void initialize() {
 		Color backgroundColor = new Color(220, 220, 220);
+		Color backgroundRed = new Color(255, 67, 102);
 		MouseListener hoverEffect = new HoverEffect(Color.WHITE, backgroundColor) {
 
 			@Override
@@ -102,9 +104,8 @@ public class RankingSpecificFrame extends JPanel {
 				super.mouseClicked(e);
 				configureItemClick(backgroundColor, e);
 			}
-
-
 		};
+		
 		this.setBackground(backgroundColor);
 		this.setBounds(x, y, width, height);
 		this.setLayout(null);
@@ -165,10 +166,13 @@ public class RankingSpecificFrame extends JPanel {
 		int vertexY = 0;
 
 		for (int i = 0; i < playerMatch.size(); i++) {
+			PlayerMatch current = playerMatch.get(i);
+			long qtd = playerMatch.stream().filter(pm -> pm.getMatch().getId() == current.getMatch().getId()).count();
+			
 			JPanel body = new JPanel();
 			body.setBounds(0, vertexY, (int) (width * 0.91), bodyHeught);
 			body.setLayout(null);
-			body.setBackground(backgroundColor);
+			body.setBackground(qtd >= 3 ? backgroundRed : backgroundColor);
 			panel.add(body);
 			vertexY += bodyHeught;
 
@@ -178,22 +182,22 @@ public class RankingSpecificFrame extends JPanel {
 			Format.classification(bodyClassification, classification);
 			body.add(bodyClassification);
 
-			JLabel bodyUsers = new JLabel(playerMatch.get(i).getPlayer().getPlayerUsername());
+			JLabel bodyUsers = new JLabel(current.getPlayer().getPlayerUsername());
 			bodyUsers.setHorizontalAlignment(SwingConstants.CENTER);
 			bodyUsers.setBounds(Width / 6, 0, Width / 6 * 2, bodyHeught);
 			body.add(bodyUsers);
 			
-			JLabel bodyMatches = new JLabel(playerMatch.get(i).getMatch().getId().toString());
+			JLabel bodyMatches = new JLabel(current.getMatch().getId().toString());
 			bodyMatches.setHorizontalAlignment(SwingConstants.CENTER);
 			bodyMatches.setBounds(Width / 6 * 3, 0, Width / 6, bodyHeught);
 			body.add(bodyMatches);
 
-			JLabel bodyPunctuation = new JLabel(Format.punctuation(playerMatch.get(i).getPlayerPoints()));
+			JLabel bodyPunctuation = new JLabel(Format.punctuation(current.getPlayerPoints()));
 			bodyPunctuation.setHorizontalAlignment(SwingConstants.CENTER);
 			bodyPunctuation.setBounds(Width / 6 * 4, 0, Width / 6, bodyHeught);
 			body.add(bodyPunctuation);
 
-			JLabel bodyDuration = new JLabel(Format.hours(playerMatch.get(i).getMilliSecondsDuration()));
+			JLabel bodyDuration = new JLabel(Format.hours(current.getMilliSecondsDuration()));
 			bodyDuration.setHorizontalAlignment(SwingConstants.CENTER);
 			bodyDuration.setBounds(Width / 6 * 5, 0, Width / 6, bodyHeught);
 			body.add(bodyDuration);
@@ -201,7 +205,8 @@ public class RankingSpecificFrame extends JPanel {
 			JSeparator separator = new JSeparator();
 			separator.setBounds(headHeight * 50 / 455, 0, Width, 2);
 			body.add(separator);
-			body.addMouseListener(hoverEffect);
+			if (qtd < 3)
+				body.addMouseListener(hoverEffect);
 
 			classification++;
 		}
@@ -224,16 +229,26 @@ public class RankingSpecificFrame extends JPanel {
 	}
 
 	private void configureItemClick(Color backgroundColor, MouseEvent e) {
+		
+		
 		List<Component> components = Arrays.asList(e.getComponent().getParent().getComponents());
 		components.stream().filter(c -> !c.equals(e.getComponent()))
 				.forEach(c -> c.setBackground(backgroundColor));
 		e.getComponent().setBackground(Color.WHITE);
 		int index = components.indexOf(e.getComponent());
 		selectedPlayerMatch = playerMatch.get(index);
-		selectedMatch = MatchController.getInstance().findById(selectedPlayerMatch.getId());
+		long quantity = playerMatch.stream().filter(pm -> pm.getMatch().getId() == selectedPlayerMatch.getId()).count();
+		if (quantity >= 3) {
+			String message = "A partida selecionada atingiu o limite de 3 jogadores! Selecione outra";
+			JOptionPane.showMessageDialog(this, message, "Atenção", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		
+		selectedMatch = MatchController.getInstance().findById(selectedPlayerMatch.getMatch().getId());
 		selectedPuzzle = PuzzleController.getInstance().findById(selectedMatch.getPuzzle().getId());
 		selectedPuzzle.initializeFromBd(selectedPlayerMatch.getId());
 		selectedUrlImage = selectedPuzzle.getUrlImage();
 		listener.changeImage(selectedUrlImage);
+		
 	}
 }
