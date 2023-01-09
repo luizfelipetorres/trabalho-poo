@@ -72,12 +72,14 @@ public class MatchDAO implements DAOListener<Match> {
 	public Match findById(Long id) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
-			String sql = "SELECT * FROM MATCH WHERE PUZZLE_ID = " + id;
+			String sql = "SELECT * FROM MATCH WHERE MATCH_ID = " + id;
 			Statement stmt = (Statement) connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if (rs.next()) {
-				Puzzle puzzle = PuzzleDAO.getInstance().findById(id);
+				Long indexPuzzle = rs.getLong("PUZZLE_ID");
+				Puzzle puzzle = PuzzleDAO.getInstance().findById(indexPuzzle);
+				puzzle.setId(indexPuzzle);
 				return new Match(rs.getLong("MATCH_ID"), puzzle);
 			}
 
@@ -86,20 +88,6 @@ public class MatchDAO implements DAOListener<Match> {
 		}
 
 		return null;
-	}
-
-	@Override
-	public void remove(Long id) {
-
-		try {
-			Connection connection = ConnectionFactory.getConnection();
-			Statement stmt = connection.createStatement();
-
-			String query = "DELETE FROM MATCH WHERE MATCH_ID = " + id;
-			stmt.executeUpdate(query);
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
 	}
 
 	@Override
@@ -123,6 +111,39 @@ public class MatchDAO implements DAOListener<Match> {
 			System.err.println(e);
 		}
 		return listMatches;
+	}
+
+	@Override
+	public void removeAll() {
+
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			Statement stmt = connection.createStatement();
+
+			String query = "DELETE FROM MATCH";
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+	}
+
+	public Match findByPuzzleId(Long id) {
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM MATCH WHERE PUZZLE_ID = " + id;
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			if (rs.next()) {
+				Puzzle puzzle = PuzzleDAO.getInstance().findById(id);
+				return new Match(rs.getLong("MATCH_ID"), puzzle);
+			}
+
+		} catch (SQLException e) {
+			System.err.println(e);
+		}
+
+		return null;
 	}
 
 }

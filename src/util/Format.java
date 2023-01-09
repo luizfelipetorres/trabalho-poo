@@ -13,12 +13,14 @@ public class Format {
 	private Format() {}
 	
 	public static String hours(Long duration) {
-		Long seconds = duration;
+		
+		Long milliseconds = duration / 100;
+		Long seconds = duration / 1000;
 		Long hours = seconds / 3600;
 		seconds %= 3600;
 		Long minutes = seconds / 60;
 		seconds %= 60;
-		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+		return String.format("%02d:%02d:%02d:%02d", hours, minutes, seconds, milliseconds);
 	}
 	
 	public static String punctuation(double number) {

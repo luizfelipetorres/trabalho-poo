@@ -1,11 +1,10 @@
 package controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import dao.PlayerMatchDAO;
 import model.PlayerMatch;
-import util.RecordPlayerMatch;
+import model.RecordPlayerMatch;
 
 public class PlayerMatchController {
 
@@ -29,18 +28,18 @@ public class PlayerMatchController {
 		return PlayerMatchDAO.getInstance().update(playerMatch);
 	}
 
-	public Optional<PlayerMatch> findById(Long id) {
-		return Optional.of(PlayerMatchDAO.getInstance().findById(id));
-	}
-
 	public List<PlayerMatch> findAll() {
 		return PlayerMatchDAO.getInstance().findAll();
 	}
 
-	public void remove(Long id) {
-		PlayerMatchDAO.getInstance().remove(id);
+	public void removeAll() {
+		PlayerMatchDAO.getInstance().removeAll();
 	}
-	
+
+	public PlayerMatch findById(Long playerId, Long matchId) {
+		return PlayerMatchDAO.getInstance().findById(playerId, matchId);
+	}
+
 	public int totalPages(int limit, boolean isComplete) {
 		return (int) Math.ceil( PlayerMatchDAO.getInstance().totalElement( isComplete)/limit);
 	}
@@ -49,10 +48,6 @@ public class PlayerMatchController {
 		return PlayerMatchDAO.getInstance().findAll(page, limit, isComplete);
 	}
 	
-	public List<PlayerMatch> findByMatchID(Long matchId , int limit,boolean isComplete){
-		return PlayerMatchDAO.getInstance().findByMatchID(matchId,limit, isComplete);
-	}
-
 	public RecordPlayerMatch recordPlayerMatchByPlayer(Long idPlayer) {
 		return PlayerMatchDAO.getInstance().recordPlayerMatchByPlayer(idPlayer);
 	}

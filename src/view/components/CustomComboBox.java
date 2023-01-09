@@ -2,6 +2,7 @@ package view.components;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
@@ -24,6 +25,7 @@ public class CustomComboBox<T> extends JPanel {
 	private int x;
 	private int y;
 	private int width;
+	private JSeparator separator;
 
 	public CustomComboBox(String title, T[] model, int x, int y, int width) {
 		super();
@@ -35,32 +37,38 @@ public class CustomComboBox<T> extends JPanel {
 		this.initialize();
 	}
 
+	public CustomComboBox(String title, T[] model, int x, int y, int width, ItemListener listener) {
+		this(title, model, x, y, width);
+		comboBox.addItemListener(listener);
+	}
+	
 	public void initialize() {
 
 		MouseAdapter hoverEffect = new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				e.getComponent().setForeground(new Color(249, 13, 72));
-				e.getComponent().setBackground(new Color(249, 13, 72));
+				separator.setForeground(new Color(249, 13, 72));
+				separator.setBackground(new Color(249, 13, 72));
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				e.getComponent().setForeground(new Color(0, 0, 128));
-				e.getComponent().setBackground(new Color(0, 0, 128));
+				separator.setForeground(new Color(0, 0, 128));
+				separator.setBackground(new Color(0, 0, 128));
 			}
 		};
 
 		this.setLayout(null);
 		this.setBorder(null);
-		this.setBounds(x, y, width, 75);
+		this.setBounds(x, y, width, 62);
 		this.setBackground(new Color(255, 255, 255));
 
-		JLabel label = new CustomLabel(title, 0, 0, width, 30);
+		JLabel label = new CustomLabel(title, 0, 0, width, 15);
 
 		comboBox = new JComboBox<T>();
 		comboBox.setModel(new DefaultComboBoxModel<T>(model));
-		comboBox.setBounds(0, 30, width, 40);
+		comboBox.setBounds(0, 15, width, 40);
+		comboBox.addMouseListener(hoverEffect);
 		comboBox.setUI(new BasicComboBoxUI() {
 			@Override
 			protected void installDefaults() {
@@ -73,6 +81,7 @@ public class CustomComboBox<T> extends JPanel {
 			@Override
 			protected JButton createArrowButton() {
 				final JButton button = new JButton(new ImageIcon("img\\icons\\icon-arrowdown.png"));
+				button.addMouseListener(hoverEffect);
 				button.setFocusPainted(false);
 				button.setFocusable(false);
 				button.setRequestFocusEnabled(false);
@@ -82,8 +91,8 @@ public class CustomComboBox<T> extends JPanel {
 
 		});
 
-		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 70, width, 7);
+		separator = new JSeparator();
+		separator.setBounds(0, 55, width, 7);
 		separator.setForeground(new Color(0, 0, 128));
 		separator.setBackground(new Color(0, 0, 128));
 		separator.addMouseListener(hoverEffect);
@@ -94,5 +103,4 @@ public class CustomComboBox<T> extends JPanel {
 	public Object getSelectedItem() {
 		return comboBox.getSelectedItem();
 	}
-
 }

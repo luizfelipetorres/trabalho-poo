@@ -16,7 +16,6 @@ import controller.PlayerController;
 
 import java.awt.Color;
 
-import dao.PlayerDAO;
 import model.Player;
 import view.components.CustomButton;
 import view.components.CustomField;
@@ -33,11 +32,12 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class LoginFrame extends AbstractWindow {
 
 	private JFrame frame;
+	private CustomField fieldLoginUsername;
+	private CustomField fieldLoginPassword;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -88,26 +88,25 @@ public class LoginFrame extends AbstractWindow {
 		tabbedPane.addTab("Entrar", null, containerLogin, null);
 		containerLogin.setLayout(null);
 
-		CustomField fieldLoginUsername = new CustomField("Nome do usuário:", 270, 30, 50, false);
-		CustomField fieldLoginPassword = new CustomField("Senha:", 270, 30, 150, true);
-
-		CustomButton btnLogin = new CustomButton("Entrar", "img\\icons\\icon-login.png", new Color(255, 255, 255), new Color(0, 0, 128), 20, 279, 270, 50);
+		fieldLoginUsername = new CustomField("Nome do usuário:", 270, 30, 50, false);
+		fieldLoginPassword = new CustomField("Senha:", 270, 30, 150, true);
+		CustomButton btnLogin = new CustomButton("Entrar", "img\\icons\\icon-login.png", new Color(255, 255, 255),
+				new Color(0, 0, 128), 20, 279, 270, 50);
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				Player player = new Player(fieldLoginUsername.getText(), Arrays.toString(fieldLoginPassword.getPassword()));
+				Player player = new Player(fieldLoginUsername.getText(),
+						Arrays.toString(fieldLoginPassword.getPassword()));
 
-				try {
-					Player playerSelected = PlayerController.getInstance().authenticate(player);
+				Player playerSelected = PlayerController.getInstance().authenticate(player);
 
-					if (playerSelected.getPlayerId() != null) {
-						KernelFrame.main(null, playerSelected);
-						frame.dispose();
-					} else {
-						JOptionPane.showMessageDialog(null, "Dados inválidos, por favor insira as credenciais novamente!", "Erro", JOptionPane.ERROR_MESSAGE);
-					}
-				} catch (SQLException ex) {	
-					JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+				if (playerSelected.getPlayerId() != null) {
+					KernelFrame.main(null, playerSelected);
+					frame.dispose();
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Dados inválidos, por favor insira as credenciais novamente!", "Erro",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -129,31 +128,36 @@ public class LoginFrame extends AbstractWindow {
 		CustomField fieldRegisterEmail = new CustomField("E-mail:", 270, 30, 150, false);
 		CustomField fieldRegisterPassword = new CustomField("Senha:", 270, 30, 250, true);
 
-		CustomButton btnRegister = new CustomButton("Cadastrar", "img\\icons\\icon-adduser.png", new Color(255, 255, 255), new Color(0, 0, 128), 21, 374, 270, 50);
+		CustomButton btnRegister = new CustomButton("Cadastrar", "img\\icons\\icon-adduser.png",
+				new Color(255, 255, 255), new Color(0, 0, 128), 21, 374, 270, 50);
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				Player player = new Player(fieldRegisterUsername.getText(), fieldRegisterEmail.getText(), Arrays.toString(fieldRegisterPassword.getPassword()));
+				Player player = new Player(fieldRegisterUsername.getText(), fieldRegisterEmail.getText(),
+						Arrays.toString(fieldRegisterPassword.getPassword()));
 
-				if (PlayerDAO.getInstance().save(player)) {
-					JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+				if (PlayerController.getInstance().save(player)) {
+					JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!", "Sucesso",
+							JOptionPane.INFORMATION_MESSAGE);
 					tabbedPane.setSelectedIndex(0);
-				}else{
-					JOptionPane.showMessageDialog(null, "Erro ao cadastrar usuário!", "Erro", JOptionPane.ERROR_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, "Erro ao cadastrar usuário!", "Erro",
+							JOptionPane.ERROR_MESSAGE);
 				}
-				
+
 			}
 		});
 		btnRegister.addMouseListener(hoverEffect);
-		
+
 		Arrays.asList(fieldLoginUsername, fieldLoginPassword, btnLogin).forEach(containerLogin::add);
-		Arrays.asList(fieldRegisterUsername, fieldRegisterEmail, fieldRegisterPassword, btnRegister).forEach(containerRegister::add);
+		Arrays.asList(fieldRegisterUsername, fieldRegisterEmail, fieldRegisterPassword, btnRegister)
+				.forEach(containerRegister::add);
 
 		JLabel lbBG = new JLabel("");
 		BufferedImage resized;
-		try {		
+		try {
 			resized = ImageIO.read(new File("img\\bgs\\bg-login.jpg"));
-			Image image = resized.getScaledInstance(494, 567, 1);	
+			Image image = resized.getScaledInstance(494, 567, 1);
 			lbBG.setIcon(new ImageIcon(image));
 			lbBG.setHorizontalAlignment(SwingConstants.CENTER);
 			lbBG.setBounds(0, 0, 494, 567);
@@ -161,6 +165,7 @@ public class LoginFrame extends AbstractWindow {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 	}
+
 }

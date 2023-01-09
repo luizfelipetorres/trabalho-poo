@@ -31,4 +31,8 @@ public class PieceController {
 		PieceDAO.getInstance().configPiece(playerMatch, pieces);
 	}
 
+	public void removeAll() {
+		PieceDAO.getInstance().removeAll();
+	}
+
 }

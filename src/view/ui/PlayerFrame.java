@@ -5,7 +5,6 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import javax.swing.JLabel;
@@ -15,12 +14,16 @@ import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
+import controller.MatchController;
+import controller.PieceController;
 import controller.PlayerController;
 import controller.PlayerMatchController;
+import controller.PuzzleController;
 import interfaces.UserInformationListener;
 import model.Player;
+import model.RecordPlayerMatch;
+import util.Format;
 import util.ImageManager;
-import util.RecordPlayerMatch;
 import view.components.CustomButton;
 import view.components.CustomField;
 import view.components.JPhotoRound;
@@ -63,8 +66,7 @@ public class PlayerFrame extends JPanel {
 		fieldEmail.setText(player.getPlayerEmail());
 
 		CustomButton btnRegister = new CustomButton("Atualizar", "img\\icons\\icon-update.png",
-				new Color(255, 255, 255), new Color(0, 0, 128), 500, 600, 270, 50);
-		btnRegister.setBounds(500, 590, 300, 50);
+				new Color(255, 255, 255), new Color(0, 0, 128), 500, 590, 250, 50);
 		btnRegister.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -79,6 +81,37 @@ public class PlayerFrame extends JPanel {
 			@Override
 			public void mouseExited(MouseEvent e) {
 				btnRegister.setBackground(new Color(0, 0, 128));
+			}
+		});
+
+		CustomButton btnReset = new CustomButton("Limpar histórico", "img\\icons\\icon-remove.png",
+				new Color(255, 255, 255), new Color(0, 0, 128), 800, 590, 250, 50);
+		btnReset.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				String message = "Tem certeza que deseja fazer isso?\nIsso irá limpar todo histórico do jogo.";
+				Object[] options = { "Sim", "Não" };
+				int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+				if (response == JOptionPane.YES_OPTION) {
+					PieceController.getInstance().removeAll();
+					PlayerMatchController.getInstance().removeAll();
+					MatchController.getInstance().removeAll();
+					PuzzleController.getInstance().removeAll();
+				}
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnReset.setBackground(new Color(249, 13, 72));
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnReset.setBackground(new Color(0, 0, 128));
 			}
 		});
 
@@ -156,37 +189,37 @@ public class PlayerFrame extends JPanel {
 		textMatchNotComplete.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textMatchNotComplete.setBounds(383, 456, 50, 25);
 
-		JLabel textTotalDuration = new JLabel(formatHours(recordPlayerMatch.getTotalDuration()));
+		JLabel textTotalDuration = new JLabel(Format.hours(recordPlayerMatch.getTotalDuration()));
 		textTotalDuration.setHorizontalAlignment(SwingConstants.CENTER);
 		textTotalDuration.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textTotalDuration.setBounds(167, 517, 280, 25);
 
-		JLabel textMaxDuration = new JLabel(formatHours(recordPlayerMatch.getMaxDuration()));
+		JLabel textMaxDuration = new JLabel(Format.hours(recordPlayerMatch.getMaxDuration()));
 		textMaxDuration.setHorizontalAlignment(SwingConstants.RIGHT);
 		textMaxDuration.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textMaxDuration.setBounds(121, 545, 93, 25);
 
-		JLabel textMinDuration = new JLabel(formatHours(recordPlayerMatch.getMinDuration()));
+		JLabel textMinDuration = new JLabel(Format.hours(recordPlayerMatch.getMinDuration()));
 		textMinDuration.setHorizontalAlignment(SwingConstants.RIGHT);
 		textMinDuration.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textMinDuration.setBounds(335, 546, 112, 25);
 
-		JLabel textTotalPoints = new JLabel(formatNumber(recordPlayerMatch.getTotalPoints()));
+		JLabel textTotalPoints = new JLabel(Format.punctuation(recordPlayerMatch.getTotalPoints()));
 		textTotalPoints.setHorizontalAlignment(SwingConstants.RIGHT);
 		textTotalPoints.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textTotalPoints.setBounds(131, 570, 82, 25);
 
-		JLabel textMaxPoints = new JLabel(formatNumber(recordPlayerMatch.getMaxPoints()));
+		JLabel textMaxPoints = new JLabel(Format.punctuation(recordPlayerMatch.getMaxPoints()));
 		textMaxPoints.setHorizontalAlignment(SwingConstants.RIGHT);
 		textMaxPoints.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textMaxPoints.setBounds(344, 594, 103, 25);
 
-		JLabel textSmallerPoints = new JLabel(formatNumber(recordPlayerMatch.getMinPoints()));
+		JLabel textSmallerPoints = new JLabel(Format.punctuation(recordPlayerMatch.getMinPoints()));
 		textSmallerPoints.setHorizontalAlignment(SwingConstants.RIGHT);
 		textSmallerPoints.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textSmallerPoints.setBounds(141, 594, 72, 25);
 
-		JLabel textAvgPoints = new JLabel(formatNumber(recordPlayerMatch.getAvgPoints()));
+		JLabel textAvgPoints = new JLabel(Format.punctuation(recordPlayerMatch.getAvgPoints()));
 		textAvgPoints.setHorizontalAlignment(SwingConstants.RIGHT);
 		textAvgPoints.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textAvgPoints.setBounds(346, 570, 99, 25);
@@ -218,7 +251,7 @@ public class PlayerFrame extends JPanel {
 		});
 
 		Arrays.asList(fieldUsername, fieldEmail, currentPassword, newPassword,
-				btnRegister, panelInformationPersona, changePassword).forEach(this::add);
+				btnRegister, btnReset, panelInformationPersona, changePassword).forEach(this::add);
 
 		Arrays.asList(photoPersona, separatorPhotoPersona, lbTitleInformationPersona, titleTotalMatch,
 				titleMatchComplete, titleMatchNotComplete, titleTotalPoints, titleMaxPoints,
@@ -236,7 +269,7 @@ public class PlayerFrame extends JPanel {
 				int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
 						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 
-				if (response == 0) {
+				if (response == JOptionPane.YES_OPTION) {
 					updatePhoto();
 				} else {
 					removePhoto();
@@ -303,19 +336,5 @@ public class PlayerFrame extends JPanel {
 	private void removePhoto() {
 		String path = "img\\icons\\icon-persona.png";
 		photoPersona.setPath(path);
-	}
-
-	private String formatHours(Long duration) {
-		Long seconds = duration;
-		Long hours = seconds / 3600;
-		seconds %= 3600;
-		Long minutes = seconds / 60;
-		seconds %= 60;
-		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-	}
-
-	private String formatNumber(double number) {
-		DecimalFormat df = new DecimalFormat(",##0.00");
-		return df.format(number);
 	}
 }

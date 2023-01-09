@@ -1,6 +1,7 @@
-package util;
+package model;
 
 public class RecordPlayerMatch {
+	
 	private int totalMatchNotCompleted;
 	private int totalMatchCompleted;
 	private long totalPoints;

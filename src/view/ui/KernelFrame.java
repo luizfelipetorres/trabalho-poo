@@ -1,7 +1,5 @@
 package view.ui;
 
-import static javax.swing.JOptionPane.YES_OPTION;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
@@ -25,7 +23,6 @@ import controller.PlayerController;
 import interfaces.PuzzleFrameListener;
 import interfaces.UserInformationListener;
 import model.Player;
-import util.TypeShuffle;
 import view.components.CustomButton;
 import view.components.JPhotoRound;
 
@@ -52,14 +49,12 @@ public class KernelFrame extends AbstractWindow {
 	public KernelFrame(Player player) {
 		super();
 		initialize(player);
-		/* initializer fake puzzle - refactor code */
-		puzzleFrame = new PuzzleFrame(player, 2, "img\\puzzle\\default.jpg", TypeShuffle.pairs);
 	}
 
 	private void initialize(Player player) {
 
-		PuzzleFrameListener puzzleListener = (urlImage, size, shuffle) -> {
-			puzzleFrame = new PuzzleFrame(player, size, urlImage, shuffle);
+		PuzzleFrameListener puzzleListener = (puzzle, match, currentTime, typeGame) -> {
+			puzzleFrame = new PuzzleFrame(player, puzzle, match, currentTime, typeGame);
 			showFrame(puzzleFrame);
 		};
 
@@ -71,6 +66,7 @@ public class KernelFrame extends AbstractWindow {
 		frame.getContentPane().setBackground(new Color(255, 255, 255));
 		frame.setBounds(100, 100, 1300, 750);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		frame.getContentPane().setLayout(null);
 
 		JPanel panelPersona = new JPanel();
@@ -156,15 +152,19 @@ public class KernelFrame extends AbstractWindow {
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				if (puzzleFrame.stopwatchListener().getDuration() > 0) {
+				if (puzzleFrame != null && puzzleFrame.stopwatchListener().getDuration() > 0) {
 					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
-					String message = "Quer desistir da partida atual e iniciar uma nova?";
-					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
-						showFrame(puzzleFrame);
+					String message = "Deseja realmente sair?";
+					Object[] options = { "Sim", "Não" };
+					int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+					if (response == JOptionPane.YES_OPTION) {
+						showFrame(new PreGameFrame(puzzleListener, player));
+					}else{
 						return;
 					}
 				}
-				showFrame(new PreGameFrame(puzzleListener));
+				showFrame(new PreGameFrame(puzzleListener, player));
 			}
 		});
 		btnPlay.addMouseListener(hoverEffect);
@@ -174,11 +174,15 @@ public class KernelFrame extends AbstractWindow {
 		btnConfig.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (puzzleFrame.stopwatchListener().getDuration() > 0) {
+				if (puzzleFrame != null && puzzleFrame.stopwatchListener().getDuration() > 0) {
 					if(puzzleFrame.stopwatchListener().isRunning()) puzzleFrame.stopwatchListener().pause();
-					String message = "Quer desistir da partida atual e iniciar uma nova?";
-					if (JOptionPane.showConfirmDialog(null, message) != YES_OPTION) {
-						showFrame(puzzleFrame);
+					String message = "Deseja realmente sair?";
+					Object[] options = { "Sim", "Não" };
+					int response = JOptionPane.showOptionDialog(null, message, "Pergunta", JOptionPane.DEFAULT_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+					if (response == JOptionPane.YES_OPTION) {
+						showFrame(new PlayerFrame(player, userListener));
+					}else{
 						return;
 					}
 				}

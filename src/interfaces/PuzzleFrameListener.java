@@ -1,7 +1,9 @@
 package interfaces;
 
-import util.TypeShuffle;
+import model.Match;
+import model.Puzzle;
+import util.enums.TypeGame;
 
 public interface PuzzleFrameListener {
-	void onClick(String urlImage, int size, TypeShuffle typeShuffle);
+	void onClick(Puzzle puzzle, Match match, long currentTime, TypeGame typeGame);
 }

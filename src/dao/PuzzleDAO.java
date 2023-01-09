@@ -10,7 +10,7 @@ import java.util.List;
 import connection.ConnectionFactory;
 import interfaces.DAOListener;
 import model.Puzzle;
-import util.TypeShuffle;
+import util.enums.TypeShuffle;
 
 public class PuzzleDAO implements DAOListener<Puzzle> {
 
@@ -33,7 +33,7 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "INSERT INTO PUZZLE(PUZZLE_SIZE, PUZZLE_TYPE_SHUFFLE, PUZZLE_URL_IMAGE) VALUES (?,?,?)";
 			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, puzzle.getSIZE());
+			ps.setInt(1, puzzle.getSize());
 			ps.setString(2, puzzle.getTypeShuffle().toString());
 			ps.setString(3, puzzle.getUrlImage());
 			ps.execute();
@@ -53,12 +53,6 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 	}
 
 	@Override
-	public List<Puzzle> findAll() {
-		/* implements logic */
-		return null;
-	}
-
-	@Override
 	public Puzzle findById(Long id) {
 
 		Puzzle puzzle = new Puzzle();
@@ -70,10 +64,13 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if (rs.next()) {
-				puzzle.setLINES(rs.getInt("PUZZLE_SIZE")/2);
-				puzzle.setCOLUMNS(rs.getInt("PUZZLE_SIZE")/2);
+				puzzle.setId(rs.getLong("PUZZLE_ID"));
+				puzzle.setLINES(rs.getInt("PUZZLE_SIZE"));
+				puzzle.setCOLUMNS(rs.getInt("PUZZLE_SIZE"));
+				puzzle.setSize(rs.getInt("PUZZLE_SIZE"));
 				puzzle.setTypeShuffle(TypeShuffle.valueOf(rs.getString("PUZZLE_TYPE_SHUFFLE")));
 				puzzle.setUrlImage(rs.getString("PUZZLE_URL_IMAGE"));
+				puzzle.setFromBd(true);
 				rs.close();
 				connection.close();
 				return puzzle;
@@ -87,12 +84,18 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 	}
 
 	@Override
+	public List<Puzzle> findAll() {
+		/* implements logic */
+		return null;
+	}
+
+	@Override
 	public boolean update(Puzzle puzzle) {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			String sql = "UPDATE PUZZLE SET PUZZLE_SIZE = ?, PUZZLE_TYPE_SHUFFLE = ?, PUZZLE_URL_IMAGE = ? WHERE PUZZLE_ID = ?";
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setInt(1, puzzle.getSIZE());
+			ps.setInt(1, puzzle.getSize());
 			ps.setString(2, puzzle.getTypeShuffle().toString());
 			ps.setString(3, puzzle.getUrlImage());
 			ps.setLong(4, puzzle.getId());
@@ -107,16 +110,15 @@ public class PuzzleDAO implements DAOListener<Puzzle> {
 	}
 
 	@Override
-	public void remove(Long id) {
+	public void removeAll() {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			Statement stmt = connection.createStatement();
 
-			String query = "DELETE FROM PUZZLE WHERE PUZZLE_ID = " + id;
+			String query = "DELETE FROM PUZZLE";
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
 }

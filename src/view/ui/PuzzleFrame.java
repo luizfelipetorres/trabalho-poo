@@ -13,17 +13,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import dao.MatchDAO;
-import dao.PieceDAO;
-import dao.PlayerMatchDAO;
-import dao.PuzzleDAO;
+import controller.MatchController;
+import controller.PieceController;
+import controller.PlayerMatchController;
+import controller.PuzzleController;
 import interfaces.PuzzleBoardListener;
 import interfaces.StopwatchListener;
 import model.Match;
 import model.Player;
 import model.PlayerMatch;
 import model.Puzzle;
-import util.TypeShuffle;
+import util.enums.TypeGame;
+import util.enums.TypeShuffle;
 import view.components.PuzzleBoard;
 import view.components.Stopwatch;
 
@@ -34,13 +35,32 @@ public class PuzzleFrame extends JPanel {
 	private boolean wasExecuted;
 	private Stopwatch stopWatch;
 	private PuzzleBoard puzzleBoard;
-	
-	public PuzzleFrame(Player player, int size, String urlImage, TypeShuffle typeShuffle) {
+	private long currentTime;
+	private TypeGame typeGame;
+	private Match match;
+
+	public PuzzleFrame(Player player, int size, String urlImage, TypeShuffle typeShuffle, long currentTime,
+			TypeGame typeGame) {
 		super();
 		this.player = player;
+		this.currentTime = currentTime;
+		this.typeGame = typeGame;
 		this.wasExecuted = false;
-		this.stopWatch = new Stopwatch(puzzleBoardListener());
-		this.puzzleBoard = new PuzzleBoard(size, urlImage, typeShuffle, puzzleBoardListener(), stopwatchListener());
+		this.stopWatch = new Stopwatch(puzzleBoardListener(), currentTime);
+		this.puzzleBoard = new PuzzleBoard(size, urlImage, typeShuffle, puzzleBoardListener(), stopwatchListener(),
+				typeGame);
+		this.initialize();
+	}
+
+	public PuzzleFrame(Player player, Puzzle puzzle, Match match, long currentTime, TypeGame typeGame) {
+		super();
+		this.player = player;
+		this.match = match;
+		this.currentTime = currentTime;
+		this.typeGame = typeGame;
+		this.wasExecuted = false;
+		this.stopWatch = new Stopwatch(puzzleBoardListener(), currentTime);
+		this.puzzleBoard = new PuzzleBoard(puzzle, puzzleBoardListener(), stopwatchListener(), typeGame);
 		this.initialize();
 	}
 
@@ -53,7 +73,7 @@ public class PuzzleFrame extends JPanel {
 		BufferedImage resized;
 		try {
 			resized = ImageIO.read(new File("img\\bgs\\bg-main.jpg"));
-			Image image = resized.getScaledInstance(730, 640, 1);	
+			Image image = resized.getScaledInstance(730, 640, 1);
 			lbBG.setIcon(new ImageIcon(image));
 			lbBG.setHorizontalAlignment(SwingConstants.CENTER);
 			lbBG.setBounds(645, 0, 430, 640);
@@ -61,10 +81,10 @@ public class PuzzleFrame extends JPanel {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		Arrays.asList(puzzleBoard, stopWatch).forEach(this::add);
 	}
-	
+
 	public PuzzleBoardListener puzzleBoardListener() {
 		return new PuzzleBoardListener() {
 
@@ -82,16 +102,16 @@ public class PuzzleFrame extends JPanel {
 
 		};
 	}
-	
+
 	public StopwatchListener stopwatchListener() {
-		
+
 		return new StopwatchListener() {
-			
+
 			@Override
 			public void pause() {
 				stopWatch.pause();
 			}
-			
+
 			@Override
 			public void stop() {
 				stopWatch.stop();
@@ -106,19 +126,22 @@ public class PuzzleFrame extends JPanel {
 			public Long getDuration() {
 				return stopWatch.getSeconds();
 			}
-			
+
+			@Override
+			public long setMilliSeconds() {
+				return currentTime;
+			}
+
 		};
 	}
-	
+
 	private void persistenceData(Puzzle puzzle, boolean isCompleted) {
+		if(!wasExecuted && typeGame == TypeGame.newGame){
+			PuzzleController.getInstance().save(puzzle);
 
-		if(!wasExecuted){
-			
-			PuzzleDAO.getInstance().save(puzzle);
+			match = new Match(puzzle);
 
-			Match match = new Match(puzzle);
-
-			MatchDAO.getInstance().save(match);
+			MatchController.getInstance().save(match);
 			
 			PlayerMatch playerMatch = new PlayerMatch(
 					player,
@@ -126,26 +149,39 @@ public class PuzzleFrame extends JPanel {
 					stopWatch.getMilliSeconds(),
 					isCompleted
 					);
-			PlayerMatchDAO.getInstance().save(playerMatch);
+			PlayerMatchController.getInstance().save(playerMatch);
 			
-			PieceDAO.getInstance().save(playerMatch.getId(), puzzle.getPieces());
+			PieceController.getInstance().save(playerMatch.getId(), puzzle.getPieces());
+
+			wasExecuted = !wasExecuted;
+
+		}else if(!wasExecuted && typeGame == TypeGame.multiplayerGame) {
+			PuzzleController.getInstance().save(puzzle);
+			
+			PlayerMatch playerMatch = new PlayerMatch(
+					player,
+					this.match,
+					stopWatch.getMilliSeconds(),
+					isCompleted
+					);
+			
+			PlayerMatchController.getInstance().save(playerMatch);
+			
+			PieceController.getInstance().save(playerMatch.getId(), puzzle.getPieces());
 
 			wasExecuted = !wasExecuted;
 
 		}else{
-
-			PuzzleDAO.getInstance().update(puzzle);
-
-			Match match = MatchDAO.getInstance().findById(puzzle.getId());
-			match.setPuzzle(puzzle);
-
-			PlayerMatch playerMatch = PlayerMatchDAO.getInstance().findById(player.getPlayerId(), match.getId());
+			PuzzleController.getInstance().update(puzzle);
+			
+			this.match.setPuzzle(puzzle);
+			PlayerMatch playerMatch = PlayerMatchController.getInstance().findById(player.getPlayerId(),match.getId());
 			playerMatch.setMilliSecondsDuration(stopWatch.getMilliSeconds());
 			playerMatch.setCompleted(isCompleted);
 
-			PlayerMatchDAO.getInstance().update(playerMatch);
+			PlayerMatchController.getInstance().update(playerMatch);
 			
-			PieceDAO.getInstance().update(playerMatch.getId(), puzzle.getPieces());
+			PieceController.getInstance().update(playerMatch.getId(), puzzle.getPieces());
 
 		}	
 	}

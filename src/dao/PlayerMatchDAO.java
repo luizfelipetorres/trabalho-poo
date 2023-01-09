@@ -13,7 +13,7 @@ import interfaces.DAOListener;
 import model.Match;
 import model.Player;
 import model.PlayerMatch;
-import util.RecordPlayerMatch;
+import model.RecordPlayerMatch;
 
 public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 
@@ -29,6 +29,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 		return instance;
 	}
 
+	@Override
 	public boolean save(PlayerMatch playerMatch) {
 		ResultSet id;
 		try {
@@ -102,31 +103,6 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 		return null;
 	}
 
-	public PlayerMatch findById(Long playerId, Long matchId) {
-
-		try {
-			Connection connection = ConnectionFactory.getConnection();
-			String sql = "SELECT * FROM PLAYER_MATCH WHERE PLAYER_ID = " + playerId + "AND MATCH_ID = " + matchId;
-			Statement stmt = (Statement) connection.createStatement();
-			ResultSet rs = stmt.executeQuery(sql);
-
-			if (rs.next()) {
-				Match match = MatchDAO.getInstance().findById(rs.getLong("MATCH_ID"));
-				Player player = PlayerDAO.getInstance().findById(rs.getLong("PLAYER_ID"));
-				PlayerMatch playerMatch = new PlayerMatch(rs.getLong("PLAYER_MATCH_ID"), player, match,
-						rs.getLong("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
-						rs.getBoolean("PLAYER_MATCH_COMPLETE"));
-				rs.close();
-				connection.close();
-				return playerMatch;
-			}
-
-		} catch (SQLException e) {
-			System.err.println(e);
-		}
-		return null;
-	}
-
 	@Override
 	public List<PlayerMatch> findAll() {
 		ArrayList<PlayerMatch> listPlayerMatch = new ArrayList<PlayerMatch>();
@@ -155,16 +131,41 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 	}
 
 	@Override
-	public void remove(Long id) {
+	public void removeAll() {
 		try {
 			Connection connection = ConnectionFactory.getConnection();
 			Statement stmt = connection.createStatement();
 
-			String query = "DELETE FROM PLAYER_MATCH WHERE PLAYER_MATCH_ID = " + id;
+			String query = "DELETE FROM PLAYER_MATCH";
 			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public PlayerMatch findById(Long playerId, Long matchId) {
+
+		try {
+			Connection connection = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM PLAYER_MATCH WHERE PLAYER_ID = " + playerId + "AND MATCH_ID = " + matchId;
+			Statement stmt = (Statement) connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+
+			if (rs.next()) {
+				Match match = MatchDAO.getInstance().findById(rs.getLong("MATCH_ID"));
+				Player player = PlayerDAO.getInstance().findById(rs.getLong("PLAYER_ID"));
+				PlayerMatch playerMatch = new PlayerMatch(rs.getLong("PLAYER_MATCH_ID"), player, match,
+						rs.getLong("PLAYER_MATCH_DURATION"), rs.getDouble("PLAYER_MATCH_POINTS"),
+						rs.getBoolean("PLAYER_MATCH_COMPLETE"));
+				rs.close();
+				connection.close();
+				return playerMatch;
+			}
+
 		} catch (SQLException e) {
 			System.err.println(e);
 		}
+		return null;
 	}
 
 	public RecordPlayerMatch recordPlayerMatchByPlayer(Long idPlayer) {
@@ -215,7 +216,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 		}
 		return recordPlayerMatch;
 	}
-	
+
 	public int totalElement(boolean isComplete) {
 		int count = 0;
 		try {
@@ -235,7 +236,7 @@ public class PlayerMatchDAO implements DAOListener<PlayerMatch> {
 		}
 		return 0;
 	}
-	
+
 	public List<PlayerMatch> findAll(int page, int limit, boolean isComplete) {
 		ArrayList<PlayerMatch> listPlayerMatch = new ArrayList<PlayerMatch>();
 
